@@ -376,11 +376,19 @@
       btn.classList.add('active');
 
       const tabId = btn.dataset.tab;
+
+      // Скрываем все вкладки
       Object.values(tabs).forEach(tab => tab.classList.add('hidden'));
 
+      // Очищаем содержимое скинов и прокачки
+      tabs.skins.innerHTML = '';
+      tabs.upgrades.innerHTML = '';
+
+      // Показываем нужную вкладку
       const visibleTab = tabs[tabId.replace('-tab','')];
       if (visibleTab) visibleTab.classList.remove('hidden');
 
+      // Отрисовка соответствующего контента
       if (tabId === 'skins-tab') {
         renderSkins();
       } else if (tabId === 'upgrades-tab') {
@@ -388,6 +396,10 @@
       }
     });
   });
+
+  updateUI(); // Только обновление UI при старте
+</script>
+
 
   updateUI(); // Только обновление UI, без отрисовки скинов/апгрейдов
 </script>
