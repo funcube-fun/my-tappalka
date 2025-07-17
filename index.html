@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+     <html lang="en">
+     <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>Tapalka Mini App</title>
+       <script src="https://telegram.org/js/telegram-web-app.js"></script>
+       <style>
+         body {
+           font-family: Arial, sans-serif;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           justify-content: center;
+           height: 100vh;
+           margin: 0;
+           background-color: #f0f0f0;
+         }
+         #tapButton {
+           padding: 20px 40px;
+           font-size: 24px;
+           background-color: #0088cc;
+           color: white;
+           border: none;
+           border-radius: 10px;
+           cursor: pointer;
+         }
+         #score {
+           font-size: 32px;
+           margin-bottom: 20px;
+         }
+       </style>
+     </head>
+     <body>
+       <div id="score">Score: 0</div>
+       <button id="tapButton">Tap Me!</button>
+       <script>
+         const WebApp = window.Telegram.WebApp;
+         WebApp.ready();
+         const user = WebApp.initDataUnsafe.user;
+         if (user) {
+           console.log(`User: ${user.first_name} ${user.last_name || ''}`);
+         }
+         let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
+         const scoreDisplay = document.getElementById('score');
+         const tapButton = document.getElementById('tapButton');
+         scoreDisplay.innerText = `Score: ${score}`;
+         tapButton.addEventListener('click', () => {
+           score++;
+           scoreDisplay.innerText = `Score: ${score}`;
+           localStorage.setItem('score', score);
+           WebApp.sendData(JSON.stringify({ score: score }));
+           WebApp.HapticFeedback.impactOccurred('medium');
+         });
+         WebApp.onEvent('themeChanged', () => {
+           document.body.style.backgroundColor = WebApp.themeParams.bg_color || '#f0f0f0';
+           tapButton.style.backgroundColor = WebApp.themeParams.button_color || '#0088cc';
+         });
+       </script>
+     </body>
+     </html>
