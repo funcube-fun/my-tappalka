@@ -173,6 +173,8 @@
   <button class="tab-btn" data-tab="upgrades-tab">Прокачка</button>
 </footer>
 
+<!-- Весь HTML остаётся прежним вплоть до <script> -->
+
 <script>
   // Данные игры
   const data = {
@@ -187,7 +189,6 @@
     }
   };
 
-  // Сохранение данных
   function saveData() {
     localStorage.setItem('score', data.score);
     localStorage.setItem('energy', data.energy);
@@ -198,25 +199,21 @@
     localStorage.setItem('upg_energy', data.upgradesBought.energy);
   }
 
-  // UI элементы
   const scoreDisplay = document.getElementById('score-display');
   const energyDisplay = document.getElementById('energy-display');
   const coinButton = document.getElementById('coin-button');
 
-  // Вкладки
   const tabs = {
     tap: document.getElementById('tap-tab'),
     skins: document.getElementById('skins-tab'),
     upgrades: document.getElementById('upgrades-tab'),
   };
 
-  // Скины
   const skins = [
     { name: 'Жёлтый (стандарт)', colorClass: 'skin-yellow', cost: 0 },
     { name: 'Голубой', colorClass: 'skin-blue', cost: 100 },
   ];
 
-  // Показываем магазин скинов
   function renderSkins() {
     const container = tabs.skins;
     container.innerHTML = '';
@@ -261,7 +258,6 @@
     });
   }
 
-  // Прокачка
   const upgradesList = [
     {
       id: 'click',
@@ -342,12 +338,10 @@
     });
   }
 
-  // Обновление UI
   function updateUI() {
     scoreDisplay.textContent = `Монеты: ${Math.floor(data.score)}`;
     energyDisplay.textContent = `Энергия: ${Math.floor(data.energy)} / ${data.energyMax}`;
 
-    // Меняем цвет кнопки в зависимости от скина
     if (data.skinIndex === 1) {
       coinButton.classList.add('blue');
     } else {
@@ -355,7 +349,6 @@
     }
   }
 
-  // Логика клика по монете
   coinButton.onclick = () => {
     if (data.energy >= 1) {
       data.energy -= 1;
@@ -367,7 +360,6 @@
     }
   };
 
-  // Восполнение энергии по 1 каждую секунду
   setInterval(() => {
     if (data.energy < data.energyMax) {
       data.energy += 1;
@@ -377,7 +369,6 @@
     }
   }, 1000);
 
-  // Переключение вкладок
   const tabButtons = document.querySelectorAll('footer button.tab-btn');
   tabButtons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -386,18 +377,17 @@
 
       const tabId = btn.dataset.tab;
       Object.values(tabs).forEach(tab => tab.classList.add('hidden'));
-      tabs[tabId.replace('-tab','')]?.classList.remove('hidden');
 
-      if (tabId === 'skins-tab') renderSkins();
-      if (tabId === 'upgrades-tab') renderUpgrades();
+      const visibleTab = tabs[tabId.replace('-tab','')];
+      if (visibleTab) visibleTab.classList.remove('hidden');
+
+      if (tabId === 'skins-tab') {
+        renderSkins();
+      } else if (tabId === 'upgrades-tab') {
+        renderUpgrades();
+      }
     });
   });
 
-  // Инициализация
-  updateUI();
-  renderSkins();
-  renderUpgrades();
+  updateUI(); // Только обновление UI, без отрисовки скинов/апгрейдов
 </script>
-
-</body>
-</html>
