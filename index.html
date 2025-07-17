@@ -6,69 +6,90 @@
 <title>Ukraine Coin</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
   body {
     margin: 0; 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #121212;
-    color: #eee;
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: #f0f0f0;
     display: flex; 
     flex-direction: column;
     height: 100vh;
   }
   header {
-    background: #1e90ff;
-    padding: 15px;
+    background: #ffdd00;
+    color: #1e3c72;
+    padding: 18px 0;
     text-align: center;
-    font-size: 1.8rem;
-    font-weight: bold;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     user-select: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
   }
   nav {
     display: flex;
-    background: #222;
+    background: #162447;
     justify-content: space-around;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
   }
   nav button {
     flex: 1;
-    padding: 12px;
-    font-size: 1rem;
-    color: #ccc;
+    padding: 15px;
+    font-size: 1.1rem;
+    color: #a9b1d6;
     background: transparent;
     border: none;
     cursor: pointer;
     transition: background 0.3s, color 0.3s;
+    font-weight: 600;
   }
   nav button.active, nav button:hover {
-    background: #1e90ff;
-    color: white;
+    background: #ffdd00;
+    color: #162447;
+    font-weight: 700;
+    box-shadow: 0 0 12px #ffdd00;
+    border-radius: 8px 8px 0 0;
   }
   main {
     flex: 1;
-    padding: 20px;
+    padding: 25px 30px 30px;
     overflow-y: auto;
+    background: #243b55;
+    border-radius: 0 0 12px 12px;
+    box-shadow: inset 0 0 40px #162447;
   }
   .hidden {
     display: none;
   }
   /* Tap page */
   #coin {
-    margin: 40px auto;
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle at center, gold 60%, #b8860b 100%);
+    margin: 50px auto 30px;
+    width: 130px;
+    height: 130px;
+    background: radial-gradient(circle at center, #ffdd00 65%, #b38f00 100%);
     border-radius: 50%;
-    box-shadow: 0 0 10px gold;
+    box-shadow: 0 0 25px #ffdd00;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 3rem;
+    font-size: 4rem;
     user-select: none;
+    transition: transform 0.15s ease-in-out;
+  }
+  #coin:active {
+    transform: scale(0.9);
+    box-shadow: 0 0 40px #fff700;
   }
   #score {
-    font-size: 2rem;
+    font-size: 2.4rem;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 10px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    text-shadow: 0 0 7px #ffdd00;
   }
   /* Quests */
   ul {
@@ -76,136 +97,212 @@
     padding-left: 0;
   }
   li {
-    background: #222;
-    margin-bottom: 12px;
-    padding: 12px;
-    border-radius: 8px;
+    background: #1a2a47;
+    margin-bottom: 16px;
+    padding: 18px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #c9d1e8;
   }
   li.completed {
-    background: #1e90ff;
-    color: white;
+    background: #ffdd00;
+    color: #162447;
+    font-weight: 700;
     text-decoration: line-through;
+    box-shadow: 0 0 15px #ffdd00;
+  }
+  li a {
+    color: #ffdd00;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 15px;
+    transition: color 0.3s;
+  }
+  li a:hover {
+    color: #fff700;
   }
   /* Top */
   table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 12px;
+    margin-top: 18px;
+    font-size: 1.1rem;
   }
   th, td {
-    padding: 10px;
-    border-bottom: 1px solid #444;
+    padding: 14px 10px;
+    border-bottom: 2px solid #162447;
     text-align: left;
+  }
+  th {
+    background: #1a2a47;
+    color: #ffdd00;
+    letter-spacing: 1px;
+  }
+  tr:nth-child(even) {
+    background: #162447;
+  }
+  tr.top-player {
+    background: #ffdd00;
+    color: #162447;
+    font-weight: 700;
+    box-shadow: 0 0 10px #fff700;
   }
 </style>
 </head>
 <body>
-  <header>Ukraine Coin</header>
-  <nav>
-    <button id="tab-tap" class="active">Tap</button>
-    <button id="tab-quests">Quests</button>
-    <button id="tab-top">Top</button>
-  </nav>
-  <main>
-    <!-- Tap page -->
-    <section id="page-tap">
-      <div id="coin" title="Tap me!">🪙</div>
-      <div id="score">Score: 0</div>
-    </section>
-    <!-- Quests page -->
-    <section id="page-quests" class="hidden">
-      <ul id="quest-list"></ul>
-    </section>
-    <!-- Top page -->
-    <section id="page-top" class="hidden">
-      <table>
-        <thead>
-          <tr><th>Player</th><th>Score</th></tr>
-        </thead>
-        <tbody id="top-list"></tbody>
-      </table>
-    </section>
-  </main>
+<header>Ukraine Coin</header>
+<nav>
+  <button id="tab-tap" class="active">Tap</button>
+  <button id="tab-quests">Quests</button>
+  <button id="tab-top">Top</button>
+</nav>
+<main>
+  <!-- Tap page -->
+  <section id="page-tap">
+    <div id="coin" title="Tap me!">🪙</div>
+    <div id="score">Score: 0</div>
+  </section>
+  <!-- Quests page -->
+  <section id="page-quests" class="hidden">
+    <ul id="quest-list"></ul>
+  </section>
+  <!-- Top page -->
+  <section id="page-top" class="hidden">
+    <table>
+      <thead>
+        <tr><th>Player</th><th>Score</th></tr>
+      </thead>
+      <tbody id="top-list"></tbody>
+    </table>
+  </section>
+</main>
 
 <script>
   const WebApp = window.Telegram.WebApp;
   WebApp.ready();
 
-  // User info
   const user = WebApp.initDataUnsafe.user || { id: 'guest', first_name: 'Guest' };
   const playerId = user.id || 'guest';
   const playerName = user.first_name || 'Guest';
 
-  // Score storage
+  // Подгружаем общий топ из localStorage или создаём пустой
+  const STORAGE_TOP_KEY = 'ukraine_coin_top';
+
+  function loadTop() {
+    const data = localStorage.getItem(STORAGE_TOP_KEY);
+    return data ? JSON.parse(data) : [];
+  }
+  function saveTop(top) {
+    localStorage.setItem(STORAGE_TOP_KEY, JSON.stringify(top));
+  }
+
+  // Обновляем или добавляем игрока в топ
+  function updateTop(playerName, score) {
+    let top = loadTop();
+    const idx = top.findIndex(p => p.name === playerName);
+    if (idx !== -1) {
+      if(score > top[idx].score) top[idx].score = score;
+    } else {
+      top.push({ name: playerName, score });
+    }
+    // Сортируем по убыванию очков и оставляем топ 10
+    top.sort((a,b) => b.score - a.score);
+    if(top.length > 10) top.length = 10;
+    saveTop(top);
+    return top;
+  }
+
+  // Переменные
   let score = parseInt(localStorage.getItem('score_' + playerId)) || 0;
 
-  // Quests data
   const quests = [
-    { id: 1, text: "Tap 10 times", target: 10 },
-    { id: 2, text: "Tap 50 times", target: 50 },
-    { id: 3, text: "Tap 100 times", target: 100 },
+    { id: 1, text: 'Подпишись на Telegram канал', link: 'https://t.me/your_channel', reward: 10000 },
+    { id: 2, text: 'Подпишись на TikTok', link: 'https://www.tiktok.com/@your_tiktok', reward: 10000 },
+    { id: 3, text: 'Подпишись на YouTube', link: 'https://www.youtube.com/channel/your_youtube', reward: 10000 },
+    { id: 4, text: 'Накликай 1,000 раз', target: 1000, reward: 1000 },
+    { id: 5, text: 'Накликай 10,000 раз', target: 10000, reward: 10000 },
+    { id: 6, text: 'Накликай 100,000 раз', target: 100000, reward: 20000 },
+    { id: 7, text: 'Накликай 200,000 раз', target: 200000, reward: 30000 },
   ];
 
-  // DOM Elements
+  // DOM
   const scoreDisplay = document.getElementById('score');
   const coin = document.getElementById('coin');
   const questList = document.getElementById('quest-list');
   const topList = document.getElementById('top-list');
 
-  // Update score display
+  // Функции
   function updateScore() {
-    scoreDisplay.textContent = `Score: ${score}`;
+    scoreDisplay.textContent = `Score: ${score.toLocaleString()}`;
   }
 
-  // Save score
   function saveScore() {
     localStorage.setItem('score_' + playerId, score);
   }
 
-  // Handle coin tap
-  coin.addEventListener('click', () => {
-    score++;
-    updateScore();
-    saveScore();
-    WebApp.HapticFeedback.impactOccurred('medium');
-    updateQuests();
-    updateTopList();
-    // Send score to bot if needed
-    WebApp.sendData(JSON.stringify({ score }));
-  });
-
-  // Render quests
   function updateQuests() {
     questList.innerHTML = '';
     quests.forEach(q => {
-      const completed = score >= q.target;
+      let completed = false;
+      if(q.target) {
+        completed = score >= q.target;
+      } else if(q.reward && q.link) {
+        // Для подписок — ставим completed если уже получил награду (в localStorage)
+        completed = localStorage.getItem(`quest_done_${q.id}_${playerId}`) === 'true';
+      }
       const li = document.createElement('li');
-      li.textContent = `${q.text} — ${completed ? '✅' : '❌'}`;
-      if (completed) li.classList.add('completed');
+      li.className = completed ? 'completed' : '';
+      li.innerHTML = `
+        <span>${q.text}</span>
+        ${
+          q.link ? 
+          (completed ? '✅' : `<a href="${q.link}" target="_blank" rel="noopener noreferrer">Перейти</a>`) 
+          : completed ? '✅' : ''
+        }
+      `;
+      // Клик по ссылке подписки — даём награду и ставим completed
+      if(q.link && !completed) {
+        li.querySelector('a').addEventListener('click', () => {
+          alert(`Спасибо за поддержку! Ты получил ${q.reward.toLocaleString()} монет.`);
+          score += q.reward;
+          saveScore();
+          updateScore();
+          localStorage.setItem(`quest_done_${q.id}_${playerId}`, 'true');
+          updateQuests();
+          updateTopList();
+          updateTop(playerName, score);
+        });
+      }
       questList.appendChild(li);
     });
   }
 
-  // Simple local top list
   function updateTopList() {
-    // For demo, просто покажем себя и два фиктивных игрока
-    const fakePlayers = [
-      { name: 'Alice', score: 120 },
-      { name: 'Bob', score: 90 },
-      { name: playerName, score }
-    ];
-    // Сортируем по убыванию
-    fakePlayers.sort((a, b) => b.score - a.score);
-
+    const top = updateTop(playerName, score);
     topList.innerHTML = '';
-    fakePlayers.forEach(p => {
+    top.forEach((p, i) => {
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${p.name}</td><td>${p.score}</td>`;
+      tr.className = p.name === playerName ? 'top-player' : '';
+      tr.innerHTML = `<td>${i+1}. ${p.name}</td><td>${p.score.toLocaleString()}</td>`;
       topList.appendChild(tr);
     });
   }
 
-  // Tabs navigation
+  coin.addEventListener('click', () => {
+    score++;
+    saveScore();
+    updateScore();
+    WebApp.HapticFeedback.impactOccurred('medium');
+    updateQuests();
+    updateTopList();
+    WebApp.sendData(JSON.stringify({ score }));
+  });
+
+  // Навигация по вкладкам
   const tabs = ['tap', 'quests', 'top'];
   tabs.forEach(tab => {
     document.getElementById('tab-' + tab).addEventListener('click', () => {
@@ -223,12 +320,8 @@
   updateQuests();
   updateTopList();
 
-  // Тема Telegram (авто)
   WebApp.onEvent('themeChanged', () => {
-    const bg = WebApp.themeParams.bg_color || '#121212';
-    const text = WebApp.themeParams.text_color || '#eee';
-    document.body.style.backgroundColor = bg;
-    document.body.style.color = text;
+    // Подстройка цветов под тему (при желании)
   });
 </script>
 </body>
