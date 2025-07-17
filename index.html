@@ -28,33 +28,9 @@
     user-select: none;
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
   }
-  nav {
-    display: flex;
-    background: #162447;
-    justify-content: space-around;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-  }
-  nav button {
-    flex: 1;
-    padding: 15px;
-    font-size: 1.1rem;
-    color: #a9b1d6;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s, color 0.3s;
-    font-weight: 600;
-  }
-  nav button.active, nav button:hover {
-    background: #ffdd00;
-    color: #162447;
-    font-weight: 700;
-    box-shadow: 0 0 12px #ffdd00;
-    border-radius: 8px 8px 0 0;
-  }
   main {
     flex: 1;
-    padding: 25px 30px 30px;
+    padding: 25px 30px 80px; /* отступ снизу для меню */
     overflow-y: auto;
     background: #243b55;
     border-radius: 0 0 12px 12px;
@@ -63,7 +39,7 @@
   .hidden {
     display: none;
   }
-  /* Tap page */
+  /* Контент для разных вкладок */
   #coin {
     margin: 50px auto 30px;
     width: 130px;
@@ -91,7 +67,6 @@
     font-weight: 700;
     text-shadow: 0 0 7px #ffdd00;
   }
-  /* Quests */
   ul {
     list-style: none;
     padding-left: 0;
@@ -125,7 +100,6 @@
   li a:hover {
     color: #fff700;
   }
-  /* Top */
   table {
     width: 100%;
     border-collapse: collapse;
@@ -151,26 +125,86 @@
     font-weight: 700;
     box-shadow: 0 0 10px #fff700;
   }
+
+  /* Нижнее меню */
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 60px;
+    background: #162447;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -3px 10px rgba(0,0,0,0.7);
+    user-select: none;
+    z-index: 1000;
+  }
+  footer button {
+    background: none;
+    border: none;
+    color: #a9b1d6;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    flex: 1;
+    padding: 8px 0;
+    transition: color 0.3s, border-top 0.3s;
+    border-top: 3px solid transparent;
+  }
+  footer button.active {
+    color: #ffdd00;
+    border-top: 3px solid #ffdd00;
+    font-weight: 700;
+  }
+  footer button:hover:not(.active) {
+    color: #fff700;
+  }
+
+  /* Прокачка */
+  #page-upgrades ul {
+    padding-left: 0;
+  }
+  #page-upgrades li {
+    background: #1a2a47;
+    margin-bottom: 16px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    font-size: 1.2rem;
+    color: #c9d1e8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  #page-upgrades li button {
+    background: #ffdd00;
+    color: #162447;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  #page-upgrades li button:hover {
+    background-color: #ffd633;
+  }
 </style>
 </head>
 <body>
 <header>Ukraine Coin</header>
-<nav>
-  <button id="tab-tap" class="active">Tap</button>
-  <button id="tab-quests">Quests</button>
-  <button id="tab-top">Top</button>
-</nav>
 <main>
-  <!-- Tap page -->
+  <!-- Tap -->
   <section id="page-tap">
     <div id="coin" title="Tap me!">🪙</div>
     <div id="score">Score: 0</div>
   </section>
-  <!-- Quests page -->
+  <!-- Quests -->
   <section id="page-quests" class="hidden">
     <ul id="quest-list"></ul>
   </section>
-  <!-- Top page -->
+  <!-- Top -->
   <section id="page-top" class="hidden">
     <table>
       <thead>
@@ -179,7 +213,19 @@
       <tbody id="top-list"></tbody>
     </table>
   </section>
+  <!-- Upgrades -->
+  <section id="page-upgrades" class="hidden">
+    <ul id="upgrade-list">
+      <!-- Прокачки будут тут -->
+    </ul>
+  </section>
 </main>
+<footer>
+  <button id="tab-tap" class="active">Tap</button>
+  <button id="tab-quests">Quests</button>
+  <button id="tab-top">Top</button>
+  <button id="tab-upgrades">Прокачка</button>
+</footer>
 
 <script>
   const WebApp = window.Telegram.WebApp;
@@ -189,9 +235,11 @@
   const playerId = user.id || 'guest';
   const playerName = user.first_name || 'Guest';
 
-  // Подгружаем общий топ из localStorage или создаём пустой
   const STORAGE_TOP_KEY = 'ukraine_coin_top';
+  const STORAGE_SCORE_KEY = 'score_' + playerId;
+  const STORAGE_UPGRADES_KEY = 'upgrades_' + playerId;
 
+  // Загрузка топа
   function loadTop() {
     const data = localStorage.getItem(STORAGE_TOP_KEY);
     return data ? JSON.parse(data) : [];
@@ -199,8 +247,7 @@
   function saveTop(top) {
     localStorage.setItem(STORAGE_TOP_KEY, JSON.stringify(top));
   }
-
-  // Обновляем или добавляем игрока в топ
+  // Обновление топа
   function updateTop(playerName, score) {
     let top = loadTop();
     const idx = top.findIndex(p => p.name === playerName);
@@ -209,16 +256,31 @@
     } else {
       top.push({ name: playerName, score });
     }
-    // Сортируем по убыванию очков и оставляем топ 10
     top.sort((a,b) => b.score - a.score);
     if(top.length > 10) top.length = 10;
     saveTop(top);
     return top;
   }
 
-  // Переменные
-  let score = parseInt(localStorage.getItem('score_' + playerId)) || 0;
+  // Загрузка прокачек
+  function loadUpgrades() {
+    const data = localStorage.getItem(STORAGE_UPGRADES_KEY);
+    return data ? JSON.parse(data) : {
+      clickPower: 1, // сколько монет за клик
+      autoClicker: 0 // автонаклики (будет в будущем)
+    };
+  }
+  function saveUpgrades(upgrades) {
+    localStorage.setItem(STORAGE_UPGRADES_KEY, JSON.stringify(upgrades));
+  }
 
+  // Счёт
+  let score = parseInt(localStorage.getItem(STORAGE_SCORE_KEY)) || 0;
+
+  // Прокачки
+  let upgrades = loadUpgrades();
+
+  // Квесты
   const quests = [
     { id: 1, text: 'Подпишись на Telegram канал', link: 'https://t.me/your_channel', reward: 10000 },
     { id: 2, text: 'Подпишись на TikTok', link: 'https://www.tiktok.com/@your_tiktok', reward: 10000 },
@@ -229,21 +291,43 @@
     { id: 7, text: 'Накликай 200,000 раз', target: 200000, reward: 30000 },
   ];
 
+  // Прокачки для покупки
+  const upgradesList = [
+    { id: 'clickPower', name: 'Увеличить монеты за клик (+1)', baseCost: 5000, costMult: 2 },
+  ];
+
   // DOM
   const scoreDisplay = document.getElementById('score');
   const coin = document.getElementById('coin');
   const questList = document.getElementById('quest-list');
   const topList = document.getElementById('top-list');
+  const upgradeList = document.getElementById('upgrade-list');
 
-  // Функции
+  // Навигация
+  const tabs = ['tap', 'quests', 'top', 'upgrades'];
+  function showTab(tab) {
+    tabs.forEach(t => {
+      document.getElementById('tab-' + t).classList.remove('active');
+      document.getElementById('page-' + t).classList.add('hidden');
+    });
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('page-' + tab).classList.remove('hidden');
+  }
+  tabs.forEach(tab => {
+    document.getElementById('tab-' + tab).addEventListener('click', () => {
+      showTab(tab);
+    });
+  });
+
+  // Обновить счёт
   function updateScore() {
     scoreDisplay.textContent = `Score: ${score.toLocaleString()}`;
   }
-
+  // Сохранить счёт
   function saveScore() {
-    localStorage.setItem('score_' + playerId, score);
+    localStorage.setItem(STORAGE_SCORE_KEY, score);
   }
-
+  // Обновить квесты
   function updateQuests() {
     questList.innerHTML = '';
     quests.forEach(q => {
@@ -251,7 +335,6 @@
       if(q.target) {
         completed = score >= q.target;
       } else if(q.reward && q.link) {
-        // Для подписок — ставим completed если уже получил награду (в localStorage)
         completed = localStorage.getItem(`quest_done_${q.id}_${playerId}`) === 'true';
       }
       const li = document.createElement('li');
@@ -264,7 +347,6 @@
           : completed ? '✅' : ''
         }
       `;
-      // Клик по ссылке подписки — даём награду и ставим completed
       if(q.link && !completed) {
         li.querySelector('a').addEventListener('click', () => {
           alert(`Спасибо за поддержку! Ты получил ${q.reward.toLocaleString()} монет.`);
@@ -280,7 +362,7 @@
       questList.appendChild(li);
     });
   }
-
+  // Обновить топ
   function updateTopList() {
     const top = updateTop(playerName, score);
     topList.innerHTML = '';
@@ -291,9 +373,36 @@
       topList.appendChild(tr);
     });
   }
+  // Обновить прокачки
+  function updateUpgrades() {
+    upgradeList.innerHTML = '';
+    upgradesList.forEach(upg => {
+      const level = upgrades[upg.id] || 0;
+      const cost = Math.floor(upg.baseCost * Math.pow(upg.costMult, level));
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span>${upg.name} (уровень: ${level})</span>
+        <button ${score < cost ? 'disabled' : ''}>Купить за ${cost.toLocaleString()}</button>
+      `;
+      li.querySelector('button').addEventListener('click', () => {
+        if(score >= cost) {
+          score -= cost;
+          upgrades[upg.id] = level + 1;
+          saveScore();
+          saveUpgrades(upgrades);
+          updateScore();
+          updateUpgrades();
+          updateTop(playerName, score);
+          updateTopList();
+        }
+      });
+      upgradeList.appendChild(li);
+    });
+  }
 
+  // Клик по монете
   coin.addEventListener('click', () => {
-    score++;
+    score += upgrades.clickPower || 1;
     saveScore();
     updateScore();
     WebApp.HapticFeedback.impactOccurred('medium');
@@ -302,27 +411,19 @@
     WebApp.sendData(JSON.stringify({ score }));
   });
 
-  // Навигация по вкладкам
-  const tabs = ['tap', 'quests', 'top'];
-  tabs.forEach(tab => {
-    document.getElementById('tab-' + tab).addEventListener('click', () => {
-      tabs.forEach(t => {
-        document.getElementById('tab-' + t).classList.remove('active');
-        document.getElementById('page-' + t).classList.add('hidden');
-      });
-      document.getElementById('tab-' + tab).classList.add('active');
-      document.getElementById('page-' + tab).classList.remove('hidden');
-    });
-  });
-
   // Инициализация
   updateScore();
   updateQuests();
   updateTopList();
+  updateUpgrades();
 
+  // Подстройка под тему телеграм (по желанию)
   WebApp.onEvent('themeChanged', () => {
-    // Подстройка цветов под тему (при желании)
+    // Можно менять цвета тут
   });
+
+  // По умолчанию показываем "тап"
+  showTab('tap');
 </script>
 </body>
 </html>
