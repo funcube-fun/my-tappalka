@@ -6,10 +6,13 @@
 <title>Ukraine Coin</title>
 <style>
   body {
-    margin: 0; padding: 0; background: #000; color: #ffd500;
+    margin: 0; padding: 0;
+    background: linear-gradient(to bottom, #000, #111);
+    color: #ffd500;
     font-family: Arial, sans-serif;
     display: flex; flex-direction: column; height: 100vh;
     user-select: none;
+    overflow: hidden;
   }
   header {
     text-align: center; padding: 20px 0 10px 0;
@@ -21,17 +24,19 @@
   }
   main {
     flex: 1; padding: 10px 20px; overflow-y: auto;
+    position: relative;
   }
   footer {
     display: flex; background: #111; border-top: 1px solid #222;
+    z-index: 10;
   }
   footer button {
     flex: 1; background: transparent; border: none; color: #ffd500;
     font-weight: 700; padding: 12px 0; font-size: 14px; cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s, color 0.3s;
   }
   footer button.active, footer button:hover {
-    background: #222;
+    background: #222; color: #fff;
   }
   .hidden {
     display: none;
@@ -42,61 +47,115 @@
     border: 6px solid #f9f871;
     box-shadow: 0 0 20px #ffd500aa inset, 0 0 15px #ffd500;
     cursor: pointer; background-color: #ffd500;
-    transition: transform 0.1s ease;
+    transition: transform 0.1s ease, box-shadow 0.3s;
+    animation: pulse 2s infinite;
+  }
+  #coin-button:hover {
+    box-shadow: 0 0 25px #fff000, 0 0 30px #ffd500;
   }
   #coin-button.blue {
     background-color: #00bfff;
     box-shadow: 0 0 20px #00bfffaa inset, 0 0 15px #00bfff;
     border-color: #0077bb;
   }
-  #coin-button:active { transform: scale(0.9); }
+  #coin-button:active {
+    transform: scale(0.9);
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+  }
   #score-display, #energy-display {
     font-size: 22px; margin: 10px 0;
+    text-shadow: 0 0 5px #000;
   }
   .skin-item, .upgrade-item, .task-item {
     display: flex; justify-content: space-between; align-items: center;
-    background: #111; border: 1px solid #444; padding: 10px;
-    border-radius: 8px; margin-bottom: 10px;
+    background: #1a1a1a; border: 1px solid #333; padding: 12px;
+    border-radius: 12px; margin-bottom: 12px;
+    box-shadow: 0 0 6px #000;
+    transition: transform 0.2s;
+  }
+  .skin-item:hover, .upgrade-item:hover, .task-item:hover {
+    transform: scale(1.02);
   }
   .skin-swatch {
     width: 40px; height: 40px; border-radius: 50%; border: 2px solid #444;
   }
   .skin-yellow { background-color: #ffd500; }
   .skin-blue { background-color: #00bfff; }
-  .skin-selected { border-color: #0f0 !important; }
+  .skin-selected { border-color: #0f0 !important; box-shadow: 0 0 6px #0f0; }
   button.small {
     padding: 6px 12px; font-size: 14px;
-    background: #222; border: none; color: #ffd500;
+    background: linear-gradient(to right, #222, #333);
+    border: 1px solid #444; color: #ffd500;
     border-radius: 5px; cursor: pointer;
+    transition: background 0.3s, transform 0.1s;
+  }
+  button.small:hover {
+    background: linear-gradient(to right, #333, #444);
+    transform: scale(1.05);
   }
   .task-input {
-    width: 100%; margin-top: 10px;
+    width: 100%; margin-top: 10px; padding: 8px;
+    border-radius: 6px; border: 1px solid #333;
+    background: #111; color: #ffd500;
+  }
+
+  /* Фоновая анимация монет */
+  #coin-fx {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+    overflow: hidden; z-index: 0;
+  }
+  .coin-fx-item {
+    position: absolute; width: 24px; height: 24px; background: url('https://emojicdn.elk.sh/🪙');
+    background-size: cover; animation: fall 5s linear infinite;
+  }
+  @keyframes fall {
+    0% { transform: translateY(-100px); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
   }
 </style>
 </head>
 <body>
-
 <header>Ukraine <span class="coin">Coin</span></header>
-
 <main>
+  <div id="coin-fx"></div>
   <section id="tap-tab">
     <div id="score-display">Монеты: 0</div>
     <div id="energy-display">Энергия: 100 / 100</div>
     <button id="coin-button"></button>
   </section>
-
   <section id="skins-tab" class="hidden"></section>
   <section id="upgrades-tab" class="hidden"></section>
   <section id="tasks-tab" class="hidden"></section>
 </main>
-
 <footer>
   <button class="tab-btn active" data-tab="tap-tab">Тап</button>
   <button class="tab-btn" data-tab="skins-tab">Магазин скинов</button>
   <button class="tab-btn" data-tab="upgrades-tab">Прокачка</button>
   <button class="tab-btn" data-tab="tasks-tab">Задания</button>
 </footer>
-
+<script>
+// Добавляем фоновые падающие монеты
+function spawnCoinFx() {
+  const fx = document.getElementById('coin-fx');
+  const coin = document.createElement('div');
+  coin.className = 'coin-fx-item';
+  coin.style.left = Math.random() * 100 + '%';
+  coin.style.animationDuration = (4 + Math.random() * 3) + 's';
+  fx.appendChild(coin);
+  setTimeout(() => coin.remove(), 6000);
+}
+setInterval(spawnCoinFx, 800);
+</script>
+<script>
+// Остальной JS уже есть в коде ниже (оставляем без изменений)
+</script>
+</body>
+</html>
 <script>
 const data = {
   score: parseInt(localStorage.getItem('score')) || 0,
