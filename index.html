@@ -1,85 +1,235 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ukraine Coin Tap</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background-color: #f0f0f0;
-      margin: 0;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-      font-size: 32px;
-      color: #0077b6;
-      text-shadow: 1px 1px 2px #ccc;
-    }
-
-    #score {
-      font-size: 28px;
-      margin-bottom: 30px;
-      color: #333;
-    }
-
-    #tapButton {
-      width: 150px;
-      height: 150px;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/7/7e/Ukraine_1_hryvnia_coin_reverse_2006.png') no-repeat center center;
-      background-size: cover;
-      border: none;
-      border-radius: 50%;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      cursor: pointer;
-      transition: transform 0.1s ease;
-    }
-
-    #tapButton:active {
-      transform: scale(0.9);
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ukraine Coin</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  body {
+    margin: 0; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    color: #eee;
+    display: flex; 
+    flex-direction: column;
+    height: 100vh;
+  }
+  header {
+    background: #1e90ff;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    user-select: none;
+  }
+  nav {
+    display: flex;
+    background: #222;
+    justify-content: space-around;
+  }
+  nav button {
+    flex: 1;
+    padding: 12px;
+    font-size: 1rem;
+    color: #ccc;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+  }
+  nav button.active, nav button:hover {
+    background: #1e90ff;
+    color: white;
+  }
+  main {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .hidden {
+    display: none;
+  }
+  /* Tap page */
+  #coin {
+    margin: 40px auto;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle at center, gold 60%, #b8860b 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 10px gold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    user-select: none;
+  }
+  #score {
+    font-size: 2rem;
+    text-align: center;
+    margin-top: 20px;
+  }
+  /* Quests */
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  li {
+    background: #222;
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  li.completed {
+    background: #1e90ff;
+    color: white;
+    text-decoration: line-through;
+  }
+  /* Top */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+  }
+  th, td {
+    padding: 10px;
+    border-bottom: 1px solid #444;
+    text-align: left;
+  }
+</style>
 </head>
 <body>
-  <h1>Ukraine Coin</h1>
-  <div id="score">Score: 0</div>
-  <button id="tapButton"></button>
+  <header>Ukraine Coin</header>
+  <nav>
+    <button id="tab-tap" class="active">Tap</button>
+    <button id="tab-quests">Quests</button>
+    <button id="tab-top">Top</button>
+  </nav>
+  <main>
+    <!-- Tap page -->
+    <section id="page-tap">
+      <div id="coin" title="Tap me!">🪙</div>
+      <div id="score">Score: 0</div>
+    </section>
+    <!-- Quests page -->
+    <section id="page-quests" class="hidden">
+      <ul id="quest-list"></ul>
+    </section>
+    <!-- Top page -->
+    <section id="page-top" class="hidden">
+      <table>
+        <thead>
+          <tr><th>Player</th><th>Score</th></tr>
+        </thead>
+        <tbody id="top-list"></tbody>
+      </table>
+    </section>
+  </main>
 
-  <script>
-    const WebApp = window.Telegram.WebApp;
-    WebApp.ready();
+<script>
+  const WebApp = window.Telegram.WebApp;
+  WebApp.ready();
 
-    const user = WebApp.initDataUnsafe.user;
-    if (user) {
-      console.log(`User: ${user.first_name} ${user.last_name || ''}`);
-    }
+  // User info
+  const user = WebApp.initDataUnsafe.user || { id: 'guest', first_name: 'Guest' };
+  const playerId = user.id || 'guest';
+  const playerName = user.first_name || 'Guest';
 
-    let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
-    const scoreDisplay = document.getElementById('score');
-    const tapButton = document.getElementById('tapButton');
-    scoreDisplay.innerText = `Score: ${score}`;
+  // Score storage
+  let score = parseInt(localStorage.getItem('score_' + playerId)) || 0;
 
-    tapButton.addEventListener('click', () => {
-      score++;
-      scoreDisplay.innerText = `Score: ${score}`;
-      localStorage.setItem('score', score);
-      WebApp.sendData(JSON.stringify({ score: score }));
-      WebApp.HapticFeedback.impactOccurred('medium');
+  // Quests data
+  const quests = [
+    { id: 1, text: "Tap 10 times", target: 10 },
+    { id: 2, text: "Tap 50 times", target: 50 },
+    { id: 3, text: "Tap 100 times", target: 100 },
+  ];
+
+  // DOM Elements
+  const scoreDisplay = document.getElementById('score');
+  const coin = document.getElementById('coin');
+  const questList = document.getElementById('quest-list');
+  const topList = document.getElementById('top-list');
+
+  // Update score display
+  function updateScore() {
+    scoreDisplay.textContent = `Score: ${score}`;
+  }
+
+  // Save score
+  function saveScore() {
+    localStorage.setItem('score_' + playerId, score);
+  }
+
+  // Handle coin tap
+  coin.addEventListener('click', () => {
+    score++;
+    updateScore();
+    saveScore();
+    WebApp.HapticFeedback.impactOccurred('medium');
+    updateQuests();
+    updateTopList();
+    // Send score to bot if needed
+    WebApp.sendData(JSON.stringify({ score }));
+  });
+
+  // Render quests
+  function updateQuests() {
+    questList.innerHTML = '';
+    quests.forEach(q => {
+      const completed = score >= q.target;
+      const li = document.createElement('li');
+      li.textContent = `${q.text} — ${completed ? '✅' : '❌'}`;
+      if (completed) li.classList.add('completed');
+      questList.appendChild(li);
     });
+  }
 
-    // Реакция на смену темы
-    WebApp.onEvent('themeChanged', () => {
-      document.body.style.backgroundColor = WebApp.themeParams.bg_color || '#f0f0f0';
+  // Simple local top list
+  function updateTopList() {
+    // For demo, просто покажем себя и два фиктивных игрока
+    const fakePlayers = [
+      { name: 'Alice', score: 120 },
+      { name: 'Bob', score: 90 },
+      { name: playerName, score }
+    ];
+    // Сортируем по убыванию
+    fakePlayers.sort((a, b) => b.score - a.score);
+
+    topList.innerHTML = '';
+    fakePlayers.forEach(p => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${p.name}</td><td>${p.score}</td>`;
+      topList.appendChild(tr);
     });
-  </script>
+  }
+
+  // Tabs navigation
+  const tabs = ['tap', 'quests', 'top'];
+  tabs.forEach(tab => {
+    document.getElementById('tab-' + tab).addEventListener('click', () => {
+      tabs.forEach(t => {
+        document.getElementById('tab-' + t).classList.remove('active');
+        document.getElementById('page-' + t).classList.add('hidden');
+      });
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('page-' + tab).classList.remove('hidden');
+    });
+  });
+
+  // Инициализация
+  updateScore();
+  updateQuests();
+  updateTopList();
+
+  // Тема Telegram (авто)
+  WebApp.onEvent('themeChanged', () => {
+    const bg = WebApp.themeParams.bg_color || '#121212';
+    const text = WebApp.themeParams.text_color || '#eee';
+    document.body.style.backgroundColor = bg;
+    document.body.style.color = text;
+  });
+</script>
 </body>
 </html>
-
