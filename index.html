@@ -36,19 +36,12 @@
   .hidden {
     display: none;
   }
-  /* Tap tab */
-  #tap-tab {
-    text-align: center;
-  }
+  #tap-tab { text-align: center; }
   #coin-button {
-    margin: 20px auto;
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
+    margin: 20px auto; width: 160px; height: 160px; border-radius: 50%;
     border: 6px solid #f9f871;
     box-shadow: 0 0 20px #ffd500aa inset, 0 0 15px #ffd500;
-    cursor: pointer;
-    background-color: #ffd500; /* default yellow */
+    cursor: pointer; background-color: #ffd500;
     transition: transform 0.1s ease;
   }
   #coin-button.blue {
@@ -56,350 +49,251 @@
     box-shadow: 0 0 20px #00bfffaa inset, 0 0 15px #00bfff;
     border-color: #0077bb;
   }
-  #coin-button:active {
-    transform: scale(0.9);
-  }
+  #coin-button:active { transform: scale(0.9); }
   #score-display, #energy-display {
     font-size: 22px; margin: 10px 0;
   }
-  /* Skins tab */
-  #skins-tab {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  .skin-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #111;
-    border: 1px solid #444;
-    padding: 10px;
-    border-radius: 8px;
+  .skin-item, .upgrade-item, .task-item {
+    display: flex; justify-content: space-between; align-items: center;
+    background: #111; border: 1px solid #444; padding: 10px;
+    border-radius: 8px; margin-bottom: 10px;
   }
   .skin-swatch {
-    width: 40px; height: 40px; border-radius: 50%;
-    border: 2px solid #444;
+    width: 40px; height: 40px; border-radius: 50%; border: 2px solid #444;
   }
-  .skin-yellow {
-    background-color: #ffd500;
+  .skin-yellow { background-color: #ffd500; }
+  .skin-blue { background-color: #00bfff; }
+  .skin-selected { border-color: #0f0 !important; }
+  button.small {
+    padding: 6px 12px; font-size: 14px;
+    background: #222; border: none; color: #ffd500;
+    border-radius: 5px; cursor: pointer;
   }
-  .skin-blue {
-    background-color: #00bfff;
-  }
-  .skin-selected {
-    border-color: #0f0 !important;
-  }
-  .skin-item button {
-    background: #222;
-    border: none;
-    color: #ffd500;
-    padding: 6px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  .skin-item button:disabled {
-    background: #444;
-    cursor: default;
-  }
-  /* Upgrades tab */
-  #upgrades-tab {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  .upgrade-item {
-    background: #111;
-    border: 1px solid #444;
-    padding: 10px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .upgrade-info {
-    flex-grow: 1;
-    margin-right: 10px;
-  }
-  .upgrade-info h4 {
-    margin: 0 0 6px 0;
-    font-weight: 700;
-  }
-  .upgrade-info p {
-    margin: 0;
-    font-size: 14px;
-    color: #aaa;
-  }
-  .upgrade-item button {
-    background: #222;
-    border: none;
-    color: #ffd500;
-    padding: 8px 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  .upgrade-item button:disabled {
-    background: #444;
-    cursor: default;
+  .task-input {
+    width: 100%; margin-top: 10px;
   }
 </style>
 </head>
 <body>
 
-<header>
-  Ukraine <span class="coin">Coin</span>
-</header>
+<header>Ukraine <span class="coin">Coin</span></header>
 
 <main>
-  <!-- Вкладка Тап -->
   <section id="tap-tab">
     <div id="score-display">Монеты: 0</div>
     <div id="energy-display">Энергия: 100 / 100</div>
     <button id="coin-button"></button>
   </section>
 
-  <!-- Вкладка Магазин скинов -->
   <section id="skins-tab" class="hidden"></section>
-
-  <!-- Вкладка Прокачка -->
   <section id="upgrades-tab" class="hidden"></section>
+  <section id="tasks-tab" class="hidden"></section>
 </main>
 
 <footer>
   <button class="tab-btn active" data-tab="tap-tab">Тап</button>
   <button class="tab-btn" data-tab="skins-tab">Магазин скинов</button>
   <button class="tab-btn" data-tab="upgrades-tab">Прокачка</button>
+  <button class="tab-btn" data-tab="tasks-tab">Задания</button>
 </footer>
 
-<!-- Весь HTML остаётся прежним вплоть до <script> -->
-
 <script>
-  // Данные игры
-  const data = {
-    score: parseInt(localStorage.getItem('score')) || 0,
-    energyMax: parseInt(localStorage.getItem('energyMax')) || 100,
-    energy: parseInt(localStorage.getItem('energy')) || 100,
-    clickPower: parseInt(localStorage.getItem('clickPower')) || 1,
-    skinIndex: parseInt(localStorage.getItem('skinIndex')) || 0,
-    upgradesBought: {
-      click: parseInt(localStorage.getItem('upg_click')) || 0,
-      energy: parseInt(localStorage.getItem('upg_energy')) || 0
-    }
-  };
+const data = {
+  score: parseInt(localStorage.getItem('score')) || 0,
+  energyMax: parseInt(localStorage.getItem('energyMax')) || 100,
+  energy: parseInt(localStorage.getItem('energy')) || 100,
+  clickPower: parseInt(localStorage.getItem('clickPower')) || 1,
+  skinIndex: parseInt(localStorage.getItem('skinIndex')) || 0,
+  upgradesBought: {
+    click: parseInt(localStorage.getItem('upg_click')) || 0,
+    energy: parseInt(localStorage.getItem('upg_energy')) || 0
+  },
+  tasksCompleted: JSON.parse(localStorage.getItem('tasksCompleted')) || {},
+  referralUsed: localStorage.getItem('referralUsed') || ""
+};
 
-  function saveData() {
-    localStorage.setItem('score', data.score);
-    localStorage.setItem('energy', data.energy);
-    localStorage.setItem('energyMax', data.energyMax);
-    localStorage.setItem('clickPower', data.clickPower);
-    localStorage.setItem('skinIndex', data.skinIndex);
-    localStorage.setItem('upg_click', data.upgradesBought.click);
-    localStorage.setItem('upg_energy', data.upgradesBought.energy);
-  }
+function saveData() {
+  localStorage.setItem('score', data.score);
+  localStorage.setItem('energy', data.energy);
+  localStorage.setItem('energyMax', data.energyMax);
+  localStorage.setItem('clickPower', data.clickPower);
+  localStorage.setItem('skinIndex', data.skinIndex);
+  localStorage.setItem('upg_click', data.upgradesBought.click);
+  localStorage.setItem('upg_energy', data.upgradesBought.energy);
+  localStorage.setItem('tasksCompleted', JSON.stringify(data.tasksCompleted));
+  localStorage.setItem('referralUsed', data.referralUsed);
+}
 
-  const scoreDisplay = document.getElementById('score-display');
-  const energyDisplay = document.getElementById('energy-display');
-  const coinButton = document.getElementById('coin-button');
+const scoreDisplay = document.getElementById('score-display');
+const energyDisplay = document.getElementById('energy-display');
+const coinButton = document.getElementById('coin-button');
 
-  const tabs = {
-    tap: document.getElementById('tap-tab'),
-    skins: document.getElementById('skins-tab'),
-    upgrades: document.getElementById('upgrades-tab'),
-  };
+const tabs = {
+  tap: document.getElementById('tap-tab'),
+  skins: document.getElementById('skins-tab'),
+  upgrades: document.getElementById('upgrades-tab'),
+  tasks: document.getElementById('tasks-tab'),
+};
 
-  const skins = [
-    { name: 'Жёлтый (стандарт)', colorClass: 'skin-yellow', cost: 0 },
-    { name: 'Голубой', colorClass: 'skin-blue', cost: 100 },
-  ];
+const skins = [
+  { name: 'Жёлтый (стандарт)', colorClass: 'skin-yellow', cost: 0 },
+  { name: 'Голубой', colorClass: 'skin-blue', cost: 100 },
+];
 
-  function renderSkins() {
-    const container = tabs.skins;
-    container.innerHTML = '';
-    skins.forEach((skin, idx) => {
-      const div = document.createElement('div');
-      div.className = 'skin-item';
-
-      const swatch = document.createElement('div');
-      swatch.className = `skin-swatch ${skin.colorClass}`;
-      if (data.skinIndex === idx) swatch.classList.add('skin-selected');
-      div.appendChild(swatch);
-
-      const nameSpan = document.createElement('span');
-      nameSpan.textContent = skin.name;
-      div.appendChild(nameSpan);
-
-      const btn = document.createElement('button');
-
-      if (data.skinIndex === idx) {
-        btn.textContent = 'Выбрано';
-        btn.disabled = true;
-      } else if (data.score >= skin.cost) {
-        btn.textContent = `Купить за ${skin.cost} монет`;
-        btn.disabled = false;
-      } else {
-        btn.textContent = `Нужно ${skin.cost} монет`;
-        btn.disabled = true;
-      }
-
+function renderSkins() {
+  const c = tabs.skins;
+  c.innerHTML = '';
+  skins.forEach((skin, i) => {
+    const div = document.createElement('div'); div.className = 'skin-item';
+    div.innerHTML = `<div class="skin-swatch ${skin.colorClass} ${data.skinIndex === i ? 'skin-selected' : ''}"></div>
+      <span>${skin.name}</span>`;
+    const btn = document.createElement('button');
+    btn.className = 'small';
+    if (data.skinIndex === i) {
+      btn.textContent = 'Выбрано'; btn.disabled = true;
+    } else if (data.score >= skin.cost) {
+      btn.textContent = `Купить за ${skin.cost}`;
       btn.onclick = () => {
-        if (data.score >= skin.cost) {
-          data.score -= skin.cost;
-          data.skinIndex = idx;
-          saveData();
-          updateUI();
-          renderSkins();
-        }
+        data.score -= skin.cost; data.skinIndex = i; saveData(); updateUI(); renderSkins();
       };
-
-      div.appendChild(btn);
-      container.appendChild(div);
-    });
-  }
-
-  const upgradesList = [
-    {
-      id: 'click',
-      title: 'Улучшение клика',
-      desc: 'Увеличивает монеты за клик',
-      baseCost: 100,
-      baseAmount: 1,
-      getCost() {
-        return Math.floor(this.baseCost * Math.pow(1.7, data.upgradesBought.click));
-      },
-      buy() {
-        data.clickPower += this.baseAmount;
-        data.upgradesBought.click++;
-      },
-      getDesc() {
-        return `+${this.baseAmount} к монетам за клик`;
-      }
-    },
-    {
-      id: 'energy',
-      title: 'Улучшение энергии',
-      desc: 'Увеличивает максимальную энергию',
-      baseCost: 150,
-      baseAmount: 20,
-      getCost() {
-        return Math.floor(this.baseCost * Math.pow(1.5, data.upgradesBought.energy));
-      },
-      buy() {
-        data.energyMax += this.baseAmount;
-        data.energy += this.baseAmount;
-        data.upgradesBought.energy++;
-        if (data.energy > data.energyMax) data.energy = data.energyMax;
-      },
-      getDesc() {
-        return `+${this.baseAmount} к максимуму энергии`;
-      }
-    }
-  ];
-
-  function renderUpgrades() {
-    const container = tabs.upgrades;
-    container.innerHTML = '';
-    upgradesList.forEach(upg => {
-      const cost = upg.getCost();
-
-      const div = document.createElement('div');
-      div.className = 'upgrade-item';
-
-      const info = document.createElement('div');
-      info.className = 'upgrade-info';
-
-      const title = document.createElement('h4');
-      title.textContent = `${upg.title} (уровень: ${data.upgradesBought[upg.id]})`;
-
-      const desc = document.createElement('p');
-      desc.textContent = upg.desc + ' — ' + upg.getDesc();
-
-      info.appendChild(title);
-      info.appendChild(desc);
-
-      const btn = document.createElement('button');
-      btn.textContent = `Купить за ${cost} монет`;
-      btn.disabled = data.score < cost;
-      btn.onclick = () => {
-        if (data.score >= cost) {
-          data.score -= cost;
-          upg.buy();
-          saveData();
-          updateUI();
-          renderUpgrades();
-        }
-      };
-
-      div.appendChild(info);
-      div.appendChild(btn);
-
-      container.appendChild(div);
-    });
-  }
-
-  function updateUI() {
-    scoreDisplay.textContent = `Монеты: ${Math.floor(data.score)}`;
-    energyDisplay.textContent = `Энергия: ${Math.floor(data.energy)} / ${data.energyMax}`;
-
-    if (data.skinIndex === 1) {
-      coinButton.classList.add('blue');
     } else {
-      coinButton.classList.remove('blue');
+      btn.textContent = `Нужно ${skin.cost}`; btn.disabled = true;
     }
+    div.appendChild(btn); c.appendChild(div);
+  });
+}
+
+const upgradesList = [
+  {
+    id: 'click', title: 'Улучшение клика', desc: 'Больше монет за клик',
+    baseCost: 100, baseAmount: 1,
+    getCost() { return Math.floor(this.baseCost * Math.pow(1.7, data.upgradesBought.click)); },
+    buy() { data.clickPower += this.baseAmount; data.upgradesBought.click++; },
+    getDesc() { return `+${this.baseAmount} монет за клик`; }
+  },
+  {
+    id: 'energy', title: 'Улучшение энергии', desc: 'Больше энергии',
+    baseCost: 150, baseAmount: 20,
+    getCost() { return Math.floor(this.baseCost * Math.pow(1.5, data.upgradesBought.energy)); },
+    buy() { data.energyMax += this.baseAmount; data.energy += this.baseAmount; data.upgradesBought.energy++; },
+    getDesc() { return `+${this.baseAmount} макс. энергии`; }
   }
+];
 
-  coinButton.onclick = () => {
-    if (data.energy >= 1) {
-      data.energy -= 1;
-      data.score += data.clickPower;
-      saveData();
-      updateUI();
-    } else {
-      alert('Недостаточно энергии! Улучшайте энергию.');
-    }
-  };
-
-  setInterval(() => {
-    if (data.energy < data.energyMax) {
-      data.energy += 1;
-      if (data.energy > data.energyMax) data.energy = data.energyMax;
-      saveData();
-      updateUI();
-    }
-  }, 1000);
-
-  const tabButtons = document.querySelectorAll('footer button.tab-btn');
-  tabButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      tabButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const tabId = btn.dataset.tab;
-
-      // Скрываем все вкладки
-      Object.values(tabs).forEach(tab => tab.classList.add('hidden'));
-
-      // Очищаем содержимое скинов и прокачки
-      tabs.skins.innerHTML = '';
-      tabs.upgrades.innerHTML = '';
-
-      // Показываем нужную вкладку
-      const visibleTab = tabs[tabId.replace('-tab','')];
-      if (visibleTab) visibleTab.classList.remove('hidden');
-
-      // Отрисовка соответствующего контента
-      if (tabId === 'skins-tab') {
-        renderSkins();
-      } else if (tabId === 'upgrades-tab') {
-        renderUpgrades();
+function renderUpgrades() {
+  const c = tabs.upgrades;
+  c.innerHTML = '';
+  upgradesList.forEach(upg => {
+    const cost = upg.getCost();
+    const div = document.createElement('div'); div.className = 'upgrade-item';
+    div.innerHTML = `<div class="upgrade-info">
+      <h4>${upg.title} (уровень: ${data.upgradesBought[upg.id]})</h4>
+      <p>${upg.desc} — ${upg.getDesc()}</p>
+    </div>`;
+    const btn = document.createElement('button');
+    btn.className = 'small';
+    btn.textContent = `Купить за ${cost}`;
+    btn.disabled = data.score < cost;
+    btn.onclick = () => {
+      if (data.score >= cost) {
+        data.score -= cost; upg.buy(); saveData(); updateUI(); renderUpgrades();
       }
-    });
+    };
+    div.appendChild(btn); c.appendChild(div);
+  });
+}
+
+const tasks = [
+  { id: 'telegram', label: 'Подпишись на Telegram', url: 'https://t.me/' },
+  { id: 'youtube', label: 'Подпишись на YouTube', url: 'https://youtube.com/' },
+  { id: 'tiktok', label: 'Подпишись на TikTok', url: 'https://tiktok.com/' },
+  { id: 'site', label: 'Посети сайт разработчика', url: 'https://example.com' },
+];
+
+function renderTasks() {
+  const c = tabs.tasks;
+  c.innerHTML = '';
+
+  tasks.forEach(task => {
+    const div = document.createElement('div'); div.className = 'task-item';
+    const btn = document.createElement('button');
+    btn.className = 'small';
+    const done = !!data.tasksCompleted[task.id];
+    btn.textContent = done ? 'Выполнено' : 'Получить +1000';
+    btn.disabled = done;
+    btn.onclick = () => {
+      window.open(task.url, '_blank');
+      if (!done) {
+        data.tasksCompleted[task.id] = true;
+        data.score += 1000; saveData(); updateUI(); renderTasks();
+      }
+    };
+    div.innerHTML = `<span>${task.label}</span>`;
+    div.appendChild(btn); c.appendChild(div);
   });
 
-  updateUI(); // Только обновление UI при старте
+  // Реферальная часть
+  const refDiv = document.createElement('div');
+  refDiv.innerHTML = `
+    <p>Ваша реф. ссылка: <input readonly value="${location.href}?ref=you" style="width:100%"></p>
+    <p>Введите код друга:</p>
+    <input class="task-input" id="refInput" placeholder="вставьте код...">
+    <button class="small" onclick="useReferral()">Активировать +1000</button>
+  `;
+  c.appendChild(refDiv);
+}
+
+function useReferral() {
+  const input = document.getElementById('refInput');
+  const code = input.value.trim();
+  if (code && !data.referralUsed) {
+    data.score += 1000;
+    data.referralUsed = code;
+    saveData(); updateUI(); alert('Бонус получен!');
+  } else {
+    alert('Код уже использован или пуст');
+  }
+}
+
+function updateUI() {
+  scoreDisplay.textContent = `Монеты: ${Math.floor(data.score)}`;
+  energyDisplay.textContent = `Энергия: ${Math.floor(data.energy)} / ${data.energyMax}`;
+  coinButton.classList.toggle('blue', data.skinIndex === 1);
+}
+
+coinButton.onclick = () => {
+  if (data.energy >= 1) {
+    data.energy--; data.score += data.clickPower;
+    saveData(); updateUI();
+  } else {
+    alert('Недостаточно энергии!');
+  }
+};
+
+setInterval(() => {
+  if (data.energy < data.energyMax) {
+    data.energy++;
+    saveData(); updateUI();
+  }
+}, 1000);
+
+const tabButtons = document.querySelectorAll('footer button.tab-btn');
+tabButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabButtons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    Object.values(tabs).forEach(tab => tab.classList.add('hidden'));
+    const tabId = btn.dataset.tab.replace('-tab', '');
+    tabs[tabId].classList.remove('hidden');
+    if (tabId === 'skins') renderSkins();
+    if (tabId === 'upgrades') renderUpgrades();
+    if (tabId === 'tasks') renderTasks();
+  });
+});
+
+// Авто-запуск
+updateUI();
 </script>
 
-
-  updateUI(); // Только обновление UI, без отрисовки скинов/апгрейдов
-</script>
+</body>
+</html>
