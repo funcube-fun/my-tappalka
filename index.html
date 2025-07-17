@@ -3,427 +3,491 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Ukraine Coin</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<title>Ukraine Coin - Tapalka</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
   body {
-    margin: 0; 
+    margin: 0;
     font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
-    color: #f0f0f0;
-    display: flex; 
+    background: linear-gradient(135deg, #004aad, #007fff);
+    color: #fff;
+    display: flex;
     flex-direction: column;
     height: 100vh;
   }
   header {
-    background: #ffdd00;
-    color: #1e3c72;
-    padding: 18px 0;
     text-align: center;
-    font-size: 2.2rem;
+    padding: 15px 10px 10px;
     font-weight: 700;
-    letter-spacing: 2px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    font-size: 24px;
+    letter-spacing: 1.2px;
     user-select: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    text-shadow: 0 0 8px #00aaff;
   }
   main {
-    flex: 1;
-    padding: 25px 30px 80px; /* отступ снизу для меню */
+    flex-grow: 1;
     overflow-y: auto;
-    background: #243b55;
-    border-radius: 0 0 12px 12px;
-    box-shadow: inset 0 0 40px #162447;
+    padding: 10px 15px;
   }
-  .hidden {
-    display: none;
-  }
-  /* Контент для разных вкладок */
-  #coin {
-    margin: 50px auto 30px;
-    width: 130px;
-    height: 130px;
-    background: radial-gradient(circle at center, #ffdd00 65%, #b38f00 100%);
-    border-radius: 50%;
-    box-shadow: 0 0 25px #ffdd00;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 4rem;
-    user-select: none;
-    transition: transform 0.15s ease-in-out;
-  }
-  #coin:active {
-    transform: scale(0.9);
-    box-shadow: 0 0 40px #fff700;
-  }
-  #score {
-    font-size: 2.4rem;
-    text-align: center;
-    margin-top: 10px;
-    letter-spacing: 1px;
-    font-weight: 700;
-    text-shadow: 0 0 7px #ffdd00;
-  }
-  ul {
-    list-style: none;
-    padding-left: 0;
-  }
-  li {
-    background: #1a2a47;
-    margin-bottom: 16px;
-    padding: 18px 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    font-size: 1.1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #c9d1e8;
-  }
-  li.completed {
-    background: #ffdd00;
-    color: #162447;
-    font-weight: 700;
-    text-decoration: line-through;
-    box-shadow: 0 0 15px #ffdd00;
-  }
-  li a {
-    color: #ffdd00;
-    font-weight: 700;
-    text-decoration: none;
-    margin-left: 15px;
-    transition: color 0.3s;
-  }
-  li a:hover {
-    color: #fff700;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 18px;
-    font-size: 1.1rem;
-  }
-  th, td {
-    padding: 14px 10px;
-    border-bottom: 2px solid #162447;
-    text-align: left;
-  }
-  th {
-    background: #1a2a47;
-    color: #ffdd00;
-    letter-spacing: 1px;
-  }
-  tr:nth-child(even) {
-    background: #162447;
-  }
-  tr.top-player {
-    background: #ffdd00;
-    color: #162447;
-    font-weight: 700;
-    box-shadow: 0 0 10px #fff700;
-  }
-
-  /* Нижнее меню */
   footer {
-    position: fixed;
-    bottom: 0;
-    left: 0; right: 0;
-    height: 60px;
-    background: #162447;
     display: flex;
     justify-content: space-around;
-    align-items: center;
-    box-shadow: 0 -3px 10px rgba(0,0,0,0.7);
+    background: #003e7f;
+    padding: 8px 0;
     user-select: none;
-    z-index: 1000;
   }
   footer button {
     background: none;
     border: none;
-    color: #a9b1d6;
-    font-size: 1rem;
+    color: #aaddff;
     font-weight: 600;
+    font-size: 14px;
     cursor: pointer;
-    flex: 1;
-    padding: 8px 0;
-    transition: color 0.3s, border-top 0.3s;
-    border-top: 3px solid transparent;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
   }
-  footer button.active {
-    color: #ffdd00;
-    border-top: 3px solid #ffdd00;
+  footer button.active, footer button:hover {
+    background-color: #007fff;
+    color: #fff;
+  }
+  .hidden {
+    display: none;
+  }
+  /* --- TAP TAB --- */
+  #tap-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #coin-button {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 4px solid #00c6ff;
+    background: radial-gradient(circle at center, #00aaff, #005f9e);
+    box-shadow: 0 0 20px #00aaff;
+    cursor: pointer;
+    margin: 25px 0;
+    position: relative;
+    transition: transform 0.1s ease;
+  }
+  #coin-button:active {
+    transform: scale(0.9);
+  }
+  #coin-button img {
+    width: 100px;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    user-select: none;
+  }
+  #score-display {
+    font-size: 36px;
+    font-weight: 700;
+    text-shadow: 0 0 10px #00ffff;
+  }
+  /* --- QUESTS TAB --- */
+  #quests-tab {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .quest {
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    margin-bottom: 15px;
+    padding: 15px 20px;
+    box-shadow: 0 0 12px #005f9e;
+  }
+  .quest h3 {
+    margin: 0 0 8px 0;
     font-weight: 700;
   }
-  footer button:hover:not(.active) {
-    color: #fff700;
+  .quest p {
+    margin: 6px 0 12px 0;
+    font-size: 14px;
+    color: #aaddff;
   }
-
-  /* Прокачка */
-  #page-upgrades ul {
-    padding-left: 0;
+  .quest button {
+    background: #00aaff;
+    border: none;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
   }
-  #page-upgrades li {
-    background: #1a2a47;
-    margin-bottom: 16px;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    font-size: 1.2rem;
-    color: #c9d1e8;
+  .quest button.completed {
+    background: #33cc33;
+    cursor: default;
+  }
+  .quest button:disabled {
+    opacity: 0.7;
+    cursor: default;
+  }
+  /* --- TOP TAB --- */
+  #top-tab {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #aaddff;
+    font-weight: 600;
+  }
+  th, td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #004080;
+    text-align: left;
+  }
+  th {
+    background: #005f9e;
+  }
+  /* --- UPGRADES TAB --- */
+  #upgrades-tab {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .upgrade {
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    margin-bottom: 15px;
+    padding: 15px 20px;
+    box-shadow: 0 0 12px #005f9e;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  #page-upgrades li button {
-    background: #ffdd00;
-    color: #162447;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  .upgrade-info {
+    max-width: 70%;
   }
-  #page-upgrades li button:hover {
-    background-color: #ffd633;
+  .upgrade-info h4 {
+    margin: 0 0 8px 0;
+    font-weight: 700;
+  }
+  .upgrade-info p {
+    margin: 0;
+    font-size: 14px;
+    color: #aaddff;
+  }
+  .upgrade button {
+    background: #007fff;
+    border: none;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .upgrade button:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+  /* --- DONATE BUTTON --- */
+  #donate-section {
+    text-align: center;
+    margin-top: 20px;
+  }
+  #donate-section a {
+    display: inline-block;
+    background: #00cc44;
+    color: white;
+    font-weight: 700;
+    padding: 14px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 18px;
+    box-shadow: 0 0 15px #00cc44;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+  #donate-section a:hover {
+    background: #009933;
   }
 </style>
 </head>
 <body>
 <header>Ukraine Coin</header>
+
 <main>
-  <!-- Tap -->
-  <section id="page-tap">
-    <div id="coin" title="Tap me!">🪙</div>
-    <div id="score">Score: 0</div>
+  <!-- TAP TAB -->
+  <section id="tap-tab">
+    <div id="score-display">Монеты: 0</div>
+    <button id="coin-button" title="Нажми на монету!">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Coat_of_Arms_of_Ukraine.svg/120px-Coat_of_Arms_of_Ukraine.svg.png" alt="Монета Украина" />
+    </button>
   </section>
-  <!-- Quests -->
-  <section id="page-quests" class="hidden">
-    <ul id="quest-list"></ul>
-  </section>
-  <!-- Top -->
-  <section id="page-top" class="hidden">
+
+  <!-- QUESTS TAB -->
+  <section id="quests-tab" class="hidden"></section>
+
+  <!-- TOP TAB -->
+  <section id="top-tab" class="hidden">
     <table>
       <thead>
-        <tr><th>Player</th><th>Score</th></tr>
+        <tr><th>Игрок</th><th>Монеты</th></tr>
       </thead>
       <tbody id="top-list"></tbody>
     </table>
   </section>
-  <!-- Upgrades -->
-  <section id="page-upgrades" class="hidden">
-    <ul id="upgrade-list">
-      <!-- Прокачки будут тут -->
-    </ul>
+
+  <!-- UPGRADES TAB -->
+  <section id="upgrades-tab" class="hidden"></section>
+
+  <section id="donate-section" class="hidden">
+    <a href="https://savelife.in.ua/donate/" target="_blank" rel="noopener noreferrer">Поддержать ЗСУ 🇺🇦</a>
   </section>
 </main>
+
 <footer>
-  <button id="tab-tap" class="active">Tap</button>
-  <button id="tab-quests">Quests</button>
-  <button id="tab-top">Top</button>
-  <button id="tab-upgrades">Прокачка</button>
+  <button data-tab="tap" class="active">Тапалка</button>
+  <button data-tab="quests">Задания</button>
+  <button data-tab="top">Топ</button>
+  <button data-tab="upgrades">Прокачка</button>
+  <button data-tab="donate">Донат</button>
 </footer>
 
 <script>
-  const WebApp = window.Telegram.WebApp;
-  WebApp.ready();
-
-  const user = WebApp.initDataUnsafe.user || { id: 'guest', first_name: 'Guest' };
-  const playerId = user.id || 'guest';
-  const playerName = user.first_name || 'Guest';
-
-  const STORAGE_TOP_KEY = 'ukraine_coin_top';
-  const STORAGE_SCORE_KEY = 'score_' + playerId;
-  const STORAGE_UPGRADES_KEY = 'upgrades_' + playerId;
-
-  // Загрузка топа
-  function loadTop() {
-    const data = localStorage.getItem(STORAGE_TOP_KEY);
-    return data ? JSON.parse(data) : [];
-  }
-  function saveTop(top) {
-    localStorage.setItem(STORAGE_TOP_KEY, JSON.stringify(top));
-  }
-  // Обновление топа
-  function updateTop(playerName, score) {
-    let top = loadTop();
-    const idx = top.findIndex(p => p.name === playerName);
-    if (idx !== -1) {
-      if(score > top[idx].score) top[idx].score = score;
-    } else {
-      top.push({ name: playerName, score });
-    }
-    top.sort((a,b) => b.score - a.score);
-    if(top.length > 10) top.length = 10;
-    saveTop(top);
-    return top;
-  }
-
-  // Загрузка прокачек
-  function loadUpgrades() {
-    const data = localStorage.getItem(STORAGE_UPGRADES_KEY);
-    return data ? JSON.parse(data) : {
-      clickPower: 1, // сколько монет за клик
-      autoClicker: 0 // автонаклики (будет в будущем)
-    };
-  }
-  function saveUpgrades(upgrades) {
-    localStorage.setItem(STORAGE_UPGRADES_KEY, JSON.stringify(upgrades));
-  }
-
-  // Счёт
-  let score = parseInt(localStorage.getItem(STORAGE_SCORE_KEY)) || 0;
-
-  // Прокачки
-  let upgrades = loadUpgrades();
-
-  // Квесты
-  const quests = [
-    { id: 1, text: 'Подпишись на Telegram канал', link: 'https://t.me/your_channel', reward: 10000 },
-    { id: 2, text: 'Подпишись на TikTok', link: 'https://www.tiktok.com/@your_tiktok', reward: 10000 },
-    { id: 3, text: 'Подпишись на YouTube', link: 'https://www.youtube.com/channel/your_youtube', reward: 10000 },
-    { id: 4, text: 'Накликай 1,000 раз', target: 1000, reward: 1000 },
-    { id: 5, text: 'Накликай 10,000 раз', target: 10000, reward: 10000 },
-    { id: 6, text: 'Накликай 100,000 раз', target: 100000, reward: 20000 },
-    { id: 7, text: 'Накликай 200,000 раз', target: 200000, reward: 30000 },
-  ];
-
-  // Прокачки для покупки
-  const upgradesList = [
-    { id: 'clickPower', name: 'Увеличить монеты за клик (+1)', baseCost: 5000, costMult: 2 },
-  ];
-
-  // DOM
-  const scoreDisplay = document.getElementById('score');
-  const coin = document.getElementById('coin');
-  const questList = document.getElementById('quest-list');
-  const topList = document.getElementById('top-list');
-  const upgradeList = document.getElementById('upgrade-list');
-
-  // Навигация
-  const tabs = ['tap', 'quests', 'top', 'upgrades'];
-  function showTab(tab) {
-    tabs.forEach(t => {
-      document.getElementById('tab-' + t).classList.remove('active');
-      document.getElementById('page-' + t).classList.add('hidden');
-    });
-    document.getElementById('tab-' + tab).classList.add('active');
-    document.getElementById('page-' + tab).classList.remove('hidden');
-  }
-  tabs.forEach(tab => {
-    document.getElementById('tab-' + tab).addEventListener('click', () => {
-      showTab(tab);
-    });
-  });
-
-  // Обновить счёт
-  function updateScore() {
-    scoreDisplay.textContent = `Score: ${score.toLocaleString()}`;
-  }
-  // Сохранить счёт
-  function saveScore() {
-    localStorage.setItem(STORAGE_SCORE_KEY, score);
-  }
-  // Обновить квесты
-  function updateQuests() {
-    questList.innerHTML = '';
-    quests.forEach(q => {
-      let completed = false;
-      if(q.target) {
-        completed = score >= q.target;
-      } else if(q.reward && q.link) {
-        completed = localStorage.getItem(`quest_done_${q.id}_${playerId}`) === 'true';
-      }
-      const li = document.createElement('li');
-      li.className = completed ? 'completed' : '';
-      li.innerHTML = `
-        <span>${q.text}</span>
-        ${
-          q.link ? 
-          (completed ? '✅' : `<a href="${q.link}" target="_blank" rel="noopener noreferrer">Перейти</a>`) 
-          : completed ? '✅' : ''
-        }
-      `;
-      if(q.link && !completed) {
-        li.querySelector('a').addEventListener('click', () => {
-          alert(`Спасибо за поддержку! Ты получил ${q.reward.toLocaleString()} монет.`);
-          score += q.reward;
-          saveScore();
-          updateScore();
-          localStorage.setItem(`quest_done_${q.id}_${playerId}`, 'true');
-          updateQuests();
-          updateTopList();
-          updateTop(playerName, score);
-        });
-      }
-      questList.appendChild(li);
-    });
-  }
-  // Обновить топ
-  function updateTopList() {
-    const top = updateTop(playerName, score);
-    topList.innerHTML = '';
-    top.forEach((p, i) => {
-      const tr = document.createElement('tr');
-      tr.className = p.name === playerName ? 'top-player' : '';
-      tr.innerHTML = `<td>${i+1}. ${p.name}</td><td>${p.score.toLocaleString()}</td>`;
-      topList.appendChild(tr);
-    });
-  }
-  // Обновить прокачки
-  function updateUpgrades() {
-    upgradeList.innerHTML = '';
-    upgradesList.forEach(upg => {
-      const level = upgrades[upg.id] || 0;
-      const cost = Math.floor(upg.baseCost * Math.pow(upg.costMult, level));
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <span>${upg.name} (уровень: ${level})</span>
-        <button ${score < cost ? 'disabled' : ''}>Купить за ${cost.toLocaleString()}</button>
-      `;
-      li.querySelector('button').addEventListener('click', () => {
-        if(score >= cost) {
-          score -= cost;
-          upgrades[upg.id] = level + 1;
-          saveScore();
-          saveUpgrades(upgrades);
-          updateScore();
-          updateUpgrades();
-          updateTop(playerName, score);
-          updateTopList();
-        }
-      });
-      upgradeList.appendChild(li);
-    });
-  }
-
-  // Клик по монете
-  coin.addEventListener('click', () => {
-    score += upgrades.clickPower || 1;
-    saveScore();
-    updateScore();
-    WebApp.HapticFeedback.impactOccurred('medium');
-    updateQuests();
-    updateTopList();
-    WebApp.sendData(JSON.stringify({ score }));
-  });
-
   // Инициализация
-  updateScore();
-  updateQuests();
-  updateTopList();
-  updateUpgrades();
+  const scoreDisplay = document.getElementById('score-display');
+  const coinButton = document.getElementById('coin-button');
+  const tabs = document.querySelectorAll('footer button');
+  const tapTab = document.getElementById('tap-tab');
+  const questsTab = document.getElementById('quests-tab');
+  const topTab = document.getElementById('top-tab');
+  const upgradesTab = document.getElementById('upgrades-tab');
+  const donateTab = document.getElementById('donate-section');
 
-  // Подстройка под тему телеграм (по желанию)
-  WebApp.onEvent('themeChanged', () => {
-    // Можно менять цвета тут
+  // Загрузка из localStorage
+  let score = parseInt(localStorage.getItem('score')) || 0;
+  let upgrades = JSON.parse(localStorage.getItem('upgrades')) || { clickPower: 1 };
+  let completedQuests = JSON.parse(localStorage.getItem('completedQuests')) || {};
+
+  // Имитируем "базу" игроков для топа (ключ - имя, значение - монеты)
+  let players = JSON.parse(localStorage.getItem('players')) || {};
+  const userName = `User${Math.floor(Math.random()*10000)}`;
+
+  // Функция обновления счета и сохранения
+  function updateScore(diff) {
+    score += diff;
+    if(score < 0) score = 0;
+    localStorage.setItem('score', score);
+    scoreDisplay.textContent = `Монеты: ${score}`;
+    updateTopPlayers();
+  }
+
+  // Инициализация счета
+  updateScore(0);
+
+  // Клик по монете с учетом апгрейдов
+  coinButton.addEventListener('click', () => {
+    updateScore(upgrades.clickPower);
+    coinButton.style.transform = 'scale(1.1)';
+    setTimeout(() => coinButton.style.transform = 'scale(1)', 100);
   });
 
-  // По умолчанию показываем "тап"
+  // --- Табы ---
+
+  function showTab(name) {
+    [tapTab, questsTab, topTab, upgradesTab, donateTab].forEach(tab => tab.classList.add('hidden'));
+    if(name === 'tap') tapTab.classList.remove('hidden');
+    if(name === 'quests') questsTab.classList.remove('hidden');
+    if(name === 'top') topTab.classList.remove('hidden');
+    if(name === 'upgrades') upgradesTab.classList.remove('hidden');
+    if(name === 'donate') donateTab.classList.remove('hidden');
+
+    tabs.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === name));
+
+    if(name === 'quests') renderQuests();
+    if(name === 'top') renderTop();
+    if(name === 'upgrades') renderUpgrades();
+  }
+
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => showTab(btn.dataset.tab));
+  });
+
   showTab('tap');
+
+  // --- Задания (квесты) ---
+
+  // Пример заданий
+  const questsList = [
+    {
+      id: 'tg_channel',
+      title: 'Подпишись на наш Telegram-канал',
+      desc: 'Нажми кнопку и подпишись на канал, потом отметь выполнено.',
+      url: 'https://t.me/ukrainecoinchannel',
+      reward: 10000
+    },
+    {
+      id: 'youtube',
+      title: 'Подпишись на наш YouTube',
+      desc: 'Поддержи канал и получи награду.',
+      url: 'https://www.youtube.com/channel/UCUkrainecoin',
+      reward: 15000
+    },
+    {
+      id: 'tiktok',
+      title: 'Подпишись на наш TikTok',
+      desc: 'Будь с нами и получи монеты.',
+      url: 'https://www.tiktok.com/@ukrainecoin',
+      reward: 12000
+    },
+    {
+      id: 'share_bot',
+      title: 'Поделись ботом с другом',
+      desc: 'Пригласи друга и получи бонус.',
+      url: 'https://t.me/ukrainecoinbot',
+      reward: 8000
+    },
+    {
+      id: 'watch_video',
+      title: 'Посмотри видео про ЗСУ',
+      desc: 'Посмотри видео, чтобы получить монеты.',
+      url: 'https://youtu.be/VIDEO_ID_HERE',
+      reward: 5000
+    }
+  ];
+
+  function renderQuests() {
+    questsTab.innerHTML = '';
+    questsList.forEach(q => {
+      const questDiv = document.createElement('div');
+      questDiv.className = 'quest';
+
+      const title = document.createElement('h3');
+      title.textContent = q.title;
+
+      const desc = document.createElement('p');
+      desc.textContent = q.desc;
+
+      const btn = document.createElement('button');
+      btn.textContent = completedQuests[q.id] ? `Выполнено (+${q.reward} монет)` : 'Выполнить';
+      btn.disabled = completedQuests[q.id] || false;
+      btn.onclick = () => {
+        window.open(q.url, '_blank');
+        if(!completedQuests[q.id]) {
+          completedQuests[q.id] = true;
+          localStorage.setItem('completedQuests', JSON.stringify(completedQuests));
+          updateScore(q.reward);
+          renderQuests();
+          alert(`Задание выполнено! Ты получил ${q.reward} монет.`);
+        }
+      };
+
+      questDiv.appendChild(title);
+      questDiv.appendChild(desc);
+      questDiv.appendChild(btn);
+      questsTab.appendChild(questDiv);
+    });
+  }
+
+  // --- Топ игроков ---
+
+  function updateTopPlayers() {
+    players[userName] = score;
+    localStorage.setItem('players', JSON.stringify(players));
+  }
+
+  function renderTop() {
+    updateTopPlayers();
+    const tbody = document.getElementById('top-list');
+    tbody.innerHTML = '';
+    // сортируем по убыванию монет
+    const sorted = Object.entries(players)
+      .sort((a,b) => b[1] - a[1])
+      .slice(0, 20);
+
+    sorted.forEach(([name, score], i) => {
+      const tr = document.createElement('tr');
+      const rankTd = document.createElement('td');
+      rankTd.textContent = name;
+      const scoreTd = document.createElement('td');
+      scoreTd.textContent = score;
+      tr.appendChild(rankTd);
+      tr.appendChild(scoreTd);
+      tbody.appendChild(tr);
+    });
+  }
+
+  // --- Прокачка ---
+
+  const upgradesList = [
+    {
+      id: 'clickPower',
+      title: '+1 клик (стоимость 1000 монет)',
+      desc: 'Увеличивает количество монет за клик на 1.',
+      cost: 1000,
+      effect: () => { upgrades.clickPower += 1; }
+    },
+    {
+      id: 'clickPower2',
+      title: '+5 к клику (стоимость 10000 монет)',
+      desc: 'Добавляет +5 к монетам за клик.',
+      cost: 10000,
+      effect: () => { upgrades.clickPower += 5; }
+    },
+    {
+      id: 'clickPower3',
+      title: '+10 к клику (стоимость 20000 монет)',
+      desc: 'Добавляет +10 к монетам за клик.',
+      cost: 20000,
+      effect: () => { upgrades.clickPower += 10; }
+    },
+    {
+      id: 'clickPower4',
+      title: '+30 к клику (стоимость 30000 монет)',
+      desc: 'Добавляет +30 к монетам за клик.',
+      cost: 30000,
+      effect: () => { upgrades.clickPower += 30; }
+    }
+  ];
+
+  function renderUpgrades() {
+    upgradesTab.innerHTML = '';
+    upgradesList.forEach(upg => {
+      const div = document.createElement('div');
+      div.className = 'upgrade';
+
+      const info = document.createElement('div');
+      info.className = 'upgrade-info';
+
+      const title = document.createElement('h4');
+      title.textContent = upg.title;
+
+      const desc = document.createElement('p');
+      desc.textContent = upg.desc;
+
+      info.appendChild(title);
+      info.appendChild(desc);
+
+      const btn = document.createElement('button');
+      btn.textContent = `Купить (${upg.cost} монет)`;
+      btn.disabled = score < upg.cost;
+
+      btn.onclick = () => {
+        if(score >= upg.cost) {
+          updateScore(-upg.cost);
+          upg.effect();
+          localStorage.setItem('upgrades', JSON.stringify(upgrades));
+          renderUpgrades();
+          alert('Улучшение куплено!');
+        }
+      };
+
+      div.appendChild(info);
+      div.appendChild(btn);
+
+      upgradesTab.appendChild(div);
+    });
+  }
 </script>
+
 </body>
 </html>
