@@ -1,299 +1,257 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Ukraine Coin</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ukraine Coin</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+    body {
+      margin: 0; padding: 0;
+      background-color: #000;
+      color: #ffd500;
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+      user-select: none;
+    }
+    header {
+      text-align: center;
+      padding: 20px 0 10px 0;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      user-select: none;
+    }
+    header .coin {
+      color: #00bfff;
+      text-shadow: 0 0 8px #00bfff88;
+    }
+    main {
+      flex: 1;
+      padding: 10px 20px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    footer {
+      display: flex;
+      background: #111;
+      border-top: 1px solid #222;
+    }
+    footer button {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #ffd500;
+      font-weight: 700;
+      padding: 12px 0;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    footer button.active,
+    footer button:hover {
+      background: #222;
+    }
+    .hidden {
+      display: none;
+    }
 
-  body {
-    margin: 0;
-    font-family: 'Montserrat', sans-serif;
-    background: #000;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-  header {
-    text-align: center;
-    padding: 15px 10px 10px;
-    font-weight: 700;
-    font-size: 28px;
-    letter-spacing: 1.2px;
-    user-select: none;
-    color: #ffdd33;
-    text-shadow: 0 0 10px #ffdd33;
-  }
-  header .coin {
-    color: #4fc3f7; /* голубой */
-    text-shadow: 0 0 15px #4fc3f7;
-  }
-  main {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 10px 15px;
-  }
-  footer {
-    display: flex;
-    justify-content: space-around;
-    background: #111;
-    padding: 8px 0;
-    user-select: none;
-    border-top: 1px solid #333;
-  }
-  footer button {
-    background: none;
-    border: none;
-    color: #aaa;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  footer button.active, footer button:hover {
-    background-color: #ffdd33;
-    color: #000;
-  }
-  .hidden {
-    display: none;
-  }
-  /* --- TAP TAB --- */
-  #tap-tab {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  #coin-button {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    border: 5px solid #ffdd33;
-    background: radial-gradient(circle at center, #ffd833 40%, #b28800 90%);
-    box-shadow: 0 0 25px #ffdd33;
-    cursor: pointer;
-    margin: 25px 0;
-    position: relative;
-    transition: transform 0.1s ease;
-    user-select: none;
-  }
-  #coin-button:active {
-    transform: scale(0.9);
-  }
-  #coin-button img {
-    width: 90px;
-    position: absolute;
-    top: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    user-select: none;
-    pointer-events: none;
-  }
-  #score-display {
-    font-size: 36px;
-    font-weight: 700;
-    text-shadow: 0 0 15px #ffdd33;
-    margin-bottom: 6px;
-  }
-  #energy-display {
-    font-size: 18px;
-    margin-top: 10px;
-    color: #ffcc00;
-    text-shadow: 0 0 6px #ffcc00;
-  }
-  /* --- QUESTS TAB --- */
-  #quests-tab {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  .quest {
-    background: rgba(255, 221, 51, 0.1);
-    border-radius: 12px;
-    margin-bottom: 15px;
-    padding: 15px 20px;
-    box-shadow: 0 0 12px #b28800;
-  }
-  .quest h3 {
-    margin: 0 0 8px 0;
-    font-weight: 700;
-    color: #fff;
-  }
-  .quest p {
-    margin: 6px 0 12px 0;
-    font-size: 14px;
-    color: #ffdd33cc;
-  }
-  .quest button {
-    background: #ffdd33;
-    border: none;
-    color: #000;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  .quest button.completed {
-    background: #33cc33;
-    cursor: default;
-    color: #000;
-  }
-  .quest button:disabled {
-    opacity: 0.7;
-    cursor: default;
-  }
-  /* --- TOP TAB --- */
-  #top-tab {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    color: #ffdd33cc;
-    font-weight: 600;
-  }
-  th, td {
-    padding: 10px 8px;
-    border-bottom: 1px solid #333;
-    text-align: left;
-  }
-  th {
-    background: #b28800;
-    color: #000;
-  }
-  /* --- UPGRADES TAB --- */
-  #upgrades-tab {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  .upgrade {
-    background: rgba(255, 221, 51, 0.1);
-    border-radius: 12px;
-    margin-bottom: 15px;
-    padding: 15px 20px;
-    box-shadow: 0 0 12px #b28800;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .upgrade-info {
-    max-width: 70%;
-  }
-  .upgrade-info h4 {
-    margin: 0 0 8px 0;
-    font-weight: 700;
-    color: #fff;
-  }
-  .upgrade-info p {
-    margin: 0;
-    font-size: 14px;
-    color: #ffdd33cc;
-  }
-  .upgrade button {
-    background: #ffdd33;
-    border: none;
-    color: #000;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  .upgrade button:disabled {
-    opacity: 0.6;
-    cursor: default;
-  }
-  /* --- DONATE BUTTON --- */
-  #donate-section {
-    text-align: center;
-    margin-top: 20px;
-  }
-  #donate-section a {
-    display: inline-block;
-    background: #00cc44;
-    color: white;
-    font-weight: 700;
-    padding: 14px 30px;
-    border-radius: 30px;
-    text-decoration: none;
-    font-size: 18px;
-    box-shadow: 0 0 15px #00cc44;
-    user-select: none;
-    transition: background-color 0.3s ease;
-  }
-  #donate-section a:hover {
-    background: #009933;
-  }
-  /* --- SKINS --- */
-  #skin-selector {
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .skin-thumb {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 3px solid transparent;
-    cursor: pointer;
-    transition: border-color 0.3s ease;
-    box-shadow: 0 0 8px #b28800;
-    background-size: cover;
-    background-position: center;
-  }
-  .skin-thumb.selected {
-    border-color: #ffdd33;
-    box-shadow: 0 0 15px #ffdd33;
-  }
-</style>
+    /* TAP */
+    #tap-tab {
+      text-align: center;
+    }
+    #coin-button {
+      margin: 20px auto;
+      width: 160px;
+      height: 160px;
+      background-color: #ffd500;
+      border-radius: 50%;
+      border: 6px solid #f9f871;
+      box-shadow: 0 0 20px #ffd500aa inset, 0 0 15px #ffd500;
+      cursor: pointer;
+      background-size: cover;
+      transition: transform 0.1s ease;
+    }
+    #coin-button:active {
+      transform: scale(0.9);
+    }
+    #score-display, #energy-display {
+      font-size: 22px;
+      margin: 10px 0 0 0;
+      user-select: none;
+    }
+
+    /* SKINS */
+    #skins-tab {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+    }
+    .skin-thumb {
+      width: 100px;
+      height: 100px;
+      border-radius: 16px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      border: 3px solid transparent;
+      cursor: pointer;
+      position: relative;
+      box-shadow: 0 0 8px #222 inset;
+      transition: border-color 0.3s;
+    }
+    .skin-thumb.selected {
+      border-color: #00bfff;
+      box-shadow: 0 0 10px #00bfff;
+    }
+    .skin-thumb::after {
+      content: attr(data-cost);
+      position: absolute;
+      bottom: 4px;
+      right: 6px;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      user-select: none;
+    }
+
+    /* QUESTS */
+    .quest {
+      background: #111;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #222 inset;
+    }
+    .quest h3 {
+      margin: 0 0 6px 0;
+      color: #00bfff;
+    }
+    .quest p {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      color: #ccc;
+    }
+    .quest button {
+      background-color: #00bfff;
+      border: none;
+      color: #fff;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .quest button.completed {
+      background-color: #444;
+      cursor: default;
+    }
+    .quest button:hover:not(.completed) {
+      background-color: #0080ff;
+    }
+
+    /* UPGRADES */
+    #upgrades-tab .upgrade {
+      background: #111;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      padding: 15px 20px;
+      box-shadow: 0 0 10px #222 inset;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #ccc;
+    }
+    #upgrades-tab .upgrade-info h4 {
+      margin: 0 0 4px 0;
+      color: #00bfff;
+    }
+    #upgrades-tab .upgrade-info p {
+      margin: 0;
+      font-size: 14px;
+    }
+    #upgrades-tab button {
+      background-color: #00bfff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      min-width: 130px;
+    }
+    #upgrades-tab button:disabled {
+      background-color: #444;
+      cursor: default;
+    }
+    #upgrades-tab button:hover:enabled {
+      background-color: #0080ff;
+    }
+
+    /* DONATE */
+    #donate-section {
+      text-align: center;
+      padding: 20px;
+    }
+    #donate-section a {
+      display: inline-block;
+      background: #ffd500;
+      color: #000;
+      font-weight: 700;
+      padding: 14px 24px;
+      border-radius: 20px;
+      text-decoration: none;
+      box-shadow: 0 0 12px #ffd50088;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+    #donate-section a:hover {
+      background-color: #e5c500;
+    }
+  </style>
 </head>
 <body>
-<header><span>Ukraine </span><span class="coin">Coin</span></header>
+  <header>
+    Ukraine <span class="coin">Coin</span>
+  </header>
 
-<main>
-  <!-- TAP TAB -->
-  <section id="tap-tab">
-    <div id="score-display">Монеты: 0</div>
-    <button id="coin-button" title="Нажми на монету!">
-      <img id="coin-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Golden_coin_icon.svg/120px-Golden_coin_icon.svg.png" alt="Монета" />
-    </button>
-    <div id="energy-display">Энергия: 100 / 100</div>
-    <div id="skin-selector" title="Выбери скин для монеты"></div>
-  </section>
+  <main>
+    <!-- TAP -->
+    <section id="tap-tab">
+      <div id="coin-button" title="Нажми!"></div>
+      <div id="score-display">Монеты: 0</div>
+      <div id="energy-display">Энергия: 100 / 100</div>
+    </section>
 
-  <!-- QUESTS TAB -->
-  <section id="quests-tab" class="hidden"></section>
+    <!-- SKINS -->
+    <section id="skins-tab" class="hidden"></section>
 
-  <!-- TOP TAB -->
-  <section id="top-tab" class="hidden">
-    <table>
-      <thead><tr><th>Игрок</th><th>Монеты</th></tr></thead>
-      <tbody id="top-list"></tbody>
-    </table>
-  </section>
+    <!-- QUESTS -->
+    <section id="quests-tab" class="hidden"></section>
 
-  <!-- UPGRADES TAB -->
-  <section id="upgrades-tab" class="hidden"></section>
+    <!-- UPGRADES -->
+    <section id="upgrades-tab" class="hidden"></section>
 
-  <!-- DONATE TAB -->
-  <section id="donate-section" class="hidden">
-    <a href="https://savelife.in.ua/donate/" target="_blank" rel="noopener noreferrer" title="Помочь ЗСУ">Поддержать ЗСУ</a>
-  </section>
-</main>
+    <!-- DONATE -->
+    <section id="donate-section" class="hidden">
+      <a href="https://savelife.in.ua/donate/" target="_blank" rel="noopener noreferrer" title="Помочь ЗСУ">Поддержать ЗСУ</a>
+    </section>
+  </main>
 
-<footer>
-  <button class="tab-btn active" data-tab="tap-tab">Тап</button>
-  <button class="tab-btn" data-tab="quests-tab">Задания</button>
-  <button class="tab-btn" data-tab="top-tab">Топ</button>
-  <button class="tab-btn" data-tab="upgrades-tab">Прокачка</button>
-  <button class="tab-btn" data-tab="donate-section">Донат</button>
-</footer>
+  <footer>
+    <button class="tab-btn active" data-tab="tap-tab">Тап</button>
+    <button class="tab-btn" data-tab="skins-tab">Магазин скинов</button>
+    <button class="tab-btn" data-tab="quests-tab">Задания</button>
+    <button class="tab-btn" data-tab="upgrades-tab">Прокачка</button>
+    <button class="tab-btn" data-tab="donate-section">Донат</button>
+  </footer>
 
 <script>
   const WebApp = window.Telegram?.WebApp || null;
@@ -313,7 +271,6 @@
     },
     questsDone: [],
     skinIndex: 0,
-    usersTop: {},
   };
 
   function loadData() {
@@ -333,30 +290,27 @@
   const scoreDisplay = document.getElementById('score-display');
   const energyDisplay = document.getElementById('energy-display');
   const coinButton = document.getElementById('coin-button');
-  const coinImage = document.getElementById('coin-image');
-
+  const skinsTab = document.getElementById('skins-tab');
   const questsTab = document.getElementById('quests-tab');
-  const topTab = document.getElementById('top-tab');
-  const topList = document.getElementById('top-list');
   const upgradesTab = document.getElementById('upgrades-tab');
-  const skinSelector = document.getElementById('skin-selector');
   const donateSection = document.getElementById('donate-section');
 
   const coinSkins = [
     { name: 'Классическая', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Golden_coin_icon.svg/120px-Golden_coin_icon.svg.png', cost: 0 },
-    { name: 'Сияющая', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Gold_coin_icon.svg/120px-Gold_coin_icon.svg.png', cost: 50000 },
-    { name: 'Электро', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Bitcoin.svg/120px-Bitcoin.svg.png', cost: 150000 },
-    { name: 'Пламя', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Fire_icon.svg/120px-Fire_icon.svg.png', cost: 300000 }
+    { name: 'Сияющая', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Gold_coin_icon.svg/120px-Gold_coin_icon.svg.png', cost: 5000 },
+    { name: 'Электро', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Bitcoin.svg/120px-Bitcoin.svg.png', cost: 15000 },
+    { name: 'Пламя', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Fire_icon.svg/120px-Fire_icon.svg.png', cost: 30000 }
   ];
 
   function renderSkins() {
-    skinSelector.innerHTML = '';
+    skinsTab.innerHTML = '';
     coinSkins.forEach((skin, idx) => {
       const div = document.createElement('div');
       div.className = 'skin-thumb';
       div.style.backgroundImage = `url(${skin.url})`;
+      div.dataset.cost = skin.cost > 0 ? skin.cost + ' монет' : 'Бесплатно';
       if (data.skinIndex === idx) div.classList.add('selected');
-      div.title = `${skin.name} (Цена: ${skin.cost} монет)`;
+      div.title = `${skin.name} (${div.dataset.cost})`;
       div.onclick = () => {
         if (idx === data.skinIndex) return;
         if (data.score >= skin.cost) {
@@ -370,7 +324,7 @@
           alert(`Недостаточно монет для покупки скина "${skin.name}"`);
         }
       };
-      skinSelector.appendChild(div);
+      skinsTab.appendChild(div);
     });
   }
 
@@ -435,36 +389,13 @@
     });
   }
 
-  function updateTopList() {
-    data.usersTop[user.id] = {
-      name: user.first_name || 'Игрок',
-      score: data.score,
-    };
-    saveData();
-
-    const sorted = Object.values(data.usersTop).sort((a, b) => b.score - a.score);
-
-    topList.innerHTML = '';
-    sorted.slice(0, 10).forEach((u, idx) => {
-      const tr = document.createElement('tr');
-      const tdName = document.createElement('td');
-      tdName.textContent = u.name;
-      const tdScore = document.createElement('td');
-      tdScore.textContent = u.score;
-      tr.appendChild(tdName);
-      tr.appendChild(tdScore);
-      topList.appendChild(tr);
-    });
-  }
-
-  // Апгрейды: теперь всего два товара, с нарастающей ценой и эффектом
-  // Цены начинаются дешевле и растут по формуле: baseCost * 1.5^level
+  // Улучшения
   const upgradesList = [
     {
       id: 'click',
       title: 'Улучшить клик',
       desc: 'Увеличивает количество монет за клик',
-      baseCost: 500,
+      baseCost: 100,
       baseAmount: 1,
       getCost() {
         return Math.floor(this.baseCost * Math.pow(1.5, data.upgradesBought.click));
@@ -480,8 +411,8 @@
     {
       id: 'energy',
       title: 'Улучшить энергию',
-      desc: 'Увеличивает максимум энергии и восстанавливает её',
-      baseCost: 700,
+      desc: 'Увеличивает максимум энергии и текущую энергию',
+      baseCost: 150,
       baseAmount: 10,
       getCost() {
         return Math.floor(this.baseCost * Math.pow(1.5, data.upgradesBought.energy));
@@ -489,11 +420,11 @@
       buy() {
         data.energyMax += this.baseAmount;
         data.energy += this.baseAmount;
-        if(data.energy > data.energyMax) data.energy = data.energyMax;
         data.upgradesBought.energy++;
+        if (data.energy > data.energyMax) data.energy = data.energyMax;
       },
       getDesc() {
-        return `+${this.baseAmount} к максимуму энергии и текущей энергии`;
+        return `+${this.baseAmount} максимума энергии`;
       }
     }
   ];
@@ -501,9 +432,7 @@
   function renderUpgrades() {
     upgradesTab.innerHTML = '';
     upgradesList.forEach(upg => {
-      const level = data.upgradesBought[upg.id];
       const cost = upg.getCost();
-
       const div = document.createElement('div');
       div.className = 'upgrade';
 
@@ -511,10 +440,10 @@
       info.className = 'upgrade-info';
 
       const title = document.createElement('h4');
-      title.textContent = `${upg.title} (уровень: ${level})`;
+      title.textContent = `${upg.title} (уровень: ${data.upgradesBought[upg.id]})`;
 
       const desc = document.createElement('p');
-      desc.textContent = upg.getDesc();
+      desc.textContent = upg.desc + ' — ' + upg.getDesc();
 
       info.appendChild(title);
       info.appendChild(desc);
@@ -539,21 +468,19 @@
     });
   }
 
-  // Обновляем UI - счет, энергия, монета, скин
-  function updateUI() {
-    scoreDisplay.textContent = `Монеты: ${data.score}`;
-    energyDisplay.textContent = `Энергия: ${Math.floor(data.energy)} / ${data.energyMax}`;
-    coinImage.src = coinSkins[data.skinIndex].url;
-    updateTopList();
-  }
-
-  // Обновляем счет и сохраняем
   function updateScore(amount) {
     data.score += amount;
     if (data.score < 0) data.score = 0;
   }
 
-  // Клик по монете
+  function updateUI() {
+    scoreDisplay.textContent = `Монеты: ${data.score}`;
+    energyDisplay.textContent = `Энергия: ${Math.floor(data.energy)} / ${data.energyMax}`;
+    coinButton.style.backgroundImage = `url(${coinSkins[data.skinIndex].url})`;
+    renderSkins(); // обновить выделение скина
+    renderUpgrades(); // обновить доступность кнопок
+  }
+
   coinButton.onclick = () => {
     if (data.energy >= 1) {
       data.energy -= 1;
@@ -561,7 +488,7 @@
       saveData();
       updateUI();
     } else {
-      alert('Не хватает энергии! Прокачай энергию в разделе "Прокачка".');
+      alert('Не хватает энергии! Улучшайте энергию в прокачке.');
     }
   };
 
@@ -583,22 +510,19 @@
       btn.classList.add('active');
 
       const tabId = btn.dataset.tab;
-      ['tap-tab', 'quests-tab', 'top-tab', 'upgrades-tab', 'donate-section'].forEach(id => {
+      ['tap-tab', 'skins-tab', 'quests-tab', 'upgrades-tab', 'donate-section'].forEach(id => {
         document.getElementById(id).classList.toggle('hidden', id !== tabId);
       });
 
       if (tabId === 'quests-tab') renderQuests();
       if (tabId === 'upgrades-tab') renderUpgrades();
-      if (tabId === 'top-tab') updateTopList();
-      if (tabId === 'tap-tab') updateUI();
+      if (tabId === 'skins-tab') renderSkins();
     });
   });
 
-  // Инициализация
-  renderSkins();
-  renderQuests();
-  renderUpgrades();
+  // Инициализация UI при загрузке
   updateUI();
+  renderQuests();
 </script>
 
 </body>
