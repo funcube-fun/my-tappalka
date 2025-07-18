@@ -63,12 +63,25 @@ body {
     justify-content: flex-start;
 }
 
+.score-display {
+    font-size: 2.5rem;
+    color: #ffd700;
+    text-align: center;
+    margin: 1vw 0;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+    background: linear-gradient(90deg, #2a2a7a, #3a3a8a);
+    padding: 1vw 2vw;
+    border-radius: 15px;
+    width: 80%;
+}
+
 #hamster-image {
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23ffd700"><circle cx="50" cy="50" r="40" /><path d="M40 30h20v20h-20z M45 50h10v10H45z" fill="%23000000" /></svg>') no-repeat center;
     background-size: contain;
     border-radius: 50%;
     width: 40vw;
     height: 40vw;
+    margin: 2vw 0;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     touch-action: manipulation;
     position: relative;
@@ -107,17 +120,6 @@ body {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.score-display {
-    font-size: 2.5rem;
-    color: #ffd700;
-    text-align: center;
-    margin: 2vw 0;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
-    background: linear-gradient(90deg, #2a2a7a, #3a3a8a);
-    padding: 1vw 2vw;
-    border-radius: 15px;
-}
-
 .progress-bar {
     width: 80%;
     margin: 2vw 0;
@@ -127,6 +129,7 @@ body {
     font-size: 1rem;
     text-align: center;
     color: #ffffff;
+    margin: 1vw 0;
 }
 
 .progress {
@@ -148,7 +151,7 @@ body {
 .energy-display {
     font-size: 1.2rem;
     color: #ffffff;
-    margin: 2vw 0;
+    margin: 1vw 0;
     background: linear-gradient(90deg, #2a2a7a, #3a3a8a);
     padding: 1vw 2vw;
     border-radius: 15px;
@@ -338,11 +341,10 @@ body {
     #game-container { font-size: 4vw; }
     #header { font-size: 6vw; }
     .hamster-avatar { width: 12vw; height: 12vw; }
-    #hamster-image { width: 50vw; height: 50vw; }
-    .stat-box { font-size: 4vw; }
-    .score-display { font-size: 6vw; }
-    .progress-label { font-size: 3.5vw; }
-    .energy-display { font-size: 4vw; }
+    #hamster-image { width: 50vw; height: 50vw; margin: 3vw 0; }
+    .score-display { font-size: 6vw; margin: 2vw 0; }
+    .progress-label { font-size: 3.5vw; margin: 2vw 0; }
+    .energy-display { font-size: 4vw; margin: 2vw 0; }
     .upgrade-card { padding: 3vw; }
     .upgrade-card h3 { font-size: 4vw; }
     .upgrade-card p { font-size: 3vw; }
@@ -362,11 +364,10 @@ body {
     #game-container { font-size: 16px; }
     #header { font-size: 32px; }
     .hamster-avatar { width: 40px; height: 40px; }
-    #hamster-image { width: 220px; height: 220px; }
-    .stat-box { padding: 10px 20px; font-size: 1.2rem; }
-    .score-display { font-size: 2.5rem; }
-    .progress-label { font-size: 1rem; }
-    .energy-display { font-size: 1.2rem; }
+    #hamster-image { width: 220px; height: 220px; margin: 15px 0; }
+    .score-display { font-size: 2.5rem; margin: 10px 0; }
+    .progress-label { font-size: 1rem; margin: 10px 0; }
+    .energy-display { font-size: 1.2rem; margin: 10px 0; }
     .upgrade-card { padding: 15px; }
     .upgrade-card h3 { font-size: 1.2rem; }
     .upgrade-card p { font-size: 0.9rem; }
