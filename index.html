@@ -90,33 +90,11 @@
             <button id="daily-bonus-btn" onclick="claimDailyBonus(event)" ontouchstart="claimDailyBonus(event)" disabled>Щоденний бонус</button>
             <span id="bonus-status">Оновлення о 00:00</span>
         </div>
-        <div id="ton-content" class="tab-content">
-            <h2>TON Гаманець</h2>
-            <p>Баланс: <span id="ton-balance">0 TON</span></p>
-            <button id="withdraw-btn" onclick="withdrawTON(event)" ontouchstart="withdrawTON(event)" disabled>Вивести (1000)</button>
-            <p id="ton-status">Мінімум 1000 UkraineCoins</p>
-        </div>
         <div id="shop-content" class="tab-content">
             <h2>Магазин</h2>
             <div id="shop-items">
-                <button id="buy-skin1-btn" onclick="buySkin('skin1', 500, event)" ontouchstart="buySkin('skin1', 500, event)">Скін 1 (500)</button>
-                <button id="buy-skin2-btn" onclick="buySkin('skin2', 1000, event)" ontouchstart="buySkin('skin2', 1000, event)">Скін 2 (1000)</button>
                 <button id="buy-boost-btn" onclick="buyBoost(200, event)" ontouchstart="buyBoost(200, event)">Буст тапу (200)</button>
             </div>
-        </div>
-        <div id="customize-content" class="tab-content">
-            <h2>Кастомізація</h2>
-            <select id="skin-select" onchange="changeSkin(event)">
-                <option value="default">Стандартний</option>
-                <option value="skin1">Скін 1</option>
-                <option value="skin2">Скін 2</option>
-            </select>
-        </div>
-        <div id="minigame-content" class="tab-content">
-            <h2>Міні-гра</h2>
-            <canvas id="minigame-canvas" width="300" height="200"></canvas>
-            <button id="start-minigame-btn" onclick="startMinigame(event)" ontouchstart="startMinigame(event)">Почати</button>
-            <p>Очки: <span id="minigame-score">0</span></p>
         </div>
         <div id="donate-content" class="tab-content">
             <h2>Допомога ЗСУ</h2>
@@ -141,21 +119,9 @@
                 <span class="tab-icon">🎁</span>
                 <span class="tab-label">Бонуси</span>
             </button>
-            <button class="tab-button" data-tab="ton" onclick="openTab('ton', event)" ontouchstart="openTab('ton', event)">
-                <span class="tab-icon">💰</span>
-                <span class="tab-label">TON</span>
-            </button>
             <button class="tab-button" data-tab="shop" onclick="openTab('shop', event)" ontouchstart="openTab('shop', event)">
                 <span class="tab-icon">🛒</span>
                 <span class="tab-label">Магазин</span>
-            </button>
-            <button class="tab-button" data-tab="customize" onclick="openTab('customize', event)" ontouchstart="openTab('customize', event)">
-                <span class="tab-icon">🎨</span>
-                <span class="tab-label">Кастом</span>
-            </button>
-            <button class="tab-button" data-tab="minigame" onclick="openTab('minigame', event)" ontouchstart="openTab('minigame', event)">
-                <span class="tab-icon">🎮</span>
-                <span class="tab-label">Міні-гра</span>
             </button>
             <button class="tab-button" data-tab="donate" onclick="openTab('donate', event)" ontouchstart="openTab('donate', event)">
                 <span class="tab-icon">❤️</span>
