@@ -17,7 +17,16 @@
             <div class="score-display">UkraineCoins: <span id="score">0</span></div>
             <div id="hamster-image" onclick="tapCoin(event)" ontouchstart="tapCoin(event)"></div>
             <div class="progress-label">Рівень <span id="level">1</span></div>
+            <div class="progress-bar">
+                <div class="progress">
+                    <div id="progress-fill"></div>
+                </div>
+            </div>
             <div class="energy-display">Енергія: <span id="energy">100/100</span></div>
+            <div class="stats-container">
+                <div class="stat-box">Заробіток за тап: <span id="profit">+1</span></div>
+                <div class="stat-box">Пасивний дохід: <span id="profit-hour">+0</span>/год</div>
+            </div>
             <div id="notification" class="notification"></div>
         </div>
         <div id="upgrades-content" class="tab-content">
