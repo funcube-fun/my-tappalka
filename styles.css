@@ -64,7 +64,7 @@ body {
 }
 
 #hamster-image {
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23ffaa00"><circle cx="50" cy="50" r="40" /><path d="M50 20a10 10 0 00-10 10v20a10 10 0 0010 10h10a10 10 0 0010-10V30a10 10 0 00-10-10z" fill="%23ffffff" /><path d="M45 50h10v10H45z" fill="%23000000" /></svg>') no-repeat center;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23ffd700"><circle cx="50" cy="50" r="40" /><path d="M40 30h20v20h-20z M45 50h10v10H45z" fill="%23000000" /></svg>') no-repeat center;
     background-size: contain;
     border-radius: 50%;
     width: 40vw;
@@ -415,6 +415,6 @@ body {
 }
 
 #donate-content button { background: linear-gradient(45deg, #ff3333, #ff6666); }
-#donate-content h2, #ton-content h2, #shop-content h2, #clan-content h2, #customize-content h2, #minigame-content h2 { color: #ffd700; }
+#donate-content h2, #ton-content h2, #shop-content h2, #customize-content h2, #minigame-content h2 { color: #ffd700; }
 #donate-content p, #ton-content p { color: #ffffff; }
 #footer-text { position: fixed; bottom: 5vw; width: 100%; text-align: center; color: #999; }
