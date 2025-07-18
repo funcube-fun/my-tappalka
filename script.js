@@ -1,5 +1,9 @@
 let score = parseInt(localStorage.getItem('score')) || 0;
 let profitPerTap = parseInt(localStorage.getItem('profitPerTap')) || 1;
+let profitLevel = parseInt(localStorage.getItem('profitLevel')) || 1;
+let miningLevel = parseInt(localStorage.getItem('miningLevel')) || 1;
+let energyLevel = parseInt(localStorage.getItem('energyLevel')) || 1;
+let regenLevel = parseInt(localStorage.getItem('regenLevel')) || 1;
 let energy = parseInt(localStorage.getItem('energy')) || 100;
 let maxEnergy = parseInt(localStorage.getItem('maxEnergy')) || 100;
 let energyRegenRate = parseFloat(localStorage.getItem('energyRegenRate')) || 0.5;
@@ -42,6 +46,10 @@ function calculateLevelReward(level) {
 function saveGame() {
     localStorage.setItem('score', Math.floor(score));
     localStorage.setItem('profitPerTap', profitPerTap);
+    localStorage.setItem('profitLevel', profitLevel);
+    localStorage.setItem('miningLevel', miningLevel);
+    localStorage.setItem('energyLevel', energyLevel);
+    localStorage.setItem('regenLevel', regenLevel);
     localStorage.setItem('energy', Math.floor(energy));
     localStorage.setItem('maxEnergy', maxEnergy);
     localStorage.setItem('energyRegenRate', energyRegenRate);
@@ -74,14 +82,22 @@ function updateDisplay() {
     document.getElementById('energy').textContent = `${Math.floor(energy)}/${maxEnergy}`;
     document.getElementById('level').textContent = level;
     document.getElementById('progress-fill').style.width = `${(exp / expToLevel) * 100}%`;
-    document.getElementById('profit-upgrade-cost').textContent = `Ціна: ${50 * profitPerTap}`;
-    document.getElementById('mining-upgrade-cost').textContent = `Ціна: ${100 * (passiveIncome / 10 + 1)}`;
-    document.getElementById('energy-upgrade-cost').textContent = `Ціна: ${200 * (maxEnergy / 20 - 4)}`;
-    document.getElementById('regen-upgrade-cost').textContent = `Ціна: ${300 * (energyRegenRate / 0.5)}`;
-    document.getElementById('upgrade-profit-btn').disabled = score < 50 * profitPerTap;
-    document.getElementById('upgrade-mining-btn').disabled = score < 100 * (passiveIncome / 10 + 1);
-    document.getElementById('upgrade-energy-btn').disabled = score < 200 * (maxEnergy / 20 - 4);
-    document.getElementById('upgrade-regen-btn').disabled = score < 300 * (energyRegenRate / 0.5);
+    document.getElementById('profit-level').textContent = profitLevel;
+    document.getElementById('profit-upgrade-cost').textContent = `${50 * profitLevel}`;
+    document.getElementById('profit-progress').style.width = `${(profitPerTap % 10 / 10) * 100}%`;
+    document.getElementById('mining-level').textContent = miningLevel;
+    document.getElementById('mining-upgrade-cost').textContent = `${100 * miningLevel}`;
+    document.getElementById('mining-progress').style.width = `${(passiveIncome % 50 / 50) * 100}%`;
+    document.getElementById('energy-level').textContent = energyLevel;
+    document.getElementById('energy-upgrade-cost').textContent = `${200 * energyLevel}`;
+    document.getElementById('energy-progress').style.width = `${(maxEnergy % 20 / 20) * 100}%`;
+    document.getElementById('regen-level').textContent = regenLevel;
+    document.getElementById('regen-upgrade-cost').textContent = `${300 * regenLevel}`;
+    document.getElementById('regen-progress').style.width = `${(energyRegenRate % 0.5 / 0.5) * 100}%`;
+    document.getElementById('upgrade-profit-btn').disabled = score < 50 * profitLevel;
+    document.getElementById('upgrade-mining-btn').disabled = score < 100 * miningLevel;
+    document.getElementById('upgrade-energy-btn').disabled = score < 200 * energyLevel;
+    document.getElementById('upgrade-regen-btn').disabled = score < 300 * regenLevel;
     document.getElementById('daily-combo-btn').disabled = Date.now() - lastComboTime < comboCooldown;
     document.getElementById('combo-status').textContent = Date.now() - lastComboTime < comboCooldown ? `Оновлення о ${new Date(lastComboTime + comboCooldown).toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' })}` : 'Готово!';
     document.getElementById('daily-bonus-btn').disabled = Date.now() - lastDailyBonusTime < dailyBonusCooldown;
@@ -199,9 +215,10 @@ function checkLevelUp() {
 
 function upgradeProfit(event) {
     handleEvent(event, () => {
-        const cost = 50 * profitPerTap;
+        const cost = 50 * profitLevel;
         if (score >= cost) {
             score -= cost;
+            profitLevel++;
             profitPerTap += 2;
             localStorage.setItem('upgradesToday', (parseInt(localStorage.getItem('upgradesToday')) || 0) + 1);
             showNotification('Тап покращено!');
@@ -214,9 +231,10 @@ function upgradeProfit(event) {
 
 function upgradeMining(event) {
     handleEvent(event, () => {
-        const cost = 100 * (passiveIncome / 10 + 1);
+        const cost = 100 * miningLevel;
         if (score >= cost) {
             score -= cost;
+            miningLevel++;
             passiveIncome += 50;
             localStorage.setItem('upgradesToday', (parseInt(localStorage.getItem('upgradesToday')) || 0) + 1);
             showNotification('Шахта покращена!');
@@ -229,9 +247,10 @@ function upgradeMining(event) {
 
 function upgradeEnergy(event) {
     handleEvent(event, () => {
-        const cost = 200 * (maxEnergy / 20 - 4);
+        const cost = 200 * energyLevel;
         if (score >= cost) {
             score -= cost;
+            energyLevel++;
             maxEnergy += 20;
             energy = maxEnergy;
             localStorage.setItem('upgradesToday', (parseInt(localStorage.getItem('upgradesToday')) || 0) + 1);
@@ -245,9 +264,10 @@ function upgradeEnergy(event) {
 
 function upgradeRegen(event) {
     handleEvent(event, () => {
-        const cost = 300 * (energyRegenRate / 0.5);
+        const cost = 300 * regenLevel;
         if (score >= cost) {
             score -= cost;
+            regenLevel++;
             energyRegenRate += 0.5;
             localStorage.setItem('upgradesToday', (parseInt(localStorage.getItem('upgradesToday')) || 0) + 1);
             showNotification('Регенерація прискорена!');
