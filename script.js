@@ -16,24 +16,6 @@ let level = parseInt(localStorage.getItem('level')) || 1;
 let exp = parseInt(localStorage.getItem('exp')) || 0;
 let baseExpToLevel = 1000;
 let expToLevel = baseExpToLevel * level;
-let tapBoost = parseFloat(localStorage.getItem('tapBoost')) || 1.0;
-let minigameActive = false;
-let player = { x: 150, y: 100, speed: 5 };
-let enemies = [];
-let minigameScore = 0;
-
-const achievementsList = [
-    { id: 'first-tap', name: 'Перший тап', reward: 50, achieved: false },
-    { id: '100-taps', name: '100 тапів', reward: 200, achieved: false },
-    { id: 'level-5', name: 'Рівень 5', reward: 500, achieved: false },
-    { id: '1000-coins', name: '1000 монет', reward: 1000, achieved: false }
-];
-
-const dailyMissions = [
-    { id: 'tap-50', name: '50 тапів', reward: 100, completed: false, progress: 0, target: 50 },
-    { id: 'upgrade-1', name: '1 покращення', reward: 150, completed: false, progress: 0, target: 1 },
-    { id: 'daily-bonus', name: 'Взяти бонус', reward: 200, completed: false }
-];
 
 function calculateLevelReward(level) {
     return 100 + (level - 1) * 400;
@@ -55,7 +37,6 @@ function saveGame() {
     localStorage.setItem('lastDailyBonusTime', lastDailyBonusTime);
     localStorage.setItem('level', level);
     localStorage.setItem('exp', exp);
-    localStorage.setItem('tapBoost', tapBoost);
 }
 
 function showNotification(message) {
@@ -67,7 +48,7 @@ function showNotification(message) {
 
 function updateDisplay() {
     document.getElementById('score').textContent = Math.floor(score);
-    document.getElementById('profit').textContent = `+${Math.floor(profitPerTap * tapBoost)}`;
+    document.getElementById('profit').textContent = `+${Math.floor(profitPerTap)}`;
     document.getElementById('profit-hour').textContent = `+${Math.floor(passiveIncome)}`;
     document.getElementById('energy').textContent = `${Math.floor(energy)}/${maxEnergy}`;
     document.getElementById('level').textContent = level;
@@ -90,65 +71,14 @@ function updateDisplay() {
     document.getElementById('upgrade-regen-btn').disabled = score < 300 * regenLevel;
     document.getElementById('daily-bonus-btn').disabled = Date.now() - lastDailyBonusTime < dailyBonusCooldown;
     document.getElementById('bonus-status').textContent = Date.now() - lastDailyBonusTime < dailyBonusCooldown ? `Оновлення о ${new Date(lastDailyBonusTime + dailyBonusCooldown).toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' })}` : 'Готово!';
-    document.getElementById('buy-boost-btn').disabled = score < 200;
-    document.getElementById('achieve-list').innerHTML = '';
-    updateAchievements();
-    updateMissions();
+    document.getElementById('referral-btn').disabled = localStorage.getItem('referralClaimed') === 'true';
+    document.getElementById('task-video-btn').disabled = localStorage.getItem('task_video_completed') === 'true';
+    document.getElementById('task-telegram1-btn').disabled = localStorage.getItem('task_telegram1_completed') === 'true';
+    document.getElementById('task-telegram2-btn').disabled = localStorage.getItem('task_telegram2_completed') === 'true';
+    document.getElementById('task-telegram3-btn').disabled = localStorage.getItem('task_telegram3_completed') === 'true';
+    document.getElementById('task-youtube-btn').disabled = localStorage.getItem('task_youtube_completed') === 'true';
+    document.getElementById('task-tiktok-btn').disabled = localStorage.getItem('task_tiktok_completed') === 'true';
     saveGame();
-}
-
-function updateAchievements() {
-    const achieveList = document.getElementById('achieve-list');
-    achieveList.innerHTML = '';
-    achievementsList.forEach(ach => {
-        const achieved = achievements.find(a => a.id === ach.id && a.achieved);
-        if (!achieved) {
-            if ((ach.id === 'first-tap' && totalTaps >= 1) ||
-                (ach.id === '100-taps' && totalTaps >= 100) ||
-                (ach.id === 'level-5' && level >= 5) ||
-                (ach.id === '1000-coins' && score >= 1000)) {
-                score += ach.reward;
-                achievements.push({ id: ach.id, achieved: true, time: Date.now() });
-                showNotification(`Досягнення "${ach.name}"! +${ach.reward} монет!`);
-            }
-        }
-        const item = document.createElement('div');
-        item.className = 'achievement-item';
-        item.textContent = `${ach.name} (${ach.reward} монет) - ${achievements.find(a => a.id === ach.id && a.achieved) ? 'Виконано' : 'Не виконано'}`;
-        achieveList.appendChild(item);
-    });
-}
-
-function updateMissions() {
-    const missionList = document.getElementById('mission-list');
-    missionList.innerHTML = '';
-    dailyMissions.forEach(mission => {
-        const item = document.createElement('div');
-        item.className = 'mission-item';
-        if (mission.progress !== undefined) {
-            item.textContent = `${mission.name} (${mission.progress}/${mission.target}) - ${mission.completed ? 'Виконано' : 'В процесі'} (+${mission.reward})`;
-        } else {
-            item.textContent = `${mission.name} - ${mission.completed ? 'Виконано' : 'Не виконано'} (+${mission.reward})`;
-        }
-        if (!mission.completed) {
-            if (mission.id === 'tap-50' && totalTaps >= mission.target) {
-                score += mission.reward;
-                mission.completed = true;
-                showNotification(`Місія "${mission.name}" завершена! +${mission.reward} монет!`);
-            }
-            if (mission.id === 'upgrade-1' && localStorage.getItem('upgradesToday') >= 1) {
-                score += mission.reward;
-                mission.completed = true;
-                showNotification(`Місія "${mission.name}" завершена! +${mission.reward} монет!`);
-            }
-            if (mission.id === 'daily-bonus' && Date.now() - lastDailyBonusTime < dailyBonusCooldown && lastDailyBonusTime > 0) {
-                score += mission.reward;
-                mission.completed = true;
-                showNotification(`Місія "${mission.name}" завершена! +${mission.reward} монет!`);
-            }
-        }
-        missionList.appendChild(item);
-    });
 }
 
 function handleEvent(event, callback) {
@@ -160,11 +90,10 @@ function handleEvent(event, callback) {
 function tapCoin(event) {
     handleEvent(event, () => {
         if (energy >= 1) {
-            score += profitPerTap * tapBoost;
+            score += profitPerTap;
             energy -= 1;
-            exp += Math.floor(profitPerTap * tapBoost * 10);
+            exp += Math.floor(profitPerTap * 10);
             totalTaps += 1;
-            dailyMissions.find(m => m.id === 'tap-50').progress = totalTaps;
             checkLevelUp();
             createTapAnimation(event);
             updateDisplay();
@@ -177,7 +106,7 @@ function tapCoin(event) {
 function createTapAnimation(event) {
     const anim = document.createElement('div');
     anim.className = 'tap-animation';
-    anim.textContent = `+${Math.floor(profitPerTap * tapBoost)}`;
+    anim.textContent = `+${Math.floor(profitPerTap)}`;
     anim.style.left = `${event.offsetX - 20}px`;
     anim.style.top = `${event.offsetY - 20}px`;
     document.getElementById('hamster-image').appendChild(anim);
@@ -260,12 +189,6 @@ function upgradeRegen(event) {
     });
 }
 
-function claimDailyCombo(event) {
-    handleEvent(event, () => {
-        showNotification('Функція комбо видалена!');
-    });
-}
-
 function showReferral(event) {
     handleEvent(event, () => {
         if (!localStorage.getItem('referralClaimed')) {
@@ -283,15 +206,28 @@ function showReferral(event) {
 
 function completeTask(taskType, event) {
     handleEvent(event, () => {
-        if (taskType === 'video' && !localStorage.getItem('taskVideoCompleted')) {
-            score += 60;
-            exp += 600;
+        if (!localStorage.getItem(`task_${taskType}_completed`)) {
+            let reward = 60;
+            let url = 'https://t.me/example';
+            if (taskType.startsWith('telegram')) {
+                reward = 1000;
+                url = `https://t.me/example${taskType.replace('telegram', '')}`;
+            } else if (taskType === 'youtube') {
+                reward = 1000;
+                url = 'https://youtube.com/@example';
+            } else if (taskType === 'tiktok') {
+                reward = 1000;
+                url = 'https://tiktok.com/@example';
+            }
+            window.open(url, '_blank');
+            score += reward;
+            exp += reward * 10;
             checkLevelUp();
-            localStorage.setItem('taskVideoCompleted', 'true');
-            showNotification('Завдання виконано! +60 монет!');
+            localStorage.setItem(`task_${taskType}_completed`, 'true');
+            showNotification(`Завдання виконано! +${reward} монет!`);
             updateDisplay();
         } else {
-            showNotification('Завдання вже виконано або недоступне!');
+            showNotification('Завдання вже виконано!');
         }
     });
 }
@@ -328,100 +264,6 @@ function makeDonation(event) {
             showNotification('Мінімум 20 грн.');
         }
     });
-}
-
-function buyBoost(cost, event) {
-    handleEvent(event, () => {
-        if (score >= cost) {
-            score -= cost;
-            tapBoost += 0.5;
-            showNotification('Буст тапу активовано! +0.5x!');
-            updateDisplay();
-        } else {
-            showNotification('Недостатньо монет!');
-        }
-    });
-}
-
-function startMinigame(event) {
-    handleEvent(event, () => {
-        if (!minigameActive) {
-            minigameActive = true;
-            const canvas = document.createElement('canvas');
-            canvas.id = 'minigame-canvas';
-            canvas.width = 300;
-            canvas.height = 200;
-            canvas.style.border = '2px solid #ffd700';
-            canvas.style.borderRadius = '10px';
-            canvas.style.background = '#2a2a5a';
-            document.getElementById('minigame-content').appendChild(canvas);
-            player = { x: 150, y: 100, speed: 5 };
-            enemies = [];
-            minigameScore = 0;
-            document.addEventListener('keydown', movePlayer);
-            requestAnimationFrame(gameLoop);
-            showNotification('Міні-гра почалась! Керуйте стрілками, уникайте ворогів!');
-        }
-    });
-}
-
-function movePlayer(event) {
-    if (minigameActive) {
-        switch (event.key) {
-            case 'ArrowUp': player.y = Math.max(0, player.y - player.speed); break;
-            case 'ArrowDown': player.y = Math.min(200, player.y + player.speed); break;
-            case 'ArrowLeft': player.x = Math.max(0, player.x - player.speed); break;
-            case 'ArrowRight': player.x = Math.min(300, player.x + player.speed); break;
-        }
-    }
-}
-
-function gameLoop() {
-    if (minigameActive) {
-        const canvas = document.getElementById('minigame-canvas');
-        const ctx = canvas.getContext('2d');
-
-        // Створення ворогів
-        if (Math.random() < 0.02) {
-            enemies.push({ x: Math.random() * 300, y: -10, speed: 2 + Math.random() * 2 });
-        }
-
-        // Оновлення та відображення
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#ffaa00';
-        ctx.beginPath();
-        ctx.arc(player.x, player.y, 10, 0, Math.PI * 2);
-        ctx.fill();
-
-        enemies = enemies.filter(enemy => {
-            enemy.y += enemy.speed;
-            ctx.fillStyle = '#ff3333';
-            ctx.beginPath();
-            ctx.arc(enemy.x, enemy.y, 10, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Перевірка зіткнень
-            const dx = player.x - enemy.x;
-            const dy = player.y - enemy.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < 20) {
-                minigameActive = false;
-                score += minigameScore * 10;
-                exp += minigameScore * 100;
-                checkLevelUp();
-                showNotification(`Міні-гра завершена! +${minigameScore * 10} монет!`);
-                canvas.remove();
-                updateDisplay();
-                return false;
-            }
-            return enemy.y < 210;
-        });
-
-        minigameScore++;
-        document.getElementById('minigame-score').textContent = minigameScore;
-
-        if (minigameActive) requestAnimationFrame(gameLoop);
-    }
 }
 
 function openTab(tabName, event) {
