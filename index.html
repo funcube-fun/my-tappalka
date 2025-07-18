@@ -3,63 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UkraineCoin Офіційна Тап-Гра</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Oswald:wght@400;700&display=swap">
+    <title>UkraineCoin Хомяк</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="game-container">
         <div id="header">
-            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffd700'><path d='M12 2L4.5 7.5V16.5L12 22l7.5-5.5V7.5L12 2zm0 13a3 3 0 100-6 3 3 0 000 6z'/></svg>" alt="UkraineCoin Logo" class="logo">
-            UkraineCoin
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%23ffd700'><circle cx='50' cy='50' r='40' fill='%23ffaa00' /><path d='M50 20a10 10 0 00-10 10v20a10 10 0 0010 10h10a10 10 0 0010-10V30a10 10 0 00-10-10z' fill='%23ffffff' /><path d='M45 50h10v10H45z' fill='%23000000' /></svg>" alt="UkraineCoin Hamster" class="hamster-avatar">
+            UkraineCoin Хомяк
         </div>
         <div id="main-content" class="tab-content active">
-            <div class="stats" id="score">UkraineCoins: 0</div>
-            <div class="stats" id="profit">Прибуток за тап: 1</div>
-            <div class="stats" id="energy">Енергія: 100/100</div>
-            <div class="stats" id="total-taps">Тапи: 0</div>
-            <div id="coin-image" ontouchstart="tapCoin()"></div>
-            <button id="auto-tap-btn" ontouchstart="toggleAutoTap()">Автоклік (100)</button>
+            <div class="stats-container">
+                <div class="stat-box">Заробіток за тап: <span id="profit">+1</span></div>
+                <div class="stat-box">Пасивний дохід: <span id="profit-hour">+0</span>/год</div>
+            </div>
+            <div class="score-display">UkraineCoins: <span id="score">0</span></div>
+            <div id="hamster-image" onclick="tapCoin(event)" ontouchstart="tapCoin(event)"></div>
+            <div class="progress-bar">
+                <div class="progress-label">Рівень <span id="level">1</span></div>
+                <div class="progress">
+                    <div id="progress-fill"></div>
+                </div>
+            </div>
+            <div class="energy-display">Енергія: <span id="energy">100/100</span></div>
         </div>
         <div id="upgrades-content" class="tab-content">
-            <button id="upgrade-btn" ontouchstart="upgradeProfit()">Покращити тап (50)</button>
-            <button id="upgrade-energy-btn" ontouchstart="upgradeEnergy()">Покращити енергію (100)</button>
-            <button id="upgrade-regen-btn" ontouchstart="upgradeRegen()">Регенерація (150)</button>
-        </div>
-        <div id="bonuses-content" class="tab-content">
-            <button id="bonus-btn" ontouchstart="claimBonus()">Бонус (+200)</button>
-            <button id="special-bonus-btn" ontouchstart="claimSpecialBonus()">Спецбонус (+500, 48г)</button>
-            <button id="weekly-bonus-btn" ontouchstart="claimWeeklyBonus()">Тижневий (+1000, 7д)</button>
+            <div class="upgrade-section">
+                <button id="upgrade-profit-btn" onclick="upgradeProfit(event)" ontouchstart="upgradeProfit(event)">Покращити тап (50)</button>
+                <span id="profit-upgrade-cost">Ціна: 50</span>
+            </div>
+            <div class="upgrade-section">
+                <button id="upgrade-mining-btn" onclick="upgradeMining(event)" ontouchstart="upgradeMining(event)">Покращити шахту (100)</button>
+                <span id="mining-upgrade-cost">Ціна: 100</span>
+            </div>
+            <div class="upgrade-section">
+                <button id="upgrade-energy-btn" onclick="upgradeEnergy(event)" ontouchstart="upgradeEnergy(event)">Покращити енергію (200)</button>
+                <span id="energy-upgrade-cost">Ціна: 200</span>
+            </div>
+            <div class="upgrade-section">
+                <button id="upgrade-regen-btn" onclick="upgradeRegen(event)" ontouchstart="upgradeRegen(event)">Швидша реген (300)</button>
+                <span id="regen-upgrade-cost">Ціна: 300</span>
+            </div>
+            <div class="daily-combo">
+                <h3>Щоденне комбо</h3>
+                <button id="daily-combo-btn" onclick="claimDailyCombo(event)" ontouchstart="claimDailyCombo(event)" disabled>Комбо (+5M)</button>
+                <span id="combo-status">Оновлення о 00:00</span>
+            </div>
         </div>
         <div id="tasks-content" class="tab-content">
-            <button id="task-friend-btn" ontouchstart="completeTask('friend')">Запросити друга (+100)</button>
-            <button id="task-video-btn" ontouchstart="completeTask('video')">Відео (+60)</button>
+            <button id="referral-btn" onclick="showReferral(event)" ontouchstart="showReferral(event)">Запросити друга (+100)</button>
+            <button id="task-video-btn" onclick="completeTask('video', event)" ontouchstart="completeTask('video', event)">Дивитись відео (+60)</button>
+            <div id="achievements">
+                <h3>Досягнення</h3>
+                <div id="achieve-list"></div>
+            </div>
+        </div>
+        <div id="bonuses-content" class="tab-content">
+            <button id="daily-bonus-btn" onclick="claimDailyBonus(event)" ontouchstart="claimDailyBonus(event)" disabled>Щоденний бонус</button>
+            <span id="bonus-status">Оновлення о 00:00</span>
+        </div>
+        <div id="ton-content" class="tab-content">
+            <h2>TON Гаманець</h2>
+            <p>Баланс: <span id="ton-balance">0 TON</span></p>
+            <button id="withdraw-btn" onclick="withdrawTON(event)" ontouchstart="withdrawTON(event)" disabled>Вивести (1000)</button>
+            <p id="ton-status">Мінімум 1000 UkraineCoins</p>
         </div>
         <div id="donate-content" class="tab-content">
-            <h2>Пожертвування на ЗСУ</h2>
-            <p>Підтримай ЗСУ! Введіть суму (грн):</p>
-            <input type="number" id="donation-amount" placeholder="Сума" min="20">
-            <button ontouchstart="makeDonation()">Пожертвувати</button>
-            <p>Примітка: Це симуляція. Для реальних пожертвувань зверніться до офіційних фондів.</p>
+            <h2>Допомога ЗСУ</h2>
+            <input type="number" id="donation-amount" placeholder="Сума (грн)" min="20">
+            <button onclick="makeDonation(event)" ontouchstart="makeDonation(event)">Пожертвувати</button>
+            <p>Симуляція. Для реальних пожертв зверніться до офіційних фондів.</p>
         </div>
         <div id="tabs">
-            <button class="tab-button active" ontouchstart="openTab('main')">
+            <button class="tab-button active" data-tab="main" onclick="openTab('main', event)" ontouchstart="openTab('main', event)">
                 <span class="tab-icon">👆</span>
                 <span class="tab-label">Тап</span>
             </button>
-            <button class="tab-button" ontouchstart="openTab('upgrades')">
+            <button class="tab-button" data-tab="upgrades" onclick="openTab('upgrades', event)" ontouchstart="openTab('upgrades', event)">
                 <span class="tab-icon">⚙️</span>
-                <span class="tab-label">Покращення</span>
+                <span class="tab-label">Улучшення</span>
             </button>
-            <button class="tab-button" ontouchstart="openTab('bonuses')">
+            <button class="tab-button" data-tab="tasks" onclick="openTab('tasks', event)" ontouchstart="openTab('tasks', event)">
+                <span class="tab-icon">📝</span>
+                <span class="tab-label">Задания</span>
+            </button>
+            <button class="tab-button" data-tab="bonuses" onclick="openTab('bonuses', event)" ontouchstart="openTab('bonuses', event)">
                 <span class="tab-icon">🎁</span>
                 <span class="tab-label">Бонуси</span>
             </button>
-            <button class="tab-button" ontouchstart="openTab('tasks')">
-                <span class="tab-icon">📝</span>
-                <span class="tab-label">Завдання</span>
+            <button class="tab-button" data-tab="ton" onclick="openTab('ton', event)" ontouchstart="openTab('ton', event)">
+                <span class="tab-icon">💰</span>
+                <span class="tab-label">TON</span>
             </button>
-            <button class="tab-button" ontouchstart="openTab('donate')">
+            <button class="tab-button" data-tab="donate" onclick="openTab('donate', event)" ontouchstart="openTab('donate', event)">
                 <span class="tab-icon">❤️</span>
                 <span class="tab-label">Донат</span>
             </button>
