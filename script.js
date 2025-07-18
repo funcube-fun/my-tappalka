@@ -77,10 +77,10 @@ async function loadGame() {
             updateDisplay();
         } else {
             showNotification('Помилка завантаження даних');
+            console.error('Failed to load game data:', response.status);
         }
     } catch (error) {
-        showNotification('Помилка сервера');
-        console.error(error);
+        console.error('Server error:', error);
     }
 }
 
@@ -120,10 +120,10 @@ async function saveGame() {
         });
         if (!response.ok) {
             showNotification('Помилка збереження даних');
+            console.error('Failed to save game data:', response.status);
         }
     } catch (error) {
-        showNotification('Помилка сервера');
-        console.error(error);
+        console.error('Server error:', error);
     }
 }
 
@@ -142,6 +142,9 @@ function updateDisplay() {
     document.getElementById('score').textContent = Math.floor(score);
     document.getElementById('energy').textContent = `${Math.floor(energy)}/${maxEnergy}`;
     document.getElementById('level').textContent = level;
+    document.getElementById('progress-fill').style.width = `${(exp / expToLevel) * 100}%`;
+    document.getElementById('profit').textContent = `+${Math.floor(profitPerTap)}`;
+    document.getElementById('profit-hour').textContent = `+${Math.floor(passiveIncome)}`;
     document.getElementById('profit-level').textContent = profitLevel;
     document.getElementById('profit-upgrade-cost').textContent = `${50 * profitLevel}`;
     document.getElementById('profit-progress').style.width = `${(profitPerTap % 10 / 10) * 100}%`;
