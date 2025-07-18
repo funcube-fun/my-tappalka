@@ -225,45 +225,6 @@ body {
     transform: scale(0.95);
 }
 
-.daily-combo {
-    background: linear-gradient(135deg, #2a2a7a, #4a4ac0);
-    border-radius: 15px;
-    padding: 2vw;
-    width: 90%;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    text-align: center;
-}
-
-.daily-combo h3 {
-    font-size: 1.2rem;
-    margin: 0 0 1vw;
-    color: #ffd700;
-}
-
-.daily-combo button {
-    background: linear-gradient(45deg, #ffaa00, #ffdd55);
-    color: #1a1a3b;
-    border: none;
-    border-radius: 10px;
-    font-weight: 600;
-    padding: 1vw 2vw;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.daily-combo button:hover:not(:disabled) {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 215, 0, 0.5);
-}
-
-.daily-combo button:active {
-    transform: scale(0.95);
-}
-
-.daily-combo span {
-    font-size: 0.9rem;
-    color: #ffffff;
-}
-
 #tabs {
     position: fixed;
     bottom: 0;
@@ -305,19 +266,6 @@ body {
     font-weight: 600;
 }
 
-#achieve-list, #mission-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1vw;
-}
-
-.achievement-item, .mission-item {
-    background: #3a3a7a;
-    padding: 1vw;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
 .notification {
     position: fixed;
     top: 10vw;
@@ -354,6 +302,38 @@ body {
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
+#donate-content button, #tasks-content button {
+    background: linear-gradient(45deg, #0088cc, #00b7ff);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 1vw 2vw;
+    margin: 1vw 0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#donate-content button:hover:not(:disabled), #tasks-content button:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 136, 204, 0.5);
+}
+
+#donate-content button:active, #tasks-content button:active {
+    transform: scale(0.95);
+}
+
+.task-icon {
+    margin-right: 0.5vw;
+    font-size: 1.2rem;
+}
+
+#donate-content h2 { color: #ffd700; }
+#donate-content p { color: #ffffff; }
+#footer-text { position: fixed; bottom: 5vw; width: 100%; text-align: center; color: #999; }
+
 @media (max-width: 768px) {
     #game-container { font-size: 4vw; }
     #header { font-size: 6vw; }
@@ -367,16 +347,15 @@ body {
     .upgrade-card h3 { font-size: 4vw; }
     .upgrade-card p { font-size: 3vw; }
     .upgrade-card button { font-size: 4vw; padding: 2vw 4vw; }
-    .daily-combo { padding: 3vw; }
-    .daily-combo h3 { font-size: 4vw; }
-    .daily-combo button { font-size: 4vw; padding: 2vw 4vw; }
     .tab-button { font-size: 3vw; padding: 2vw; width: 18vw; height: 18vw; }
     .tab-icon { font-size: 6vw; }
     .tab-label { font-size: 3vw; }
+    .notification { top: 15vw; font-size: 4vw; }
     #donate-content input { padding: 3vw; font-size: 4vw; }
     #donate-content h2 { font-size: 5vw; }
     #donate-content p { font-size: 3vw; }
-    .notification { top: 15vw; font-size: 4vw; }
+    #tasks-content button { font-size: 4vw; padding: 2vw 4vw; }
+    .task-icon { font-size: 4.5vw; }
 }
 
 @media (min-width: 769px) {
@@ -392,19 +371,13 @@ body {
     .upgrade-card h3 { font-size: 1.2rem; }
     .upgrade-card p { font-size: 0.9rem; }
     .upgrade-card button { font-size: 1rem; padding: 10px 20px; }
-    .daily-combo { padding: 15px; }
-    .daily-combo h3 { font-size: 1.2rem; }
-    .daily-combo button { font-size: 1rem; padding: 10px 20px; }
     .tab-button { font-size: 14px; padding: 8px; width: 80px; height: 80px; }
     .tab-icon { font-size: 26px; }
     .tab-label { font-size: 12px; }
+    .notification { top: 50px; font-size: 1rem; }
     #donate-content input { padding: 12px; font-size: 16px; }
     #donate-content h2 { font-size: 28px; }
     #donate-content p { font-size: 16px; }
-    .notification { top: 50px; font-size: 1rem; }
+    #tasks-content button { font-size: 1rem; padding: 10px 20px; }
+    .task-icon { font-size: 1.2rem; }
 }
-
-#donate-content button { background: linear-gradient(45deg, #ff3333, #ff6666); }
-#donate-content h2, #shop-content h2 { color: #ffd700; }
-#donate-content p { color: #ffffff; }
-#footer-text { position: fixed; bottom: 5vw; width: 100%; text-align: center; color: #999; }
