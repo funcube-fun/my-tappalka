@@ -4,97 +4,91 @@ body {
     padding: 0;
     height: 100vh;
     background: linear-gradient(135deg, #1e1e3f, #2a2a5a);
-    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
 #game-container {
     width: 100%;
-    max-width: 1200px;
-    height: 90vh;
+    max-width: 100vw;
+    height: 100vh;
     background: rgba(30, 30, 63, 0.95);
-    border-radius: 15px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
     display: flex;
     flex-direction: column;
     color: #f0f0f0;
     overflow: hidden;
-    border: 2px solid #ffd700;
+    font-size: 4vw;
 }
 
 #header {
-    padding: 20px;
+    padding: 3vw;
     background: linear-gradient(90deg, #1e3a8a, #2d5aa8);
     text-align: center;
     font-family: 'Oswald', sans-serif;
-    font-size: 32px;
+    font-size: 6vw;
     font-weight: 700;
     color: #ffd700;
-    border-bottom: 3px solid #ffd700;
+    border-bottom: 2px solid #ffd700;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
 }
 
 .logo {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
+    width: 8vw;
+    height: 8vw;
+    margin-right: 2vw;
 }
 
-#main-content, #upgrades-content, #bonuses-content, #tasks-content, #donate-content {
+.tab-content {
     flex: 1;
-    padding: 25px;
+    padding: 3vw;
     display: none;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
-#main-content.active, #upgrades-content.active, #bonuses-content.active, #tasks-content.active, #donate-content.active {
+.tab-content.active {
     display: block;
 }
 
 #coin-image {
-    width: 220px;
-    height: 220px;
+    width: 40vw;
+    height: 40vw;
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffd700"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16z"/></svg>') no-repeat center;
     background-size: contain;
-    cursor: pointer;
-    margin: 25px auto;
-    border: 4px solid #ffd700;
+    margin: 5vw auto;
+    border: 2px solid #ffd700;
     border-radius: 50%;
-    transition: transform 0.1s, box-shadow 0.1s;
+    touch-action: manipulation;
 }
 
 #coin-image:active {
-    transform: scale(0.9);
-    box-shadow: 0 0 25px #ffd700;
+    transform: scale(0.95);
 }
 
 .stats {
-    font-size: 22px;
-    margin: 15px 0;
+    font-size: 4.5vw;
+    margin: 2vw 0;
     color: #ffd700;
     font-weight: 700;
-    border-bottom: 1px dashed #ffd700;
-    padding-bottom: 5px;
+    padding-bottom: 1vw;
 }
 
-#auto-tap-btn, #upgrade-btn, #upgrade-energy-btn, #upgrade-regen-btn, #bonus-btn, #special-bonus-btn, #weekly-bonus-btn, #task-friend-btn, #task-video-btn {
-    font-size: 16px;
-    padding: 15px 30px;
+button {
+    font-size: 4vw;
+    padding: 3vw 6vw;
     background: linear-gradient(45deg, #ffaa00, #ffdd55);
     color: #1e3a8a;
     border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    margin: 15px 0;
-    transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 2vw;
+    margin: 2vw 0;
     font-family: 'Oswald', sans-serif;
     font-weight: 400;
-    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+    touch-action: manipulation;
 }
 
 button:disabled {
@@ -102,115 +96,86 @@ button:disabled {
     cursor: not-allowed;
 }
 
-button:hover:not(:disabled) {
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.5);
-}
-
 #tabs {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
-    max-width: 1200px;
     background: linear-gradient(90deg, #1e3a8a, #2d5aa8);
-    padding: 15px 0;
+    padding: 2vw 0;
     display: flex;
     justify-content: space-around;
-    border-top: 3px solid #ffd700;
-    box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.4);
+    border-top: 2px solid #ffd700;
 }
 
 .tab-button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 14px;
-    padding: 8px;
+    font-size: 3vw;
+    padding: 2vw;
     background-color: #2d5aa8;
-    border: 2px solid #ffd700;
-    border-radius: 12px;
+    border: 1px solid #ffd700;
+    border-radius: 3vw;
     color: #f0f0f0;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s, box-shadow 0.2s;
-    width: 65px;
-    height: 75px;
+    touch-action: manipulation;
+    width: 18vw;
+    height: 18vw;
 }
 
 .tab-button.active {
     background-color: #ffd700;
     color: #1e3a8a;
-    transform: scale(1.1);
-    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
-}
-
-.tab-button:hover {
-    background-color: #3a6cc0;
-    box-shadow: 0 3px 10px rgba(255, 215, 0, 0.3);
+    transform: scale(1.05);
 }
 
 .tab-icon {
-    font-size: 26px;
-    margin-bottom: 3px;
+    font-size: 6vw;
+    margin-bottom: 1vw;
 }
 
 .tab-label {
-    font-size: 12px;
+    font-size: 3vw;
     font-family: 'Oswald', sans-serif;
-    font-weight: 400;
-    white-space: nowrap;
 }
 
 #donate-content input {
     width: 100%;
-    padding: 12px;
-    margin: 15px 0;
-    border: 2px solid #ffd700;
-    border-radius: 10px;
+    padding: 3vw;
+    margin: 2vw 0;
+    border: 1px solid #ffd700;
+    border-radius: 2vw;
     background-color: #2a2a5a;
     color: #f0f0f0;
-    font-size: 16px;
-    font-family: 'Roboto', sans-serif;
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+    font-size: 4vw;
 }
 
 #donate-content button {
     background: linear-gradient(45deg, #cc0000, #ff3333);
-    padding: 15px 30px;
-    font-size: 16px;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
 }
 
 #donate-content h2 {
-    font-size: 28px;
+    font-size: 5vw;
     color: #ffd700;
     font-family: 'Oswald', sans-serif;
-    font-weight: 700;
-    margin-bottom: 15px;
-    border-bottom: 2px solid #ffd700;
-    padding-bottom: 5px;
+    margin-bottom: 2vw;
 }
 
 #donate-content p {
-    font-size: 16px;
+    font-size: 3.5vw;
     color: #f0f0f0;
-    font-family: 'Roboto', sans-serif;
-    margin: 10px 0;
 }
 
 #donate-content p:last-child {
-    font-size: 14px;
+    font-size: 3vw;
     color: #999;
-    margin-top: 20px;
+    margin-top: 3vw;
 }
 
 #footer-text {
-    position: absolute;
-    bottom: 5px;
+    position: fixed;
+    bottom: 20vw;
     width: 100%;
     text-align: center;
-    font-size: 12px;
+    font-size: 3vw;
     color: #999;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
 }
