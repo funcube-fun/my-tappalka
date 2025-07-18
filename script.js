@@ -1,22 +1,24 @@
-let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
-let profitPerTap = localStorage.getItem('profitPerTap') ? parseInt(localStorage.getItem('profitPerTap')) : 1;
-let energy = localStorage.getItem('energy') ? parseInt(localStorage.getItem('energy')) : 100;
-let maxEnergy = localStorage.getItem('maxEnergy') ? parseInt(localStorage.getItem('maxEnergy')) : 100;
-let energyRegenRate = localStorage.getItem('energyRegenRate') ? parseFloat(localStorage.getItem('energyRegenRate')) : 0.5;
-let totalTaps = localStorage.getItem('totalTaps') ? parseInt(localStorage.getItem('totalTaps')) : 0;
+let score = parseInt(localStorage.getItem('score')) || 0;
+let profitPerTap = parseInt(localStorage.getItem('profitPerTap')) || 1;
+let energy = parseInt(localStorage.getItem('energy')) || 100;
+let maxEnergy = parseInt(localStorage.getItem('maxEnergy')) || 100;
+let energyRegenRate = parseFloat(localStorage.getItem('energyRegenRate')) || 0.5;
+let totalTaps = parseInt(localStorage.getItem('totalTaps')) || 0;
 let lastTime = Date.now();
-let lastBonusTime = localStorage.getItem('lastBonusTime') ? parseInt(localStorage.getItem('lastBonusTime')) : 0;
-let lastSpecialBonusTime = localStorage.getItem('lastSpecialBonusTime') ? parseInt(localStorage.getItem('lastSpecialBonusTime')) : 0;
-let lastWeeklyBonusTime = localStorage.getItem('lastWeeklyBonusTime') ? parseInt(localStorage.getItem('lastWeeklyBonusTime')) : 0;
+let lastBonusTime = parseInt(localStorage.getItem('lastBonusTime')) || 0;
+let lastSpecialBonusTime = parseInt(localStorage.getItem('lastSpecialBonusTime')) || 0;
+let lastWeeklyBonusTime = parseInt(localStorage.getItem('lastWeeklyBonusTime')) || 0;
 const bonusCooldown = 24 * 60 * 60 * 1000;
 const specialBonusCooldown = 48 * 60 * 60 * 1000;
 const weeklyBonusCooldown = 7 * 24 * 60 * 60 * 1000;
 let autoTapEnabled = localStorage.getItem('autoTapEnabled') === 'true';
 let autoTapInterval = null;
-let autoTapSpeed = localStorage.getItem('autoTapSpeed') ? parseInt(localStorage.getItem('autoTapSpeed')) : 1000;
+let autoTapSpeed = parseInt(localStorage.getItem('autoTapSpeed')) || 1000;
+let lastTapTime = 0;
+const tapDebounce = 100;
 
 function saveGame() {
-    localStorage.setItem('score', score);
+    localStorage.setItem('score', scorePunInt(score));
     localStorage.setItem('profitPerTap', profitPerTap);
     localStorage.setItem('energy', energy);
     localStorage.setItem('maxEnergy', maxEnergy);
@@ -33,30 +35,32 @@ function updateDisplay() {
     document.getElementById('score').textContent = `UkraineCoins: ${Math.floor(score)}`;
     document.getElementById('profit').textContent = `Прибуток за тап: ${profitPerTap}`;
     document.getElementById('energy').textContent = `Енергія: ${Math.floor(energy)}/${maxEnergy}`;
-    document.getElementById('total-taps').textContent = `Загальна кількість тапів: ${totalTaps}`;
-    document.getElementById('upgrade-btn').disabled = score < 50 * (profitPerTap - 1 + 1);
+    document.getElementById('total-taps').textContent = `Тапи: ${totalTaps}`;
+    document.getElementById('upgrade-btn').disabled = score < 50 * profitPerTap;
     document.getElementById('upgrade-energy-btn').disabled = score < 100 * (maxEnergy / 10 - 9);
-    document.getElementById('upgrade-regen-btn').disabled = score < 150 * (energyRegenRate - 0.5 + 1);
+    document.getElementById('upgrade-regen-btn').disabled = score < 150 * (energyRegenRate / 0.4);
     document.getElementById('bonus-btn').disabled = Date.now() - lastBonusTime < bonusCooldown;
     document.getElementById('special-bonus-btn').disabled = Date.now() - lastSpecialBonusTime < specialBonusCooldown;
     document.getElementById('weekly-bonus-btn').disabled = Date.now() - lastWeeklyBonusTime < weeklyBonusCooldown;
     document.getElementById('task-friend-btn').disabled = localStorage.getItem('taskFriendCompleted') === 'true';
     document.getElementById('task-video-btn').disabled = localStorage.getItem('taskVideoCompleted') === 'true';
     document.getElementById('auto-tap-btn').disabled = score < 100 || autoTapEnabled;
-    saveGame();
 }
 
 function tapCoin() {
+    const currentTime = Date.now();
+    if (currentTime - lastTapTime < tapDebounce) return;
     if (energy >= 1) {
         score += profitPerTap;
         energy -= 1;
         totalTaps += 1;
+        lastTapTime = currentTime;
         updateDisplay();
     }
 }
 
 function upgradeProfit() {
-    const upgradeCost = 50 * (profitPerTap - 1 + 1);
+    const upgradeCost = 50 * profitPerTap;
     if (score >= upgradeCost) {
         score -= upgradeCost;
         profitPerTap += 2;
@@ -75,7 +79,7 @@ function upgradeEnergy() {
 }
 
 function upgradeRegen() {
-    const upgradeCost = 150 * (energyRegenRate - 0.5 + 1);
+    const upgradeCost = 150 * (energyRegenRate / 0.4);
     if (score >= upgradeCost) {
         score -= upgradeCost;
         energyRegenRate += 0.4;
@@ -138,20 +142,20 @@ function makeDonation() {
     const amount = parseInt(document.getElementById('donation-amount').value);
     if (amount >= 20) {
         if (confirm(`Підтвердити пожертвування ${amount} грн на підтримку ЗСУ?`)) {
-            alert(`Дякуємо за пожертвування ${amount} грн на підтримку ЗСУ! (Симуляція)`);
+            alert(`Дякуємо за пожертвування ${amount} грн! (Симуляція)`);
             score += amount * 3;
             document.getElementById('donation-amount').value = '';
             updateDisplay();
         }
     } else {
-        alert('Мінімальна сума пожертвування - 20 грн.');
+        alert('Мінімальна сума - 20 грн.');
     }
 }
 
 function openTab(tabName) {
     document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-    document.querySelector(`[onclick="openTab('${tabName}')"]`).classList.add('active');
+    document.querySelector(`[ontouchstart="openTab('${tabName}')"]`).classList.add('active');
     document.getElementById(`${tabName}-content`).classList.add('active');
 }
 
