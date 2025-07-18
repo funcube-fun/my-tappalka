@@ -30,21 +30,43 @@
             <div id="notification" class="notification"></div>
         </div>
         <div id="upgrades-content" class="tab-content">
-            <div class="upgrade-section">
-                <button id="upgrade-profit-btn" onclick="upgradeProfit(event)" ontouchstart="upgradeProfit(event)">Покращити тап (50)</button>
-                <span id="profit-upgrade-cost">Ціна: 50</span>
-            </div>
-            <div class="upgrade-section">
-                <button id="upgrade-mining-btn" onclick="upgradeMining(event)" ontouchstart="upgradeMining(event)">Покращити шахту (100)</button>
-                <span id="mining-upgrade-cost">Ціна: 100</span>
-            </div>
-            <div class="upgrade-section">
-                <button id="upgrade-energy-btn" onclick="upgradeEnergy(event)" ontouchstart="upgradeEnergy(event)">Покращити енергію (200)</button>
-                <span id="energy-upgrade-cost">Ціна: 200</span>
-            </div>
-            <div class="upgrade-section">
-                <button id="upgrade-regen-btn" onclick="upgradeRegen(event)" ontouchstart="upgradeRegen(event)">Швидша реген (300)</button>
-                <span id="regen-upgrade-cost">Ціна: 300</span>
+            <div class="upgrades-grid">
+                <div class="upgrade-card" data-upgrade="profit">
+                    <h3>Покращення тапу</h3>
+                    <p>Рівень: <span id="profit-level">1</span></p>
+                    <div class="progress-bar-small">
+                        <div class="progress-fill-small" id="profit-progress"></div>
+                    </div>
+                    <p>Ціна: <span id="profit-upgrade-cost">50</span></p>
+                    <button id="upgrade-profit-btn" onclick="upgradeProfit(event)" ontouchstart="upgradeProfit(event)">Покращити</button>
+                </div>
+                <div class="upgrade-card" data-upgrade="mining">
+                    <h3>Покращення шахти</h3>
+                    <p>Рівень: <span id="mining-level">1</span></p>
+                    <div class="progress-bar-small">
+                        <div class="progress-fill-small" id="mining-progress"></div>
+                    </div>
+                    <p>Ціна: <span id="mining-upgrade-cost">100</span></p>
+                    <button id="upgrade-mining-btn" onclick="upgradeMining(event)" ontouchstart="upgradeMining(event)">Покращити</button>
+                </div>
+                <div class="upgrade-card" data-upgrade="energy">
+                    <h3>Покращення енергії</h3>
+                    <p>Рівень: <span id="energy-level">1</span></p>
+                    <div class="progress-bar-small">
+                        <div class="progress-fill-small" id="energy-progress"></div>
+                    </div>
+                    <p>Ціна: <span id="energy-upgrade-cost">200</span></p>
+                    <button id="upgrade-energy-btn" onclick="upgradeEnergy(event)" ontouchstart="upgradeEnergy(event)">Покращити</button>
+                </div>
+                <div class="upgrade-card" data-upgrade="regen">
+                    <h3>Швидша регенерація</h3>
+                    <p>Рівень: <span id="regen-level">1</span></p>
+                    <div class="progress-bar-small">
+                        <div class="progress-fill-small" id="regen-progress"></div>
+                    </div>
+                    <p>Ціна: <span id="regen-upgrade-cost">300</span></p>
+                    <button id="upgrade-regen-btn" onclick="upgradeRegen(event)" ontouchstart="upgradeRegen(event)">Покращити</button>
+                </div>
             </div>
             <div class="daily-combo">
                 <h3>Щоденне комбо</h3>
