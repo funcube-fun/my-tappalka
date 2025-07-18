@@ -16,11 +16,10 @@ let level = parseInt(localStorage.getItem('level')) || 1;
 let exp = parseInt(localStorage.getItem('exp')) || 0;
 let baseExpToLevel = 1000;
 let expToLevel = baseExpToLevel * level;
-let tonBalance = parseInt(localStorage.getItem('tonBalance')) || 0;
-let referralCode = localStorage.getItem('referralCode') || Math.random().toString(36).substr(2, 9);
-let achievements = JSON.parse(localStorage.getItem('achievements')) || [];
-let ownedSkins = JSON.parse(localStorage.getItem('ownedSkins')) || ['default'];
 let tapBoost = parseFloat(localStorage.getItem('tapBoost')) || 1.0;
+let minigameActive = false;
+let player = { x: 150, y: 100, speed: 5 };
+let enemies = [];
 let minigameScore = 0;
 
 const achievementsList = [
@@ -56,10 +55,6 @@ function saveGame() {
     localStorage.setItem('lastDailyBonusTime', lastDailyBonusTime);
     localStorage.setItem('level', level);
     localStorage.setItem('exp', exp);
-    localStorage.setItem('tonBalance', tonBalance);
-    localStorage.setItem('referralCode', referralCode);
-    localStorage.setItem('achievements', JSON.stringify(achievements));
-    localStorage.setItem('ownedSkins', JSON.stringify(ownedSkins));
     localStorage.setItem('tapBoost', tapBoost);
 }
 
@@ -95,11 +90,6 @@ function updateDisplay() {
     document.getElementById('upgrade-regen-btn').disabled = score < 300 * regenLevel;
     document.getElementById('daily-bonus-btn').disabled = Date.now() - lastDailyBonusTime < dailyBonusCooldown;
     document.getElementById('bonus-status').textContent = Date.now() - lastDailyBonusTime < dailyBonusCooldown ? `Оновлення о ${new Date(lastDailyBonusTime + dailyBonusCooldown).toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' })}` : 'Готово!';
-    document.getElementById('withdraw-btn').disabled = score < 1000;
-    document.getElementById('ton-balance').textContent = `${tonBalance} TON`;
-    document.getElementById('referral-btn').textContent = `Запросити друга (+100) [${referralCode}]`;
-    document.getElementById('buy-skin1-btn').disabled = score < 500 || ownedSkins.includes('skin1');
-    document.getElementById('buy-skin2-btn').disabled = score < 1000 || ownedSkins.includes('skin2');
     document.getElementById('buy-boost-btn').disabled = score < 200;
     document.getElementById('achieve-list').innerHTML = '';
     updateAchievements();
@@ -283,7 +273,7 @@ function showReferral(event) {
             exp += 1000;
             checkLevelUp();
             localStorage.setItem('referralClaimed', 'true');
-            showNotification(`Реферальний код: ${referralCode}. Поділіться із другом! +100 монет!`);
+            showNotification('Реферальний бонус використано! +100 монет!');
             updateDisplay();
         } else {
             showNotification('Реферальний бонус уже використано!');
@@ -322,19 +312,6 @@ function claimDailyBonus(event) {
     });
 }
 
-function withdrawTON(event) {
-    handleEvent(event, () => {
-        if (score >= 1000) {
-            score -= 1000;
-            tonBalance += 1;
-            showNotification('1 TON додано до гаманця! (Симуляція)');
-            updateDisplay();
-        } else {
-            showNotification('Недостатньо монет для виведення!');
-        }
-    });
-}
-
 function makeDonation(event) {
     handleEvent(event, () => {
         const amount = parseInt(document.getElementById('donation-amount').value);
@@ -353,19 +330,6 @@ function makeDonation(event) {
     });
 }
 
-function buySkin(skin, cost, event) {
-    handleEvent(event, () => {
-        if (score >= cost && !ownedSkins.includes(skin)) {
-            score -= cost;
-            ownedSkins.push(skin);
-            showNotification(`Куплено ${skin === 'skin1' ? 'Скін 1' : 'Скін 2'}!`);
-            updateDisplay();
-        } else {
-            showNotification('Недостатньо монет або шкіра вже куплена!');
-        }
-    });
-}
-
 function buyBoost(cost, event) {
     handleEvent(event, () => {
         if (score >= cost) {
@@ -379,51 +343,85 @@ function buyBoost(cost, event) {
     });
 }
 
-function changeSkin(event) {
-    const skin = event.target.value;
-    if (ownedSkins.includes(skin)) {
-        const baseColor = skin === 'default' ? '#ffd700' : skin === 'skin1' ? '#ff5555' : '#55aa55';
-        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="${baseColor}"><circle cx="50" cy="50" r="40" /><path d="M40 30h20v20h-20z M45 50h10v10H45z" fill="%23000000" /></svg>`;
-        document.getElementById('hamster-image').style.backgroundImage = `url('data:image/svg+xml;utf8,${encodeURIComponent(svg)}')`;
-        showNotification(`Скін змінено на ${skin === 'default' ? 'Стандартний' : skin === 'skin1' ? 'Скін 1' : 'Скін 2'}!`);
-    } else {
-        showNotification('Цей шкін не куплено!');
-        document.getElementById('skin-select').value = ownedSkins[0];
-        changeSkin({ target: { value: ownedSkins[0] } });
+function startMinigame(event) {
+    handleEvent(event, () => {
+        if (!minigameActive) {
+            minigameActive = true;
+            const canvas = document.createElement('canvas');
+            canvas.id = 'minigame-canvas';
+            canvas.width = 300;
+            canvas.height = 200;
+            canvas.style.border = '2px solid #ffd700';
+            canvas.style.borderRadius = '10px';
+            canvas.style.background = '#2a2a5a';
+            document.getElementById('minigame-content').appendChild(canvas);
+            player = { x: 150, y: 100, speed: 5 };
+            enemies = [];
+            minigameScore = 0;
+            document.addEventListener('keydown', movePlayer);
+            requestAnimationFrame(gameLoop);
+            showNotification('Міні-гра почалась! Керуйте стрілками, уникайте ворогів!');
+        }
+    });
+}
+
+function movePlayer(event) {
+    if (minigameActive) {
+        switch (event.key) {
+            case 'ArrowUp': player.y = Math.max(0, player.y - player.speed); break;
+            case 'ArrowDown': player.y = Math.min(200, player.y + player.speed); break;
+            case 'ArrowLeft': player.x = Math.max(0, player.x - player.speed); break;
+            case 'ArrowRight': player.x = Math.min(300, player.x + player.speed); break;
+        }
     }
 }
 
-function startMinigame(event) {
-    handleEvent(event, () => {
+function gameLoop() {
+    if (minigameActive) {
         const canvas = document.getElementById('minigame-canvas');
         const ctx = canvas.getContext('2d');
-        let gameRunning = true;
-        minigameScore = 0;
 
-        function draw() {
-            if (!gameRunning) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#ffaa00';
+        // Створення ворогів
+        if (Math.random() < 0.02) {
+            enemies.push({ x: Math.random() * 300, y: -10, speed: 2 + Math.random() * 2 });
+        }
+
+        // Оновлення та відображення
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#ffaa00';
+        ctx.beginPath();
+        ctx.arc(player.x, player.y, 10, 0, Math.PI * 2);
+        ctx.fill();
+
+        enemies = enemies.filter(enemy => {
+            enemy.y += enemy.speed;
+            ctx.fillStyle = '#ff3333';
             ctx.beginPath();
-            ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 10, 0, Math.PI * 2);
+            ctx.arc(enemy.x, enemy.y, 10, 0, Math.PI * 2);
             ctx.fill();
-            minigameScore++;
-            document.getElementById('minigame-score').textContent = minigameScore;
-            if (minigameScore < 20) requestAnimationFrame(draw);
-            else {
-                gameRunning = false;
+
+            // Перевірка зіткнень
+            const dx = player.x - enemy.x;
+            const dy = player.y - enemy.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 20) {
+                minigameActive = false;
                 score += minigameScore * 10;
                 exp += minigameScore * 100;
                 checkLevelUp();
                 showNotification(`Міні-гра завершена! +${minigameScore * 10} монет!`);
+                canvas.remove();
                 updateDisplay();
+                return false;
             }
-        }
-        canvas.addEventListener('click', () => {
-            if (gameRunning) minigameScore += 5;
+            return enemy.y < 210;
         });
-        draw();
-    });
+
+        minigameScore++;
+        document.getElementById('minigame-score').textContent = minigameScore;
+
+        if (minigameActive) requestAnimationFrame(gameLoop);
+    }
 }
 
 function openTab(tabName, event) {
@@ -453,5 +451,4 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDisplay();
     regenerateEnergy();
     if (Date.now() - lastDailyBonusTime >= dailyBonusCooldown) lastDailyBonusTime = Date.now() - (Date.now() % (24 * 60 * 60 * 1000));
-    changeSkin({ target: { value: ownedSkins[0] } });
 });
