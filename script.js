@@ -140,11 +140,8 @@ function showNotification(message) {
 
 function updateDisplay() {
     document.getElementById('score').textContent = Math.floor(score);
-    document.getElementById('profit').textContent = `+${Math.floor(profitPerTap)}`;
-    document.getElementById('profit-hour').textContent = `+${Math.floor(passiveIncome)}`;
     document.getElementById('energy').textContent = `${Math.floor(energy)}/${maxEnergy}`;
     document.getElementById('level').textContent = level;
-    document.getElementById('progress-fill').style.width = `${(exp / expToLevel) * 100}%`;
     document.getElementById('profit-level').textContent = profitLevel;
     document.getElementById('profit-upgrade-cost').textContent = `${50 * profitLevel}`;
     document.getElementById('profit-progress').style.width = `${(profitPerTap % 10 / 10) * 100}%`;
@@ -173,10 +170,17 @@ function updateDisplay() {
     saveGame();
 }
 
+function triggerHaptic() {
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+        window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+    }
+}
+
 function handleEvent(event, callback) {
     event.preventDefault();
     if (Date.now() - (event.timeStamp || 0) < 100) return;
     callback();
+    triggerHaptic();
 }
 
 function tapCoin(event) {
@@ -191,18 +195,36 @@ function tapCoin(event) {
             updateDisplay();
         } else {
             showNotification('Недостатньо енергії!');
+            const hamster = document.getElementById('hamster-image');
+            hamster.classList.add('no-energy');
+            setTimeout(() => hamster.classList.remove('no-energy'), 300);
         }
     });
 }
 
 function createTapAnimation(event) {
+    const hamster = document.getElementById('hamster-image');
     const anim = document.createElement('div');
     anim.className = 'tap-animation';
     anim.textContent = `+${Math.floor(profitPerTap)}`;
     anim.style.left = `${event.offsetX - 20}px`;
     anim.style.top = `${event.offsetY - 20}px`;
-    document.getElementById('hamster-image').appendChild(anim);
-    setTimeout(() => anim.remove(), 500);
+    hamster.appendChild(anim);
+    setTimeout(() => anim.remove(), 700);
+
+    // Add particle effects
+    for (let i = 0; i < 5; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = 20 + Math.random() * 30;
+        particle.style.setProperty('--dx', `${Math.cos(angle) * distance}px`);
+        particle.style.setProperty('--dy', `${Math.sin(angle) * distance}px`);
+        particle.style.left = `${event.offsetX}px`;
+        particle.style.top = `${event.offsetY}px`;
+        hamster.appendChild(particle);
+        setTimeout(() => particle.remove(), 500);
+    }
 }
 
 function checkLevelUp() {
