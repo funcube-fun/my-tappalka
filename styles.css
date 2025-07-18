@@ -151,33 +151,9 @@ body {
     text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
 }
 
-.energy-display {
-    font-size: 1.2rem;
-    color: #ffffff;
-    margin: 1vw 0;
-    background: linear-gradient(90deg, #2a2a7a, #3a3a8a);
-    padding: 1vw 2vw;
-    border-radius: 15px;
-}
-
-.stats-container {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    margin-bottom: 2vw;
-}
-
-.stat-box {
-    background: linear-gradient(45deg, #2a2a7a, #4a4ac0);
-    padding: 1vw 2vw;
-    border-radius: 15px;
-    font-size: 1.2rem;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
 .progress-bar {
     width: 80%;
-    margin: 2vw 0;
+    margin: 1vw 0;
 }
 
 .progress {
@@ -194,6 +170,33 @@ body {
     width: 0%;
     transition: width 0.3s ease;
     border-radius: 10px;
+}
+
+.energy-display {
+    font-size: 1.2rem;
+    color: #ffffff;
+    margin: 1vw 0;
+    background: linear-gradient(90deg, #2a2a7a, #3a3a8a);
+    padding: 1vw 2vw;
+    border-radius: 15px;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+    margin: 1vw 0;
+}
+
+.stat-box {
+    background: linear-gradient(45deg, #2a2a7a, #4a4ac0);
+    padding: 1vw 2vw;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    flex: 1;
+    margin: 0 1vw;
+    text-align: center;
 }
 
 .upgrades-grid {
@@ -388,7 +391,10 @@ body {
     #hamster-image { width: 50vw; height: 50vw; margin: 3vw 0; }
     .score-display { font-size: 6vw; margin: 2vw 0; }
     .progress-label { font-size: 3.5vw; margin: 2vw 0; }
+    .progress-bar { margin: 2vw 0; }
     .energy-display { font-size: 4vw; margin: 2vw 0; }
+    .stats-container { margin: 2vw 0; }
+    .stat-box { font-size: 3.5vw; padding: 2vw 3vw; margin: 0 2vw; }
     .upgrade-card { padding: 3vw; }
     .upgrade-card h3 { font-size: 4vw; }
     .upgrade-card p { font-size: 3vw; }
@@ -413,7 +419,10 @@ body {
     #hamster-image { width: 220px; height: 220px; margin: 15px 0; }
     .score-display { font-size: 2.5rem; margin: 10px 0; }
     .progress-label { font-size: 1rem; margin: 10px 0; }
+    .progress-bar { margin: 10px 0; }
     .energy-display { font-size: 1.2rem; margin: 10px 0; }
+    .stats-container { margin: 10px 0; }
+    .stat-box { font-size: 1rem; padding: 10px 20px; margin: 0 10px; }
     .upgrade-card { padding: 15px; }
     .upgrade-card h3 { font-size: 1.2rem; }
     .upgrade-card p { font-size: 0.9rem; }
