@@ -56,7 +56,7 @@ async function loadGame() {
             miningLevel = data.miningLevel || 1;
             energyLevel = data.energyLevel || 1;
             regenLevel = data.regenLevel || 1;
-            energy = data.energy || 100;
+            energy = data.energy !== undefined ? data.energy : 100; // Use saved energy or default to 100 for new users
             maxEnergy = data.maxEnergy || 100;
             energyRegenRate = data.energyRegenRate || 0.5;
             passiveIncome = data.passiveIncome || 0;
@@ -280,7 +280,7 @@ function upgradeEnergy(event) {
             score -= cost;
             energyLevel++;
             maxEnergy += 20;
-            energy = maxEnergy;
+            energy = Math.min(energy, maxEnergy); // Ensure energy doesn't exceed new maxEnergy
             upgradesToday += 1;
             showNotification('Максимальна енергія збільшена!');
             updateDisplay();
