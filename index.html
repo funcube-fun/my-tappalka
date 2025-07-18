@@ -6,6 +6,55 @@
     <title>UkraineCoin Хомяк</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Добавляем темную тему */
+        body {
+            background-color: #1A1A2E;
+            color: #E0E0E0;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        #tabs {
+            display: flex;
+            justify-content: space-around;
+            background-color: #16213E;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .tab-button {
+            background: none;
+            border: none;
+            color: #E0E0E0;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 20%;
+        }
+        .tab-button.active {
+            color: #FFD700; /* Желтый для активной вкладки */
+        }
+        .tab-button:hover {
+            background-color: #2A2E44;
+            border-radius: 5px;
+        }
+        .tab-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+        .tab-label {
+            font-size: 12px;
+        }
+        /* Стили для верхнего меню (если нужно добавить) */
+        #game-container {
+            padding-bottom: 60px; /* Пространство под фиксированным меню */
+        }
+    </style>
 </head>
 <body>
     <div id="game-container">
@@ -99,23 +148,23 @@
             <p>Симуляція. Для реальних пожертв зверніться до офіційних фондів.</p>
         </div>
         <div id="tabs">
-            <button class="tab-button active" data-tab="main" onclick="openTab('main', event)" ontouchstart="openTab('main', event)">
+            <button class="tab-button active" data-tab="main" onclick="openTab('main', event); alert('Перехід до Тапу!')" ontouchstart="openTab('main', event); alert('Перехід до Тапу!')">
                 <span class="tab-icon">👆</span>
                 <span class="tab-label">Тап</span>
             </button>
-            <button class="tab-button" data-tab="upgrades" onclick="openTab('upgrades', event)" ontouchstart="openTab('upgrades', event)">
+            <button class="tab-button" data-tab="upgrades" onclick="openTab('upgrades', event); alert('Перехід до Улучшень!')" ontouchstart="openTab('upgrades', event); alert('Перехід до Улучшень!')">
                 <span class="tab-icon">⚙️</span>
                 <span class="tab-label">Улучшення</span>
             </button>
-            <button class="tab-button" data-tab="tasks" onclick="openTab('tasks', event)" ontouchstart="openTab('tasks', event)">
+            <button class="tab-button" data-tab="tasks" onclick="openTab('tasks', event); alert('Перехід до Завдань!')" ontouchstart="openTab('tasks', event); alert('Перехід до Завдань!')">
                 <span class="tab-icon">📝</span>
                 <span class="tab-label">Задания</span>
             </button>
-            <button class="tab-button" data-tab="bonuses" onclick="openTab('bonuses', event)" ontouchstart="openTab('bonuses', event)">
+            <button class="tab-button" data-tab="bonuses" onclick="openTab('bonuses', event); alert('Перехід до Бонусів!')" ontouchstart="openTab('bonuses', event); alert('Перехід до Бонусів!')">
                 <span class="tab-icon">🎁</span>
                 <span class="tab-label">Бонуси</span>
             </button>
-            <button class="tab-button" data-tab="donate" onclick="openTab('donate', event)" ontouchstart="openTab('donate', event)">
+            <button class="tab-button" data-tab="donate" onclick="openTab('donate', event); alert('Перехід до Донації!')" ontouchstart="openTab('donate', event); alert('Перехід до Донації!')">
                 <span class="tab-icon">❤️</span>
                 <span class="tab-label">Донат</span>
             </button>
