@@ -318,12 +318,6 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-#minigame-canvas {
-    border: 2px solid #ffd700;
-    border-radius: 10px;
-    background: #2a2a5a;
-}
-
 .notification {
     position: fixed;
     top: 10vw;
@@ -345,7 +339,7 @@ body {
     100% { opacity: 0; display: none; }
 }
 
-#clan-name, #donate-content input, #skin-select {
+#donate-content input {
     background: #2a2a7a;
     border: none;
     border-radius: 10px;
@@ -355,7 +349,7 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-#clan-name:focus, #donate-content input:focus, #skin-select:focus {
+#donate-content input:focus {
     outline: none;
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
@@ -382,9 +376,7 @@ body {
     #donate-content input { padding: 3vw; font-size: 4vw; }
     #donate-content h2 { font-size: 5vw; }
     #donate-content p { font-size: 3vw; }
-    #ton-content p { font-size: 4vw; }
     .notification { top: 15vw; font-size: 4vw; }
-    #minigame-canvas { width: 250px; height: 166px; }
 }
 
 @media (min-width: 769px) {
@@ -409,12 +401,10 @@ body {
     #donate-content input { padding: 12px; font-size: 16px; }
     #donate-content h2 { font-size: 28px; }
     #donate-content p { font-size: 16px; }
-    #ton-content p { font-size: 1.2rem; }
     .notification { top: 50px; font-size: 1rem; }
-    #minigame-canvas { width: 300px; height: 200px; }
 }
 
 #donate-content button { background: linear-gradient(45deg, #ff3333, #ff6666); }
-#donate-content h2, #ton-content h2, #shop-content h2, #customize-content h2, #minigame-content h2 { color: #ffd700; }
-#donate-content p, #ton-content p { color: #ffffff; }
+#donate-content h2, #shop-content h2 { color: #ffd700; }
+#donate-content p { color: #ffffff; }
 #footer-text { position: fixed; bottom: 5vw; width: 100%; text-align: center; color: #999; }
