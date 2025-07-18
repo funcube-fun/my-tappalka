@@ -1,9 +1,0 @@
-{
-       "routes": [
-         { "src": "/webhook", "dest": "/index.js" },
-         { "src": "/(.*)", "dest": "/index.html" }
-       ],
-       "functions": {
-         "index.js": { "runtime": "nodejs18.x" }
-       }
-     }
