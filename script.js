@@ -30,9 +30,9 @@ function calculateLevelReward(level) {
 }
 
 function saveGame() {
-    localStorage.setItem('score', score);
+    localStorage.setItem('score', Math.floor(score));
     localStorage.setItem('profitPerTap', profitPerTap);
-    localStorage.setItem('energy', energy);
+    localStorage.setItem('energy', Math.floor(energy));
     localStorage.setItem('maxEnergy', maxEnergy);
     localStorage.setItem('energyRegenRate', energyRegenRate);
     localStorage.setItem('passiveIncome', passiveIncome);
@@ -45,6 +45,13 @@ function saveGame() {
     localStorage.setItem('tonBalance', tonBalance);
     localStorage.setItem('referralCode', referralCode);
     localStorage.setItem('achievements', JSON.stringify(achievements));
+}
+
+function showNotification(message) {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.style.display = 'block';
+    setTimeout(() => notification.style.display = 'none', 3000);
 }
 
 function updateDisplay() {
@@ -85,7 +92,7 @@ function updateAchievements() {
                 (ach.id === '1000-coins' && score >= 1000)) {
                 score += ach.reward;
                 achievements.push({ id: ach.id, achieved: true, time: Date.now() });
-                alert(`Досягнення "${ach.name}" виконано! +${ach.reward} UkraineCoins!`);
+                showNotification(`Досягнення "${ach.name}"! +${ach.reward} монет!`);
             }
         }
         const item = document.createElement('div');
@@ -111,6 +118,8 @@ function tapCoin(event) {
             checkLevelUp();
             createTapAnimation(event);
             updateDisplay();
+        } else {
+            showNotification('Недостатньо енергії!');
         }
     });
 }
@@ -119,8 +128,8 @@ function createTapAnimation(event) {
     const anim = document.createElement('div');
     anim.className = 'tap-animation';
     anim.textContent = `+${profitPerTap}`;
-    anim.style.left = `${event.offsetX}px`;
-    anim.style.top = `${event.offsetY}px`;
+    anim.style.left = `${event.offsetX - 20}px`;
+    anim.style.top = `${event.offsetY - 20}px`;
     document.getElementById('hamster-image').appendChild(anim);
     setTimeout(() => anim.remove(), 500);
 }
@@ -132,7 +141,7 @@ function checkLevelUp() {
         expToLevel = baseExpToLevel * level;
         const reward = calculateLevelReward(level - 1);
         score += reward;
-        alert(`Рівень ${level} досягнуто! +${reward} UkraineCoins!`);
+        showNotification(`Рівень ${level} досягнуто! +${reward} UkraineCoins!`);
     }
 }
 
@@ -142,7 +151,10 @@ function upgradeProfit(event) {
         if (score >= cost) {
             score -= cost;
             profitPerTap += 2;
+            showNotification('Тап покращено!');
             updateDisplay();
+        } else {
+            showNotification('Недостатньо монет!');
         }
     });
 }
@@ -153,7 +165,10 @@ function upgradeMining(event) {
         if (score >= cost) {
             score -= cost;
             passiveIncome += 50;
+            showNotification('Шахта покращена!');
             updateDisplay();
+        } else {
+            showNotification('Недостатньо монет!');
         }
     });
 }
@@ -165,7 +180,10 @@ function upgradeEnergy(event) {
             score -= cost;
             maxEnergy += 20;
             energy = maxEnergy;
+            showNotification('Максимальна енергія збільшена!');
             updateDisplay();
+        } else {
+            showNotification('Недостатньо монет!');
         }
     });
 }
@@ -176,7 +194,10 @@ function upgradeRegen(event) {
         if (score >= cost) {
             score -= cost;
             energyRegenRate += 0.5;
+            showNotification('Регенерація прискорена!');
             updateDisplay();
+        } else {
+            showNotification('Недостатньо монет!');
         }
     });
 }
@@ -187,8 +208,11 @@ function claimDailyCombo(event) {
             score += 5000000;
             exp += 50000;
             checkLevelUp();
-            lastComboTime = Date.now();
+            lastComboTime = Date.now() + (24 * 60 * 60 * 1000 - (Date.now() % (24 * 60 * 60 * 1000))); // Сброс на 00:00 следующего дня
+            showNotification('Щоденне комбо отримано! +5M монет!');
             updateDisplay();
+        } else {
+            showNotification('Комбо доступне завтра!');
         }
     });
 }
@@ -200,8 +224,10 @@ function showReferral(event) {
             exp += 1000;
             checkLevelUp();
             localStorage.setItem('referralClaimed', 'true');
-            alert(`Реферальний код: ${referralCode}. Поділіться із другом!`);
+            showNotification(`Реферальний код: ${referralCode}. Поділіться із другом! +100 монет!`);
             updateDisplay();
+        } else {
+            showNotification('Реферальний бонус уже використано!');
         }
     });
 }
@@ -213,7 +239,10 @@ function completeTask(taskType, event) {
             exp += 600;
             checkLevelUp();
             localStorage.setItem('taskVideoCompleted', 'true');
+            showNotification('Завдання виконано! +60 монет!');
             updateDisplay();
+        } else {
+            showNotification('Завдання вже виконано або недоступне!');
         }
     });
 }
@@ -221,11 +250,15 @@ function completeTask(taskType, event) {
 function claimDailyBonus(event) {
     handleEvent(event, () => {
         if (Date.now() - lastDailyBonusTime >= dailyBonusCooldown) {
-            score += 200 + (level * 50); // Бонус увеличивается с уровнем
+            const bonus = 200 + (level * 50);
+            score += bonus;
             exp += 2000;
             checkLevelUp();
-            lastDailyBonusTime = Date.now();
+            lastDailyBonusTime = Date.now() + (24 * 60 * 60 * 1000 - (Date.now() % (24 * 60 * 60 * 1000))); // Сброс на 00:00
+            showNotification(`Щоденний бонус! +${bonus} монет!`);
             updateDisplay();
+        } else {
+            showNotification('Бонус доступний завтра!');
         }
     });
 }
@@ -235,8 +268,10 @@ function withdrawTON(event) {
         if (score >= 1000) {
             score -= 1000;
             tonBalance += 1;
-            alert('1 TON додано до гаманця! (Симуляція)');
+            showNotification('1 TON додано до гаманця! (Симуляція)');
             updateDisplay();
+        } else {
+            showNotification('Недостатньо монет для виведення!');
         }
     });
 }
@@ -246,15 +281,15 @@ function makeDonation(event) {
         const amount = parseInt(document.getElementById('donation-amount').value);
         if (amount >= 20) {
             if (confirm(`Підтвердити пожертву ${amount} грн?`)) {
-                alert(`Дякуємо за ${amount} грн! (Симуляція)`);
                 score += amount * 3;
                 exp += amount * 30;
                 checkLevelUp();
+                showNotification(`Дякуємо за ${amount} грн! +${amount * 3} монет! (Симуляція)`);
                 document.getElementById('donation-amount').value = '';
                 updateDisplay();
             }
         } else {
-            alert('Мінімум 20 грн.');
+            showNotification('Мінімум 20 грн.');
         }
     });
 }
@@ -271,10 +306,12 @@ function openTab(tabName, event) {
 function regenerateEnergy() {
     const currentTime = Date.now();
     const deltaTime = (currentTime - lastTime) / 1000;
-    energy = Math.min(energy + deltaTime * energyRegenRate, maxEnergy);
-    score += passiveIncome * (deltaTime / 3600);
-    exp += passiveIncome * (deltaTime / 3600) * 10;
-    checkLevelUp();
+    if (deltaTime > 0) {
+        energy = Math.min(energy + deltaTime * energyRegenRate, maxEnergy);
+        score += passiveIncome * (deltaTime / 3600);
+        exp += Math.floor(passiveIncome * (deltaTime / 3600) * 10);
+        checkLevelUp();
+    }
     lastTime = currentTime;
     updateDisplay();
     requestAnimationFrame(regenerateEnergy);
@@ -283,4 +320,6 @@ function regenerateEnergy() {
 document.addEventListener('DOMContentLoaded', () => {
     updateDisplay();
     regenerateEnergy();
+    if (Date.now() - lastComboTime >= comboCooldown) lastComboTime = Date.now() - (Date.now() % (24 * 60 * 60 * 1000));
+    if (Date.now() - lastDailyBonusTime >= dailyBonusCooldown) lastDailyBonusTime = Date.now() - (Date.now() % (24 * 60 * 60 * 1000));
 });
