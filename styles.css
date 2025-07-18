@@ -154,33 +154,114 @@ body {
     border-radius: 15px;
 }
 
-.upgrade-section, .daily-combo, #daily-missions, #achievements, #shop-items, #clan-info {
+.upgrades-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2vw;
+    width: 100%;
+    max-width: 1000px;
+    margin-bottom: 2vw;
+}
+
+.upgrade-card {
     background: linear-gradient(135deg, #2a2a7a, #4a4ac0);
     border-radius: 15px;
     padding: 2vw;
-    margin: 1vw 0;
-    width: 90%;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.upgrade-section button, .daily-combo button, #achievements button, #shop-items button, #create-clan-btn, #start-minigame-btn {
+.upgrade-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.upgrade-card h3 {
+    font-size: 1.2rem;
+    margin: 0 0 1vw;
+    color: #ffd700;
+}
+
+.upgrade-card p {
+    font-size: 0.9rem;
+    margin: 0.5vw 0;
+    color: #ffffff;
+}
+
+.progress-bar-small {
+    width: 100%;
+    height: 8px;
+    background: #2a2a5a;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 1vw 0;
+}
+
+.progress-fill-small {
+    height: 100%;
+    background: linear-gradient(90deg, #ffaa00, #ffd700);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 5px;
+}
+
+.upgrade-card button {
     background: linear-gradient(45deg, #ffaa00, #ffdd55);
     color: #1a1a3b;
     border: none;
     border-radius: 10px;
     font-weight: 600;
-    padding: 2vw 4vw;
-    margin: 1vw 0;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 1vw 2vw;
+    width: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.upgrade-section button:hover:not(:disabled), .daily-combo button:hover:not(:disabled), #achievements button:hover:not(:disabled), #shop-items button:hover:not(:disabled), #create-clan-btn:hover:not(:disabled), #start-minigame-btn:hover:not(:disabled) {
+.upgrade-card button:hover:not(:disabled) {
     transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 215, 0, 0.5);
 }
 
-.upgrade-section button:active, .daily-combo button:active, #achievements button:active, #shop-items button:active, #create-clan-btn:active, #start-minigame-btn:active {
+.upgrade-card button:active {
     transform: scale(0.95);
+}
+
+.daily-combo {
+    background: linear-gradient(135deg, #2a2a7a, #4a4ac0);
+    border-radius: 15px;
+    padding: 2vw;
+    width: 90%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.daily-combo h3 {
+    font-size: 1.2rem;
+    margin: 0 0 1vw;
+    color: #ffd700;
+}
+
+.daily-combo button {
+    background: linear-gradient(45deg, #ffaa00, #ffdd55);
+    color: #1a1a3b;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 1vw 2vw;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.daily-combo button:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+.daily-combo button:active {
+    transform: scale(0.95);
+}
+
+.daily-combo span {
+    font-size: 0.9rem;
+    color: #ffffff;
 }
 
 #tabs {
@@ -288,8 +369,13 @@ body {
     .score-display { font-size: 6vw; }
     .progress-label { font-size: 3.5vw; }
     .energy-display { font-size: 4vw; }
-    .upgrade-section, .daily-combo, #daily-missions, #achievements, #shop-items, #clan-info { padding: 3vw; }
-    .upgrade-section button, .daily-combo button, #achievements button, #shop-items button, #create-clan-btn, #start-minigame-btn { font-size: 4vw; padding: 3vw 6vw; }
+    .upgrade-card { padding: 3vw; }
+    .upgrade-card h3 { font-size: 4vw; }
+    .upgrade-card p { font-size: 3vw; }
+    .upgrade-card button { font-size: 4vw; padding: 2vw 4vw; }
+    .daily-combo { padding: 3vw; }
+    .daily-combo h3 { font-size: 4vw; }
+    .daily-combo button { font-size: 4vw; padding: 2vw 4vw; }
     .tab-button { font-size: 3vw; padding: 2vw; width: 18vw; height: 18vw; }
     .tab-icon { font-size: 6vw; }
     .tab-label { font-size: 3vw; }
@@ -310,8 +396,13 @@ body {
     .score-display { font-size: 2.5rem; }
     .progress-label { font-size: 1rem; }
     .energy-display { font-size: 1.2rem; }
-    .upgrade-section, .daily-combo, #daily-missions, #achievements, #shop-items, #clan-info { padding: 15px; width: 60%; }
-    .upgrade-section button, .daily-combo button, #achievements button, #shop-items button, #create-clan-btn, #start-minigame-btn { font-size: 1rem; padding: 10px 20px; }
+    .upgrade-card { padding: 15px; }
+    .upgrade-card h3 { font-size: 1.2rem; }
+    .upgrade-card p { font-size: 0.9rem; }
+    .upgrade-card button { font-size: 1rem; padding: 10px 20px; }
+    .daily-combo { padding: 15px; }
+    .daily-combo h3 { font-size: 1.2rem; }
+    .daily-combo button { font-size: 1rem; padding: 10px 20px; }
     .tab-button { font-size: 14px; padding: 8px; width: 80px; height: 80px; }
     .tab-icon { font-size: 26px; }
     .tab-label { font-size: 12px; }
