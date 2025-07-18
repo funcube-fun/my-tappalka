@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "Tap Tap!",
+    "slug": "taptap",
+    "version": "0.9",
+    "orientation": "portrait",
+    "icon": "./assets/adaptive-icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#151721"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon2.png",
+        "backgroundColor": "#361C66"
+      },
+      "package": "com.divanny.taptap"
+    },
+    "web": {
+      "favicon": "./assets/logoTap.png"
+    }
+  }
+}
