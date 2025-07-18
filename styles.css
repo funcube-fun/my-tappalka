@@ -14,13 +14,13 @@ body {
     width: 100%;
     max-width: 1200px;
     height: 100vh;
-    background: #1a1a3b;
+    background: linear-gradient(135deg, #1a1a3b, #2a2a5a);
     display: flex;
     flex-direction: column;
     color: #ffffff;
     overflow: hidden;
     border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
 #header {
@@ -34,6 +34,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 20px 20px 0 0;
 }
 
 .hamster-avatar {
@@ -65,18 +66,18 @@ body {
 #hamster-image {
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23ffaa00"><circle cx="50" cy="50" r="40" /><path d="M50 20a10 10 0 00-10 10v20a10 10 0 0010 10h10a10 10 0 0010-10V30a10 10 0 00-10-10z" fill="%23ffffff" /><path d="M45 50h10v10H45z" fill="%23000000" /></svg>') no-repeat center;
     background-size: contain;
-    border: 5px solid #ffd700;
     border-radius: 50%;
     width: 40vw;
     height: 40vw;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     touch-action: manipulation;
     position: relative;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
 }
 
 #hamster-image:active {
     transform: scale(0.9);
-    box-shadow: 0 0 20px #ffd700;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
 }
 
 .tap-animation {
@@ -99,11 +100,11 @@ body {
 }
 
 .stat-box {
-    background: linear-gradient(45deg, #3a3a7a, #6b48ff);
+    background: linear-gradient(45deg, #2a2a7a, #4a4ac0);
     padding: 1vw 2vw;
     border-radius: 15px;
-    border: 2px solid #ffd700;
     font-size: 1.2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .score-display {
@@ -112,6 +113,9 @@ body {
     text-align: center;
     margin: 2vw 0;
     text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+    background: linear-gradient(90deg, #2a2a7a, #3a3a8a);
+    padding: 1vw 2vw;
+    border-radius: 15px;
 }
 
 .progress-bar {
@@ -131,7 +135,6 @@ body {
     background: #2a2a5a;
     border-radius: 10px;
     overflow: hidden;
-    border: 2px solid #ffd700;
 }
 
 #progress-fill {
@@ -139,24 +142,28 @@ body {
     background: linear-gradient(90deg, #ffaa00, #ffd700);
     width: 0%;
     transition: width 0.3s ease;
+    border-radius: 10px;
 }
 
 .energy-display {
     font-size: 1.2rem;
     color: #ffffff;
     margin: 2vw 0;
+    background: linear-gradient(90deg, #2a2a7a, #3a3a8a);
+    padding: 1vw 2vw;
+    border-radius: 15px;
 }
 
-.upgrade-section, .daily-combo, #achievements {
+.upgrade-section, .daily-combo, #daily-missions, #achievements, #shop-items, #clan-info {
     background: linear-gradient(135deg, #2a2a7a, #4a4ac0);
     border-radius: 15px;
     padding: 2vw;
     margin: 1vw 0;
     width: 90%;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.upgrade-section button, .daily-combo button, #achievements button {
+.upgrade-section button, .daily-combo button, #achievements button, #shop-items button, #create-clan-btn, #start-minigame-btn {
     background: linear-gradient(45deg, #ffaa00, #ffdd55);
     color: #1a1a3b;
     border: none;
@@ -164,15 +171,15 @@ body {
     font-weight: 600;
     padding: 2vw 4vw;
     margin: 1vw 0;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.upgrade-section button:hover:not(:disabled), .daily-combo button:hover:not(:disabled), #achievements button:hover:not(:disabled) {
+.upgrade-section button:hover:not(:disabled), .daily-combo button:hover:not(:disabled), #achievements button:hover:not(:disabled), #shop-items button:hover:not(:disabled), #create-clan-btn:hover:not(:disabled), #start-minigame-btn:hover:not(:disabled) {
     transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4), 0 0 15px #ffd700;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 215, 0, 0.5);
 }
 
-.upgrade-section button:active, .daily-combo button:active, #achievements button:active {
+.upgrade-section button:active, .daily-combo button:active, #achievements button:active, #shop-items button:active, #create-clan-btn:active, #start-minigame-btn:active {
     transform: scale(0.95);
 }
 
@@ -185,7 +192,6 @@ body {
     padding: 2vw 0;
     display: flex;
     justify-content: space-around;
-    border-top: 2px solid #ffd700;
     z-index: 1000;
 }
 
@@ -193,19 +199,19 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #3a3a8a;
-    border: 2px solid #ffd700;
+    background: linear-gradient(135deg, #2a2a7a, #3a3a8a);
     border-radius: 15px;
     color: #ffffff;
     padding: 2vw;
-    transition: transform 0.2s ease, background 0.2s ease;
+    transition: transform 0.3s ease, background 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .tab-button.active {
     background: linear-gradient(45deg, #ffaa00, #ffdd55);
     color: #1a1a3b;
     transform: scale(1.05);
-    box-shadow: 0 0 10px #ffd700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
 .tab-icon {
@@ -218,17 +224,23 @@ body {
     font-weight: 600;
 }
 
-#achieve-list {
+#achieve-list, #mission-list {
     display: flex;
     flex-direction: column;
     gap: 1vw;
 }
 
-.achievement-item {
+.achievement-item, .mission-item {
     background: #3a3a7a;
     padding: 1vw;
     border-radius: 10px;
-    border-left: 5px solid #ffd700;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#minigame-canvas {
+    border: 2px solid #ffd700;
+    border-radius: 10px;
+    background: #2a2a5a;
 }
 
 .notification {
@@ -236,11 +248,11 @@ body {
     top: 10vw;
     left: 50%;
     transform: translateX(-50%);
-    background: #ffaa00;
+    background: linear-gradient(45deg, #ffaa00, #ffdd55);
     color: #1a1a3b;
     padding: 1vw 2vw;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     display: none;
     z-index: 1000;
     animation: fade 3s ease-out;
@@ -252,6 +264,21 @@ body {
     100% { opacity: 0; display: none; }
 }
 
+#clan-name, #donate-content input, #skin-select {
+    background: #2a2a7a;
+    border: none;
+    border-radius: 10px;
+    padding: 1vw;
+    color: #ffffff;
+    margin: 1vw 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#clan-name:focus, #donate-content input:focus, #skin-select:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
 @media (max-width: 768px) {
     #game-container { font-size: 4vw; }
     #header { font-size: 6vw; }
@@ -261,8 +288,8 @@ body {
     .score-display { font-size: 6vw; }
     .progress-label { font-size: 3.5vw; }
     .energy-display { font-size: 4vw; }
-    .upgrade-section, .daily-combo, #achievements { padding: 3vw; }
-    .upgrade-section button, .daily-combo button, #achievements button { font-size: 4vw; padding: 3vw 6vw; }
+    .upgrade-section, .daily-combo, #daily-missions, #achievements, #shop-items, #clan-info { padding: 3vw; }
+    .upgrade-section button, .daily-combo button, #achievements button, #shop-items button, #create-clan-btn, #start-minigame-btn { font-size: 4vw; padding: 3vw 6vw; }
     .tab-button { font-size: 3vw; padding: 2vw; width: 18vw; height: 18vw; }
     .tab-icon { font-size: 6vw; }
     .tab-label { font-size: 3vw; }
@@ -271,6 +298,7 @@ body {
     #donate-content p { font-size: 3vw; }
     #ton-content p { font-size: 4vw; }
     .notification { top: 15vw; font-size: 4vw; }
+    #minigame-canvas { width: 250px; height: 166px; }
 }
 
 @media (min-width: 769px) {
@@ -282,8 +310,8 @@ body {
     .score-display { font-size: 2.5rem; }
     .progress-label { font-size: 1rem; }
     .energy-display { font-size: 1.2rem; }
-    .upgrade-section, .daily-combo, #achievements { padding: 15px; width: 60%; }
-    .upgrade-section button, .daily-combo button, #achievements button { font-size: 1rem; padding: 10px 20px; }
+    .upgrade-section, .daily-combo, #daily-missions, #achievements, #shop-items, #clan-info { padding: 15px; width: 60%; }
+    .upgrade-section button, .daily-combo button, #achievements button, #shop-items button, #create-clan-btn, #start-minigame-btn { font-size: 1rem; padding: 10px 20px; }
     .tab-button { font-size: 14px; padding: 8px; width: 80px; height: 80px; }
     .tab-icon { font-size: 26px; }
     .tab-label { font-size: 12px; }
@@ -292,9 +320,10 @@ body {
     #donate-content p { font-size: 16px; }
     #ton-content p { font-size: 1.2rem; }
     .notification { top: 50px; font-size: 1rem; }
+    #minigame-canvas { width: 300px; height: 200px; }
 }
 
 #donate-content button { background: linear-gradient(45deg, #ff3333, #ff6666); }
-#donate-content h2, #ton-content h2 { color: #ffd700; }
+#donate-content h2, #ton-content h2, #shop-content h2, #clan-content h2, #customize-content h2, #minigame-content h2 { color: #ffd700; }
 #donate-content p, #ton-content p { color: #ffffff; }
 #footer-text { position: fixed; bottom: 5vw; width: 100%; text-align: center; color: #999; }
