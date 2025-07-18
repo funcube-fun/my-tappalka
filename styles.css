@@ -231,6 +231,27 @@ body {
     border-left: 5px solid #ffd700;
 }
 
+.notification {
+    position: fixed;
+    top: 10vw;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffaa00;
+    color: #1a1a3b;
+    padding: 1vw 2vw;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 1000;
+    animation: fade 3s ease-out;
+}
+
+@keyframes fade {
+    0% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; display: none; }
+}
+
 @media (max-width: 768px) {
     #game-container { font-size: 4vw; }
     #header { font-size: 6vw; }
@@ -249,6 +270,7 @@ body {
     #donate-content h2 { font-size: 5vw; }
     #donate-content p { font-size: 3vw; }
     #ton-content p { font-size: 4vw; }
+    .notification { top: 15vw; font-size: 4vw; }
 }
 
 @media (min-width: 769px) {
@@ -269,6 +291,7 @@ body {
     #donate-content h2 { font-size: 28px; }
     #donate-content p { font-size: 16px; }
     #ton-content p { font-size: 1.2rem; }
+    .notification { top: 50px; font-size: 1rem; }
 }
 
 #donate-content button { background: linear-gradient(45deg, #ff3333, #ff6666); }
