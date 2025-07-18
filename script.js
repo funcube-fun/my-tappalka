@@ -10,9 +10,7 @@ let energyRegenRate = parseFloat(localStorage.getItem('energyRegenRate')) || 0.5
 let passiveIncome = parseInt(localStorage.getItem('passiveIncome')) || 0;
 let totalTaps = parseInt(localStorage.getItem('totalTaps')) || 0;
 let lastTime = parseInt(localStorage.getItem('lastTime')) || Date.now();
-let lastComboTime = parseInt(localStorage.getItem('lastComboTime')) || 0;
 let lastDailyBonusTime = parseInt(localStorage.getItem('lastDailyBonusTime')) || 0;
-const comboCooldown = 24 * 60 * 60 * 1000;
 const dailyBonusCooldown = 24 * 60 * 60 * 1000;
 let level = parseInt(localStorage.getItem('level')) || 1;
 let exp = parseInt(localStorage.getItem('exp')) || 0;
@@ -23,7 +21,6 @@ let referralCode = localStorage.getItem('referralCode') || Math.random().toStrin
 let achievements = JSON.parse(localStorage.getItem('achievements')) || [];
 let ownedSkins = JSON.parse(localStorage.getItem('ownedSkins')) || ['default'];
 let tapBoost = parseFloat(localStorage.getItem('tapBoost')) || 1.0;
-let clan = localStorage.getItem('clan') || null;
 let minigameScore = 0;
 
 const achievementsList = [
@@ -56,7 +53,6 @@ function saveGame() {
     localStorage.setItem('passiveIncome', passiveIncome);
     localStorage.setItem('totalTaps', totalTaps);
     localStorage.setItem('lastTime', lastTime);
-    localStorage.setItem('lastComboTime', lastComboTime);
     localStorage.setItem('lastDailyBonusTime', lastDailyBonusTime);
     localStorage.setItem('level', level);
     localStorage.setItem('exp', exp);
@@ -65,7 +61,6 @@ function saveGame() {
     localStorage.setItem('achievements', JSON.stringify(achievements));
     localStorage.setItem('ownedSkins', JSON.stringify(ownedSkins));
     localStorage.setItem('tapBoost', tapBoost);
-    localStorage.setItem('clan', clan);
 }
 
 function showNotification(message) {
@@ -98,8 +93,6 @@ function updateDisplay() {
     document.getElementById('upgrade-mining-btn').disabled = score < 100 * miningLevel;
     document.getElementById('upgrade-energy-btn').disabled = score < 200 * energyLevel;
     document.getElementById('upgrade-regen-btn').disabled = score < 300 * regenLevel;
-    document.getElementById('daily-combo-btn').disabled = Date.now() - lastComboTime < comboCooldown;
-    document.getElementById('combo-status').textContent = Date.now() - lastComboTime < comboCooldown ? `Оновлення о ${new Date(lastComboTime + comboCooldown).toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' })}` : 'Готово!';
     document.getElementById('daily-bonus-btn').disabled = Date.now() - lastDailyBonusTime < dailyBonusCooldown;
     document.getElementById('bonus-status').textContent = Date.now() - lastDailyBonusTime < dailyBonusCooldown ? `Оновлення о ${new Date(lastDailyBonusTime + dailyBonusCooldown).toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' })}` : 'Готово!';
     document.getElementById('withdraw-btn').disabled = score < 1000;
@@ -108,8 +101,7 @@ function updateDisplay() {
     document.getElementById('buy-skin1-btn').disabled = score < 500 || ownedSkins.includes('skin1');
     document.getElementById('buy-skin2-btn').disabled = score < 1000 || ownedSkins.includes('skin2');
     document.getElementById('buy-boost-btn').disabled = score < 200;
-    document.getElementById('create-clan-btn').disabled = score < 1000 || clan;
-    document.getElementById('clan-info').textContent = clan ? `Ваш клан: ${clan}` : 'Створіть клан!';
+    document.getElementById('achieve-list').innerHTML = '';
     updateAchievements();
     updateMissions();
     saveGame();
@@ -280,16 +272,7 @@ function upgradeRegen(event) {
 
 function claimDailyCombo(event) {
     handleEvent(event, () => {
-        if (Date.now() - lastComboTime >= comboCooldown) {
-            score += 5000000;
-            exp += 50000;
-            checkLevelUp();
-            lastComboTime = Date.now() + (24 * 60 * 60 * 1000 - (Date.now() % (24 * 60 * 60 * 1000)));
-            showNotification('Щоденне комбо отримано! +5M монет!');
-            updateDisplay();
-        } else {
-            showNotification('Комбо доступне завтра!');
-        }
+        showNotification('Функція комбо видалена!');
     });
 }
 
@@ -377,8 +360,6 @@ function buySkin(skin, cost, event) {
             ownedSkins.push(skin);
             showNotification(`Куплено ${skin === 'skin1' ? 'Скін 1' : 'Скін 2'}!`);
             updateDisplay();
-            document.getElementById('skin-select').value = skin;
-            changeSkin({ target: { value: skin } });
         } else {
             showNotification('Недостатньо монет або шкіра вже куплена!');
         }
@@ -398,31 +379,11 @@ function buyBoost(cost, event) {
     });
 }
 
-function createClan(event) {
-    handleEvent(event, () => {
-        if (score >= 1000 && !clan) {
-            const clanName = document.getElementById('clan-name').value;
-            if (clanName) {
-                score -= 1000;
-                clan = clanName;
-                showNotification(`Клан "${clanName}" створено!`);
-                updateDisplay();
-            } else {
-                showNotification('Введіть назву клану!');
-            }
-        } else {
-            showNotification('Недостатньо монет або клан уже створено!');
-        }
-    });
-}
-
 function changeSkin(event) {
     const skin = event.target.value;
     if (ownedSkins.includes(skin)) {
-        const svg = skin === 'default' ? 
-            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23ffaa00"><circle cx="50" cy="50" r="40" /><path d="M50 20a10 10 0 00-10 10v20a10 10 0 0010 10h10a10 10 0 0010-10V30a10 10 0 00-10-10z" fill="%23ffffff" /><path d="M45 50h10v10H45z" fill="%23000000" /></svg>' :
-            (skin === 'skin1' ? '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23ff55aa"><circle cx="50" cy="50" r="40" /><path d="M50 20a10 10 0 00-10 10v20a10 10 0 0010 10h10a10 10 0 0010-10V30a10 10 0 00-10-10z" fill="%23ffffff" /><path d="M45 50h10v10H45z" fill="%2300ff00" /></svg>' :
-            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%2355aaff"><circle cx="50" cy="50" r="40" /><path d="M50 20a10 10 0 00-10 10v20a10 10 0 0010 10h10a10 10 0 0010-10V30a10 10 0 00-10-10z" fill="%23ffaa00" /><path d="M45 50h10v10H45z" fill="%23ffffff" /></svg>');
+        const baseColor = skin === 'default' ? '#ffd700' : skin === 'skin1' ? '#ff5555' : '#55aa55';
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="${baseColor}"><circle cx="50" cy="50" r="40" /><path d="M40 30h20v20h-20z M45 50h10v10H45z" fill="%23000000" /></svg>`;
         document.getElementById('hamster-image').style.backgroundImage = `url('data:image/svg+xml;utf8,${encodeURIComponent(svg)}')`;
         showNotification(`Скін змінено на ${skin === 'default' ? 'Стандартний' : skin === 'skin1' ? 'Скін 1' : 'Скін 2'}!`);
     } else {
@@ -491,7 +452,6 @@ function regenerateEnergy() {
 document.addEventListener('DOMContentLoaded', () => {
     updateDisplay();
     regenerateEnergy();
-    if (Date.now() - lastComboTime >= comboCooldown) lastComboTime = Date.now() - (Date.now() % (24 * 60 * 60 * 1000));
     if (Date.now() - lastDailyBonusTime >= dailyBonusCooldown) lastDailyBonusTime = Date.now() - (Date.now() % (24 * 60 * 60 * 1000));
     changeSkin({ target: { value: ownedSkins[0] } });
 });
