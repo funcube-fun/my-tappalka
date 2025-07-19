@@ -36,7 +36,7 @@ function loadGame() {
         miningLevel = data.miningLevel || 1;
         energyLevel = data.energyLevel || 1;
         regenLevel = data.regenLevel || 1;
-        energy = data.energy !== undefined ? data.energy : 100; // Use saved energy or default to 100 for new users
+        energy = data.energy !== undefined ? data.energy : 100;
         maxEnergy = data.maxEnergy || 100;
         energyRegenRate = data.energyRegenRate || 0.5;
         passiveIncome = data.passiveIncome || 0;
@@ -232,7 +232,7 @@ function upgradeEnergy(event) {
         score -= cost;
         energyLevel++;
         maxEnergy += 20;
-        energy = Math.min(energy, maxEnergy); // Ensure energy doesn't exceed new maxEnergy
+        energy = Math.min(energy, maxEnergy);
         upgradesToday += 1;
         showNotification('Максимальна енергія збільшена!');
         updateDisplay();
@@ -374,6 +374,13 @@ function regenerateEnergy() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if running in Telegram Web App environment
+    if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.expand();
+    } else {
+        console.warn('Not running in Telegram Web App environment');
+    }
+
     loadGame();
     regenerateEnergy();
 });
