@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Добавляем темную тему */
         body {
             background-color: #1A1A2E;
             color: #E0E0E0;
@@ -37,7 +36,7 @@
             width: 20%;
         }
         .tab-button.active {
-            color: #FFD700; /* Желтый для активной вкладки */
+            color: #FFD700;
         }
         .tab-button:hover {
             background-color: #2A2E44;
@@ -50,9 +49,8 @@
         .tab-label {
             font-size: 12px;
         }
-        /* Стили для верхнего меню (если нужно добавить) */
         #game-container {
-            padding-bottom: 60px; /* Пространство под фиксированным меню */
+            padding-bottom: 60px;
         }
     </style>
 </head>
@@ -124,7 +122,7 @@
             <button id="task-telegram1-btn" onclick="completeTask('telegram1', event)" ontouchstart="completeTask('telegram1', event)">
                 <span class="task-icon">📱</span> Підписатися на Telegram #1 (+1000)
             </button>
-            <button id="task-telegram2-btn" onclick="completeTask('telegram2', event)" ontouchstart="completeTask('telegram2', event)">
+            <button id="task-telegram2-btn" onclick bookmark:completeTask('telegram2', event)" ontouchstart="completeTask('telegram2', event)">
                 <span class="task-icon">📱</span> Підписатися на Telegram #2 (+1000)
             </button>
             <button id="task-telegram3-btn" onclick="completeTask('telegram3', event)" ontouchstart="completeTask('telegram3', event)">
@@ -138,8 +136,39 @@
             </button>
         </div>
         <div id="bonuses-content" class="tab-content">
-            <button id="daily-bonus-btn" onclick="claimDailyBonus(event)" ontouchstart="claimDailyBonus(event)" disabled>Щоденний бонус</button>
-            <span id="bonus-status">Оновлення о 00:00</span>
+            <h2>Щоденні бонуси</h2>
+            <div class="daily-bonus-container">
+                <button id="daily-bonus-day1-btn" class="daily-bonus-btn" onclick="claimDailyBonus(0, event)" ontouchstart="claimDailyBonus(0, event)">🌟 День 1: +10000</button>
+                <button id="daily-bonus-day2-btn" class="daily-bonus-btn" onclick="claimDailyBonus(1, event)" ontouchstart="claimDailyBonus(1, event)">🎖️ День 2: +20000</button>
+                <button id="daily-bonus-day3-btn" class="daily-bonus-btn" onclick="claimDailyBonus(2, event)" ontouchstart="claimDailyBonus(2, event)">🏆 День 3: +30000</button>
+                <button id="daily-bonus-day4-btn" class="daily-bonus-btn" onclick="claimDailyBonus(3, event)" ontouchstart="claimDailyBonus(3, event)">💎 День 4: +40000</button>
+                <button id="daily-bonus-day5-btn" class="daily-bonus-btn" onclick="claimDailyBonus(4, event)" ontouchstart="claimDailyBonus(4, event)">🔥 День 5: +50000</button>
+                <button id="daily-bonus-day6-btn" class="daily-bonus-btn" onclick="claimDailyBonus(5, event)" ontouchstart="claimDailyBonus(5, event)">⚡ День 6: +60000</button>
+                <button id="daily-bonus-day7-btn" class="daily-bonus-btn" onclick="claimDailyBonus(6, event)" ontouchstart="claimDailyBonus(6, event)">🎁 День 7: +70000</button>
+                <button id="daily-bonus-day8-btn" class="daily-bonus-btn" onclick="claimDailyBonus(7, event)" ontouchstart="claimDailyBonus(7, event)">🌈 День 8: +80000</button>
+                <button id="daily-bonus-day9-btn" class="daily-bonus-btn" onclick="claimDailyBonus(8, event)" ontouchstart="claimDailyBonus(8, event)">🍀 День 9: +90000</button>
+                <button id="daily-bonus-day10-btn" class="daily-bonus-btn" onclick="claimDailyBonus(9, event)" ontouchstart="claimDailyBonus(9, event)">🔔 День 10: +100000</button>
+                <button id="daily-bonus-day11-btn" class="daily-bonus-btn" onclick="claimDailyBonus(10, event)" ontouchstart="claimDailyBonus(10, event)">🎉 День 11: +110000</button>
+                <button id="daily-bonus-day12-btn" class="daily-bonus-btn" onclick="claimDailyBonus(11, event)" ontouchstart="claimDailyBonus(11, event)">🛡️ День 12: +120000</button>
+                <button id="daily-bonus-day13-btn" class="daily-bonus-btn" onclick="claimDailyBonus(12, event)" ontouchstart="claimDailyBonus(12, event)">⚔️ День 13: +130000</button>
+                <button id="daily-bonus-day14-btn" class="daily-bonus-btn" onclick="claimDailyBonus(13, event)" ontouchstart="claimDailyBonus(13, event)">🪙 День 14: +140000</button>
+                <button id="daily-bonus-day15-btn" class="daily-bonus-btn" onclick="claimDailyBonus(14, event)" ontouchstart="claimDailyBonus(14, event)">💰 День 15: +150000</button>
+                <button id="daily-bonus-day16-btn" class="daily-bonus-btn" onclick="claimDailyBonus(15, event)" ontouchstart="claimDailyBonus(15, event)">🌍 День 16: +160000</button>
+                <button id="daily-bonus-day17-btn" class="daily-bonus-btn" onclick="claimDailyBonus(16, event)" ontouchstart="claimDailyBonus(16, event)">🚀 День 17: +170000</button>
+                <button id="daily-bonus-day18-btn" class="daily-bonus-btn" onclick="claimDailyBonus(17, event)" ontouchstart="claimDailyBonus(17, event)">🌌 День 18: +180000</button>
+                <button id="daily-bonus-day19-btn" class="daily-bonus-btn" onclick="claimDailyBonus(18, event)" ontouchstart="claimDailyBonus(18, event)">🦁 День 19: +190000</button>
+                <button id="daily-bonus-day20-btn" class="daily-bonus-btn" onclick="claimDailyBonus(19, event)" ontouchstart="claimDailyBonus(19, event)">🐉 День 20: +200000</button>
+                <button id="daily-bonus-day21-btn" class="daily-bonus-btn" onclick="claimDailyBonus(20, event)" ontouchstart="claimDailyBonus(20, event)">🦄 День 21: +210000</button>
+                <button id="daily-bonus-day22-btn" class="daily-bonus-btn" onclick="claimDailyBonus(21, event)" ontouchstart="claimDailyBonus(21, event)">🌺 День 22: +220000</button>
+                <button id="daily-bonus-day23-btn" class="daily-bonus-btn" onclick="claimDailyBonus(22, event)" ontouchstart="claimDailyBonus(22, event)">🍒 День 23: +230000</button>
+                <button id="daily-bonus-day24-btn" class="daily-bonus-btn" onclick="claimDailyBonus(23, event)" ontouchstart="claimDailyBonus(23, event)">🍇 День 24: +240000</button>
+                <button id="daily-bonus-day25-btn" class="daily-bonus-btn" onclick="claimDailyBonus(24, event)" ontouchstart="claimDailyBonus(24, event)">🍓 День 25: +250000</button>
+                <button id="daily-bonus-day26-btn" class="daily-bonus-btn" onclick="claimDailyBonus(25, event)" ontouchstart="claimDailyBonus(25, event)">🍍 День 26: +260000</button>
+                <button id="daily-bonus-day27-btn" class="daily-bonus-btn" onclick="claimDailyBonus(26, event)" ontouchstart="claimDailyBonus(26, event)">🥥 День 27: +270000</button>
+                <button id="daily-bonus-day28-btn" class="daily-bonus-btn" onclick="claimDailyBonus(27, event)" ontouchstart="claimDailyBonus(27, event)">🍉 День 28: +280000</button>
+                <button id="daily-bonus-day29-btn" class="daily-bonus-btn" onclick="claimDailyBonus(28, event)" ontouchstart="claimDailyBonus(28, event)">🍑 День 29: +290000</button>
+                <button id="daily-bonus-day30-btn" class="daily-bonus-btn" onclick="claimDailyBonus(29, event)" ontouchstart="claimDailyBonus(29, event)">🍊 День 30: +300000</button>
+            </div>
         </div>
         <div id="donate-content" class="tab-content">
             <h2>Допомога ЗСУ</h2>
