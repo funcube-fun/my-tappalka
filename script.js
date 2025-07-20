@@ -11,8 +11,8 @@ let passiveIncome = 0;
 let totalTaps = 0;
 let lastTime = Date.now();
 let lastDailyBonusTime = 0;
-let dailyBonusStreak = 0; // Track consecutive days
-const dailyBonusCooldown = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+let dailyBonusStreak = 0;
+const dailyBonusCooldown = 24 * 60 * 60 * 1000;
 let level = 1;
 let exp = 0;
 let baseExpToLevel = 1000;
@@ -95,7 +95,7 @@ function calculateLevelReward(level) {
 }
 
 function calculateDailyBonus(day) {
-    return (day + 1) * 10000; // Day 1 = 10,000, Day 2 = 20,000, ..., Day 30 = 300,000
+    return (day + 1) * 10000;
 }
 
 function showNotification(message) {
@@ -129,32 +129,23 @@ function updateDisplay() {
     document.getElementById('upgrade-energy-btn').disabled = score < 200 * energyLevel;
     document.getElementById('upgrade-regen-btn').disabled = score < 300 * regenLevel;
 
-    // Update daily bonus icons
+    // Update daily bonus buttons
     const canClaim = Date.now() - lastDailyBonusTime >= dailyBonusCooldown;
     const currentDay = canClaim ? dailyBonusStreak : dailyBonusStreak - 1;
     for (let i = 0; i < 30; i++) {
         const btn = document.getElementById(`daily-bonus-day${i + 1}-btn`);
         const reward = calculateDailyBonus(i);
+        btn.innerHTML = `📄 День ${i + 1}: +${reward.toLocaleString()}`;
+        btn.disabled = i !== currentDay || !canClaim;
+        btn.classList.remove('completed', 'current', 'locked', 'unavailable');
         if (i < currentDay) {
-            btn.innerHTML = `✅ День ${i + 1}: +${reward.toLocaleString()}`;
-            btn.disabled = true;
             btn.classList.add('completed');
-            btn.classList.remove('current', 'locked', 'unavailable');
         } else if (i === currentDay && canClaim) {
-            btn.innerHTML = `🎯 День ${i + 1}: +${reward.toLocaleString()}`;
-            btn.disabled = false;
             btn.classList.add('current');
-            btn.classList.remove('completed', 'locked', 'unavailable');
         } else if (i === currentDay && !canClaim) {
-            btn.innerHTML = `⚪ День ${i + 1}: +${reward.toLocaleString()}`;
-            btn.disabled = true;
             btn.classList.add('unavailable');
-            btn.classList.remove('completed', 'current', 'locked');
         } else {
-            btn.innerHTML = `🔒 День ${i + 1}: +${reward.toLocaleString()}`;
-            btn.disabled = true;
             btn.classList.add('locked');
-            btn.classList.remove('completed', 'current', 'unavailable');
         }
     }
 
@@ -371,16 +362,16 @@ function claimDailyBonus(day, event) {
                         lastClaimDate.getDate() === currentDate.getDate() - 1;
 
     if (!isSameDay && !isYesterday && lastDailyBonusTime !== 0) {
-        dailyBonusStreak = 0; // Reset streak if a day was missed
+        dailyBonusStreak = 0;
     }
 
-    dailyBonusStreak = isSameDay ? dailyBonusStreak : dailyBonusStreak + 1; // Increment streak
+    dailyBonusStreak = isSameDay ? dailyBonusStreak : dailyBonusStreak + 1;
     const bonus = calculateDailyBonus(dailyBonusStreak - 1);
     score += bonus;
     exp += 2000;
     lastDailyBonusTime = currentTime;
     if (dailyBonusStreak >= 30) {
-        dailyBonusStreak = 0; // Reset streak after day 30
+        dailyBonusStreak = 0;
         showNotification(`Вітаємо! +${bonus.toLocaleString()} монет за ${dailyBonusStreak} день! Серію завершено!`);
     } else {
         showNotification(`День ${dailyBonusStreak}: +${bonus.toLocaleString()} монет!`);
