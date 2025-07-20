@@ -3,24 +3,22 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    background: linear-gradient(135deg, #1e1e3f, #3a3a7a);
+    background: #1A1A2E;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    color: #E0E0E0;
 }
 
 #game-container {
     width: 100%;
     max-width: 1200px;
     height: 100vh;
-    background: linear-gradient(135deg, #1a1a3b, #2a2a5a);
+    background: #1A1A2E;
     display: flex;
     flex-direction: column;
-    color: #ffffff;
     overflow: hidden;
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
 }
 
@@ -67,15 +65,7 @@ body {
 }
 
 #main-content {
-    background: linear-gradient(45deg, #1a1a3b, #2a2a5a, #3a3a7a);
-    background-size: 200% 200%;
-    animation: gradientShift 15s ease infinite;
-}
-
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    background: #1A1A2E;
 }
 
 .score-display {
@@ -83,8 +73,7 @@ body {
     color: #ffd700;
     text-align: center;
     margin: 1vw 0;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
-    background: linear-gradient(90deg, #2a2a7a, #3a3a8a);
+    background: #2a2a5a;
     padding: 1vw 2vw;
     border-radius: 15px;
     width: 80%;
@@ -100,15 +89,13 @@ body {
     height: 40vw;
     max-height: 300px;
     margin: 2vw auto;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
     touch-action: manipulation;
     position: relative;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
 }
 
 #hamster-image:active {
     transform: scale(0.9);
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.9), 0 0 50px rgba(255, 215, 0, 0.7);
 }
 
 #hamster-image.no-energy {
@@ -126,7 +113,6 @@ body {
     color: #ffd700;
     font-size: 2rem;
     animation: tapUp 0.7s ease-out;
-    text-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
 }
 
 @keyframes tapUp {
@@ -151,9 +137,8 @@ body {
 .progress-label {
     font-size: 1rem;
     text-align: center;
-    color: #ffffff;
+    color: #E0E0E0;
     margin: 1vw 0;
-    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
 }
 
 .progress-bar {
@@ -179,9 +164,9 @@ body {
 
 .energy-display {
     font-size: 1.2rem;
-    color: #ffffff;
+    color: #E0E0E0;
     margin: 1vw 0;
-    background: linear-gradient(90deg, #2a2a7a, #3a3a8a);
+    background: #2a2a5a;
     padding: 1vw 2vw;
     border-radius: 15px;
 }
@@ -194,11 +179,10 @@ body {
 }
 
 .stat-box {
-    background: linear-gradient(45deg, #2a2a7a, #4a4ac0);
+    background: #2a2a5a;
     padding: 1vw 2vw;
     border-radius: 15px;
     font-size: 1.2rem;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     flex: 1;
     margin: 0 1vw;
     text-align: center;
@@ -214,17 +198,14 @@ body {
 }
 
 .upgrade-card {
-    background: linear-gradient(135deg, #2a2a7a, #4a4ac0);
+    background: #2a2a5a;
     border-radius: 15px;
     padding: 2vw;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-sizing: border-box;
 }
 
 .upgrade-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 215, 0, 0.6);
 }
 
 .upgrade-card h3 {
@@ -236,13 +217,13 @@ body {
 .upgrade-card p {
     font-size: 0.9rem;
     margin: 0.5vw 0;
-    color: #ffffff;
+    color: #E0E0E0;
 }
 
 .progress-bar-small {
     width: 100%;
     height: 8px;
-    background: #2a2a5a;
+    background: #1a1a3b;
     border-radius: 5px;
     overflow: hidden;
     margin: 1vw 0;
@@ -264,13 +245,11 @@ body {
     font-weight: 600;
     padding: 1vw 2vw;
     width: 100%;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
 }
 
 .upgrade-card button:hover:not(:disabled) {
     transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 215, 0, 0.7);
 }
 
 .upgrade-card button:active {
@@ -282,7 +261,7 @@ body {
     bottom: 0;
     width: 100%;
     max-width: 1200px;
-    background: linear-gradient(90deg, #2a2a7a, #4a4ac0);
+    background: #16213E;
     padding: 2vw 0;
     display: flex;
     justify-content: space-around;
@@ -294,37 +273,31 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: linear-gradient(135deg, #2a2a7a, #3a3a8a);
-    border-radius: 15px;
-    color: #ffffff;
-    padding: 2vw;
-    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background: none;
+    border: none;
+    color: #E0E0E0;
+    font-size: 14px;
     cursor: pointer;
     width: 20%;
     box-sizing: border-box;
 }
 
 .tab-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 215, 0, 0.5);
+    background: #2A2E44;
+    border-radius: 5px;
 }
 
 .tab-button.active {
-    background: linear-gradient(45deg, #ffaa00, #ffdd55);
-    color: #1a1a3b;
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+    color: #FFD700;
 }
 
 .tab-icon {
-    font-size: 1.5rem;
-    margin-bottom: 0.5vw;
+    font-size: 20px;
+    margin-bottom: 2px;
 }
 
 .tab-label {
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 12px;
 }
 
 .notification {
@@ -336,7 +309,6 @@ body {
     color: #1a1a3b;
     padding: 1vw 2vw;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     display: none;
     z-index: 1000;
     animation: fade 3s ease-out;
@@ -349,18 +321,16 @@ body {
 }
 
 #donate-content input {
-    background: #2a2a7a;
+    background: #2a2a5a;
     border: none;
     border-radius: 10px;
     padding: 1vw;
-    color: #ffffff;
+    color: #E0E0E0;
     margin: 1vw 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 #donate-content input:focus {
     outline: none;
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
 #donate-content button, #tasks-content button, .daily-bonus-btn {
@@ -371,14 +341,12 @@ body {
     font-weight: 600;
     padding: 1vw 2vw;
     margin: 0.5vw;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
     box-sizing: border-box;
 }
 
 #donate-content button:hover:not(:disabled), #tasks-content button:hover:not(:disabled), .daily-bonus-btn:hover:not(:disabled) {
     transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 136, 204, 0.7);
 }
 
 #donate-content button:active, #tasks-content button:active, .daily-bonus-btn:active {
@@ -402,8 +370,6 @@ body {
     height: 60px;
     font-size: 0.9rem;
     border-radius: 15px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
 .daily-bonus-btn.completed {
@@ -424,9 +390,9 @@ body {
 }
 
 @keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
-    50% { transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
-    100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 #bonuses-content h2 {
@@ -441,7 +407,7 @@ body {
 }
 
 #donate-content h2 { color: #ffd700; }
-#donate-content p { color: #ffffff; }
+#donate-content p { color: #E0E0E0; }
 #footer-text { position: fixed; bottom: 5vw; width: 100%; text-align: center; color: #999; }
 
 @media (max-width: 768px) {
@@ -492,7 +458,7 @@ body {
     .upgrade-card p { font-size: 0.9rem; }
     .upgrade-card button { font-size: 1rem; padding: 10px 20px; }
     .tab-button { font-size: 14px; padding: 8px; width: 80px; height: auto; }
-    .tab-icon { font-size: 26px; }
+    .tab-icon { font-size: 20px; }
     .tab-label { font-size: 12px; }
     .notification { top: 50px; font-size: 1rem; }
     .tap-animation { font-size: 2rem; }
