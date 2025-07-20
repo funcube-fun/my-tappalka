@@ -173,7 +173,8 @@ body {
 
 .stats-container {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    gap: 1vw;
     width: 80%;
     margin: 1vw 0;
 }
@@ -184,7 +185,7 @@ body {
     border-radius: 15px;
     font-size: 1.2rem;
     flex: 1;
-    margin: 0 1vw;
+    max-width: 200px;
     text-align: center;
 }
 
@@ -264,7 +265,8 @@ body {
     background: #16213E;
     padding: 2vw 0;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
+    gap: 1vw;
     z-index: 1000;
     box-sizing: border-box;
 }
@@ -278,7 +280,7 @@ body {
     color: #E0E0E0;
     font-size: 14px;
     cursor: pointer;
-    width: 20%;
+    width: 18%;
     box-sizing: border-box;
 }
 
@@ -419,14 +421,14 @@ body {
     .progress-label { font-size: 3.5vw; margin: 2vw 0; }
     .progress-bar { margin: 2vw 0; }
     .energy-display { font-size: 4vw; margin: 2vw 0; }
-    .stats-container { flex-direction: column; align-items: center; margin: 2vw 0; }
-    .stat-box { font-size: 3.5vw; padding: 2vw 3vw; margin: 1vw 0; width: 80%; }
+    .stats-container { gap: 2vw; }
+    .stat-box { font-size: 3.5vw; padding: 2vw 3vw; margin: 1vw 0; max-width: 150px; }
     .upgrades-grid { grid-template-columns: 1fr; gap: 3vw; }
     .upgrade-card { padding: 3vw; }
     .upgrade-card h3 { font-size: 4vw; }
     .upgrade-card p { font-size: 3vw; }
     .upgrade-card button { font-size: 4vw; padding: 2vw 4vw; }
-    .tab-button { font-size: 3vw; padding: 2vw; width: 20%; height: auto; }
+    .tab-button { font-size: 3vw; padding: 2vw; width: 18%; height: auto; }
     .tab-icon { font-size: 6vw; }
     .tab-label { font-size: 3vw; }
     .notification { top: 15vw; font-size: 4vw; }
@@ -452,7 +454,7 @@ body {
     .progress-bar { margin: 10px 0; }
     .energy-display { font-size: 1.2rem; margin: 10px 0; }
     .stats-container { margin: 10px 0; }
-    .stat-box { font-size: 1rem; padding: 10px 20px; margin: 0 10px; }
+    .stat-box { font-size: 1rem; padding: 10px 20px; max-width: 200px; }
     .upgrade-card { padding: 15px; }
     .upgrade-card h3 { font-size: 1.2rem; }
     .upgrade-card p { font-size: 0.9rem; }
