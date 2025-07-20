@@ -354,25 +354,74 @@ body {
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
-#donate-content button, #tasks-content button {
+#donate-content button, #tasks-content button, .daily-bonus-btn {
     background: linear-gradient(45deg, #0088cc, #00b7ff);
     color: #ffffff;
     border: none;
     border-radius: 10px;
     font-weight: 600;
     padding: 1vw 2vw;
-    margin: 1vw 0;
+    margin: 0.5vw;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
 }
 
-#donate-content button:hover:not(:disabled), #tasks-content button:hover:not(:disabled) {
+#donate-content button:hover:not(:disabled), #tasks-content button:hover:not(:disabled), .daily-bonus-btn:hover:not(:disabled) {
     transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 136, 204, 0.7);
 }
 
-#donate-content button:active, #tasks-content button:active {
+#donate-content button:active, #tasks-content button:active, .daily-bonus-btn:active {
     transform: scale(0.95);
+}
+
+.daily-bonus-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1vw;
+    width: 100%;
+    max-width: 600px;
+    padding: 1vw;
+}
+
+.daily-bonus-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    font-size: 0.9rem;
+    border-radius: 15px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.daily-bonus-btn.completed {
+    background: linear-gradient(45deg, #28a745, #34c759);
+    color: #ffffff;
+}
+
+.daily-bonus-btn.current {
+    background: linear-gradient(45deg, #ffaa00, #ffdd55);
+    color: #1a1a3b;
+    animation: pulse 1.5s infinite;
+}
+
+.daily-bonus-btn.locked, .daily-bonus-btn.unavailable {
+    background: linear-gradient(45deg, #4a4a7a, #6a6a9a);
+    color: #cccccc;
+    cursor: not-allowed;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+    50% { transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+    100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+}
+
+#bonuses-content h2 {
+    color: #ffd700;
+    font-size: 1.5rem;
+    margin-bottom: 1vw;
 }
 
 .task-icon {
@@ -405,11 +454,14 @@ body {
     .notification { top: 15vw; font-size: 4vw; }
     .tap-animation { font-size: 5vw; }
     .particle { width: 3px; height: 3px; }
+    .daily-bonus-container { grid-template-columns: repeat(3, 1fr); gap: 2vw; }
+    .daily-bonus-btn { font-size: 3.5vw; height: 10vw; }
     #donate-content input { padding: 3vw; font-size: 4vw; }
     #donate-content h2 { font-size: 5vw; }
     #donate-content p { font-size: 3vw; }
     #tasks-content button { font-size: 4vw; padding: 2vw 4vw; }
     .task-icon { font-size: 4.5vw; }
+    #bonuses-content h2 { font-size: 5vw; }
 }
 
 @media (min-width: 769px) {
@@ -433,9 +485,12 @@ body {
     .notification { top: 50px; font-size: 1rem; }
     .tap-animation { font-size: 2rem; }
     .particle { width: 5px; height: 5px; }
+    .daily-bonus-container { grid-template-columns: repeat(5, 1fr); gap: 1vw; }
+    .daily-bonus-btn { font-size: 0.9rem; height: 60px; }
     #donate-content input { padding: 12px; font-size: 16px; }
     #donate-content h2 { font-size: 28px; }
     #donate-content p { font-size: 16px; }
     #tasks-content button { font-size: 1rem; padding: 10px 20px; }
     .task-icon { font-size: 1.2rem; }
+    #bonuses-content h2 { font-size: 28px; }
 }
