@@ -94,13 +94,8 @@ function calculateLevelReward(level) {
     return 100 + (level - 1) * 400;
 }
 
-function calculateDailyBonus(streak) {
-    const baseRewards = [200, 300, 400]; // Rewards for days 1, 2, 3
-    const comboBonus = 1000; // Bonus for completing a 3-day streak
-    if (streak >= 3) {
-        return comboBonus + baseRewards[2]; // Combo bonus + day 3 reward
-    }
-    return baseRewards[streak % 3]; // Regular reward for the streak day
+function calculateDailyBonus(day) {
+    return (day + 1) * 10000; // Day 1 = 10,000, Day 2 = 20,000, ..., Day 30 = 300,000
 }
 
 function showNotification(message) {
@@ -137,35 +132,31 @@ function updateDisplay() {
     // Update daily bonus icons
     const canClaim = Date.now() - lastDailyBonusTime >= dailyBonusCooldown;
     const currentDay = canClaim ? dailyBonusStreak : dailyBonusStreak - 1;
-    const buttons = [
-        document.getElementById('daily-bonus-day1-btn'),
-        document.getElementById('daily-bonus-day2-btn'),
-        document.getElementById('daily-bonus-day3-btn')
-    ];
-    const rewards = [200, 300, 1400]; // Day 3 includes combo bonus (400 + 1000)
-    buttons.forEach((btn, index) => {
-        if (index < currentDay) {
-            btn.innerHTML = `✅ День ${index + 1}: +${rewards[index]}`;
+    for (let i = 0; i < 30; i++) {
+        const btn = document.getElementById(`daily-bonus-day${i + 1}-btn`);
+        const reward = calculateDailyBonus(i);
+        if (i < currentDay) {
+            btn.innerHTML = `✅ День ${i + 1}: +${reward.toLocaleString()}`;
             btn.disabled = true;
             btn.classList.add('completed');
             btn.classList.remove('current', 'locked', 'unavailable');
-        } else if (index === currentDay && canClaim) {
-            btn.innerHTML = `🎙 День ${index + 1}: +${rewards[index]}`;
+        } else if (i === currentDay && canClaim) {
+            btn.innerHTML = `🎯 День ${i + 1}: +${reward.toLocaleString()}`;
             btn.disabled = false;
             btn.classList.add('current');
             btn.classList.remove('completed', 'locked', 'unavailable');
-        } else if (index === currentDay && !canClaim) {
-            btn.innerHTML = `⚪ День ${index + 1}: +${rewards[index]}`;
+        } else if (i === currentDay && !canClaim) {
+            btn.innerHTML = `⚪ День ${i + 1}: +${reward.toLocaleString()}`;
             btn.disabled = true;
             btn.classList.add('unavailable');
             btn.classList.remove('completed', 'current', 'locked');
         } else {
-            btn.innerHTML = `🔒 День ${index + 1}: +${rewards[index]}`;
+            btn.innerHTML = `🔒 День ${i + 1}: +${reward.toLocaleString()}`;
             btn.disabled = true;
             btn.classList.add('locked');
             btn.classList.remove('completed', 'current', 'unavailable');
         }
-    });
+    }
 
     document.getElementById('referral-btn').disabled = referralClaimed;
     document.getElementById('task-video-btn').disabled = taskVideoCompleted;
@@ -388,11 +379,11 @@ function claimDailyBonus(day, event) {
     score += bonus;
     exp += 2000;
     lastDailyBonusTime = currentTime;
-    if (dailyBonusStreak >= 3) {
-        dailyBonusStreak = 0; // Reset streak after combo bonus
-        showNotification(`Комбо-бонус! +${bonus} монет за ${dailyBonusStreak} дні!`);
+    if (dailyBonusStreak >= 30) {
+        dailyBonusStreak = 0; // Reset streak after day 30
+        showNotification(`Вітаємо! +${bonus.toLocaleString()} монет за ${dailyBonusStreak} день! Серію завершено!`);
     } else {
-        showNotification(`День ${dailyBonusStreak}: +${bonus} монет!`);
+        showNotification(`День ${dailyBonusStreak}: +${bonus.toLocaleString()} монет!`);
     }
     checkLevelUp();
     updateDisplay();
