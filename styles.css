@@ -21,6 +21,7 @@ body {
     overflow: hidden;
     border-radius: 20px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
 }
 
 #header {
@@ -54,7 +55,8 @@ body {
     padding: 3vw;
     display: none;
     overflow-y: auto;
-    position: relative;
+    overflow-x: hidden;
+    box-sizing: border-box;
 }
 
 .tab-content.active {
@@ -86,6 +88,7 @@ body {
     padding: 1vw 2vw;
     border-radius: 15px;
     width: 80%;
+    box-sizing: border-box;
 }
 
 #hamster-image {
@@ -93,8 +96,10 @@ body {
     background-size: contain;
     border-radius: 50%;
     width: 40vw;
+    max-width: 300px;
     height: 40vw;
-    margin: 2vw 0;
+    max-height: 300px;
+    margin: 2vw auto;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     touch-action: manipulation;
     position: relative;
@@ -214,6 +219,7 @@ body {
     padding: 2vw;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
 }
 
 .upgrade-card:hover {
@@ -281,6 +287,7 @@ body {
     display: flex;
     justify-content: space-around;
     z-index: 1000;
+    box-sizing: border-box;
 }
 
 .tab-button {
@@ -294,6 +301,8 @@ body {
     transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     cursor: pointer;
+    width: 20%;
+    box-sizing: border-box;
 }
 
 .tab-button:hover {
@@ -336,7 +345,7 @@ body {
 @keyframes fade {
     0% { opacity: 1; }
     90% { opacity: 1; }
-    100% { opacity: 0; display: none; }
+    100% { opacity: 0; }
 }
 
 #donate-content input {
@@ -364,6 +373,7 @@ body {
     margin: 0.5vw;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
+    box-sizing: border-box;
 }
 
 #donate-content button:hover:not(:disabled), #tasks-content button:hover:not(:disabled), .daily-bonus-btn:hover:not(:disabled) {
@@ -377,11 +387,12 @@ body {
 
 .daily-bonus-container {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 1vw;
     width: 100%;
     max-width: 600px;
     padding: 1vw;
+    box-sizing: border-box;
 }
 
 .daily-bonus-btn {
@@ -437,29 +448,30 @@ body {
     #game-container { font-size: 4vw; }
     #header { font-size: 6vw; }
     .hamster-avatar { width: 12vw; height: 12vw; }
-    #hamster-image { width: 50vw; height: 50vw; margin: 3vw 0; }
+    #hamster-image { width: 50vw; height: 50vw; max-width: 250px; max-height: 250px; margin: 3vw auto; }
     .score-display { font-size: 6vw; margin: 2vw 0; }
     .progress-label { font-size: 3.5vw; margin: 2vw 0; }
     .progress-bar { margin: 2vw 0; }
     .energy-display { font-size: 4vw; margin: 2vw 0; }
-    .stats-container { margin: 2vw 0; }
-    .stat-box { font-size: 3.5vw; padding: 2vw 3vw; margin: 0 2vw; }
+    .stats-container { flex-direction: column; align-items: center; margin: 2vw 0; }
+    .stat-box { font-size: 3.5vw; padding: 2vw 3vw; margin: 1vw 0; width: 80%; }
+    .upgrades-grid { grid-template-columns: 1fr; gap: 3vw; }
     .upgrade-card { padding: 3vw; }
     .upgrade-card h3 { font-size: 4vw; }
     .upgrade-card p { font-size: 3vw; }
     .upgrade-card button { font-size: 4vw; padding: 2vw 4vw; }
-    .tab-button { font-size: 3vw; padding: 2vw; width: 18vw; height: 18vw; }
+    .tab-button { font-size: 3vw; padding: 2vw; width: 20%; height: auto; }
     .tab-icon { font-size: 6vw; }
     .tab-label { font-size: 3vw; }
     .notification { top: 15vw; font-size: 4vw; }
     .tap-animation { font-size: 5vw; }
     .particle { width: 3px; height: 3px; }
-    .daily-bonus-container { grid-template-columns: repeat(3, 1fr); gap: 2vw; }
-    .daily-bonus-btn { font-size: 3.5vw; height: 10vw; }
+    .daily-bonus-container { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 2vw; }
+    .daily-bonus-btn { font-size: 3vw; height: 10vw; padding: 2vw; }
     #donate-content input { padding: 3vw; font-size: 4vw; }
     #donate-content h2 { font-size: 5vw; }
     #donate-content p { font-size: 3vw; }
-    #tasks-content button { font-size: 4vw; padding: 2vw 4vw; }
+    #tasks-content button { font-size: 3.5vw; padding: 2vw 4vw; }
     .task-icon { font-size: 4.5vw; }
     #bonuses-content h2 { font-size: 5vw; }
 }
@@ -468,7 +480,7 @@ body {
     #game-container { font-size: 16px; }
     #header { font-size: 32px; }
     .hamster-avatar { width: 40px; height: 40px; }
-    #hamster-image { width: 220px; height: 220px; margin: 15px 0; }
+    #hamster-image { width: 220px; height: 220px; margin: 15px auto; }
     .score-display { font-size: 2.5rem; margin: 10px 0; }
     .progress-label { font-size: 1rem; margin: 10px 0; }
     .progress-bar { margin: 10px 0; }
@@ -479,7 +491,7 @@ body {
     .upgrade-card h3 { font-size: 1.2rem; }
     .upgrade-card p { font-size: 0.9rem; }
     .upgrade-card button { font-size: 1rem; padding: 10px 20px; }
-    .tab-button { font-size: 14px; padding: 8px; width: 80px; height: 80px; }
+    .tab-button { font-size: 14px; padding: 8px; width: 80px; height: auto; }
     .tab-icon { font-size: 26px; }
     .tab-label { font-size: 12px; }
     .notification { top: 50px; font-size: 1rem; }
