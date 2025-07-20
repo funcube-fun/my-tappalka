@@ -127,7 +127,6 @@ function updateDisplay() {
     document.getElementById('energy-upgrade-cost').textContent = `${200 * energyLevel}`;
     document.getElementById('energy-progress').style.width = `${(maxEnergy % 20 / 20) * 100}%`;
     document.getElementById('regen-level').textContent = regenLevel;
-    document.getElementById('regen-upgrad
     document.getElementById('regen-upgrade-cost').textContent = `${300 * regenLevel}`;
     document.getElementById('regen-progress').style.width = `${(energyRegenRate % 0.5 / 0.5) * 100}%`;
     document.getElementById('upgrade-profit-btn').disabled = score < 50 * profitLevel;
@@ -135,13 +134,39 @@ function updateDisplay() {
     document.getElementById('upgrade-energy-btn').disabled = score < 200 * energyLevel;
     document.getElementById('upgrade-regen-btn').disabled = score < 300 * regenLevel;
 
-    // Update daily bonus button and status
+    // Update daily bonus icons
     const canClaim = Date.now() - lastDailyBonusTime >= dailyBonusCooldown;
-    document.getElementById('daily-bonus-btn').disabled = !canClaim;
-    const nextReward = calculateDailyBonus(dailyBonusStreak);
-    document.getElementById('bonus-status').textContent = canClaim
-        ? `День ${dailyBonusStreak + 1}: +${nextReward} монет`
-        : `Оновлення о ${new Date(lastDailyBonusTime + dailyBonusCooldown).toLocaleTimeString('uk-UA', { hour: '2-digit', minute: U+0027)}`;
+    const currentDay = canClaim ? dailyBonusStreak : dailyBonusStreak - 1;
+    const buttons = [
+        document.getElementById('daily-bonus-day1-btn'),
+        document.getElementById('daily-bonus-day2-btn'),
+        document.getElementById('daily-bonus-day3-btn')
+    ];
+    const rewards = [200, 300, 1400]; // Day 3 includes combo bonus (400 + 1000)
+    buttons.forEach((btn, index) => {
+        if (index < currentDay) {
+            btn.innerHTML = `✅ День ${index + 1}: +${rewards[index]}`;
+            btn.disabled = true;
+            btn.classList.add('completed');
+            btn.classList.remove('current', 'locked', 'unavailable');
+        } else if (index === currentDay && canClaim) {
+            btn.innerHTML = `🎙 День ${index + 1}: +${rewards[index]}`;
+            btn.disabled = false;
+            btn.classList.add('current');
+            btn.classList.remove('completed', 'locked', 'unavailable');
+        } else if (index === currentDay && !canClaim) {
+            btn.innerHTML = `⚪ День ${index + 1}: +${rewards[index]}`;
+            btn.disabled = true;
+            btn.classList.add('unavailable');
+            btn.classList.remove('completed', 'current', 'locked');
+        } else {
+            btn.innerHTML = `🔒 День ${index + 1}: +${rewards[index]}`;
+            btn.disabled = true;
+            btn.classList.add('locked');
+            btn.classList.remove('completed', 'current', 'unavailable');
+        }
+    });
+
     document.getElementById('referral-btn').disabled = referralClaimed;
     document.getElementById('task-video-btn').disabled = taskVideoCompleted;
     document.getElementById('task-telegram1-btn').disabled = taskTelegram1Completed;
@@ -332,42 +357,45 @@ function completeTask(taskType, event) {
     }
 }
 
-function claimDailyBonus(event) {
+function claimDailyBonus(day, event) {
     event.preventDefault();
     if (Date.now() - lastEventTime < 100) return;
     lastEventTime = Date.now();
     const currentTime = Date.now();
-    if (currentTime - lastDailyBonusTime >= dailyBonusCooldown) {
-        // Check if the last claim was within the same day (reset streak if missed)
-        const lastClaimDate = new Date(lastDailyBonusTime);
-        const currentDate = new Date(currentTime);
-        const isSameDay = lastClaimDate.getFullYear() === currentDate.getFullYear() &&
-                          lastClaimDate.getMonth() === currentDate.getMonth() &&
-                          lastClaimDate.getDate() === currentDate.getDate();
-        const isYesterday = lastClaimDate.getFullYear() === currentDate.getFullYear() &&
-                            lastClaimDate.getMonth() === currentDate.getMonth() &&
-                            lastClaimDate.getDate() === currentDate.getDate() - 1;
+    const canClaim = currentTime - lastDailyBonusTime >= dailyBonusCooldown;
+    const currentDay = canClaim ? dailyBonusStreak : dailyBonusStreak - 1;
 
-        if (!isSameDay && !isYesterday && lastDailyBonusTime !== 0) {
-            dailyBonusStreak = 0; // Reset streak if a day was missed
-        }
-
-        dailyBonusStreak = isSameDay ? dailyBonusStreak : dailyBonusStreak + 1; // Increment streak
-        const bonus = calculateDailyBonus(dailyBonusStreak - 1);
-        score += bonus;
-        exp += 2000;
-        lastDailyBonusTime = currentTime;
-        if (dailyBonusStreak >= 3) {
-            dailyBonusStreak = 0; // Reset streak after combo bonus
-            showNotification(`Комбо-бонус! +${bonus} монет за ${dailyBonusStreak} дні!`);
-        } else {
-            showNotification(`День ${dailyBonusStreak}: +${bonus} монет!`);
-        }
-        checkLevelUp();
-        updateDisplay();
-    } else {
-        showNotification('Бонус доступний завтра!');
+    if (day !== currentDay || !canClaim) {
+        showNotification('Неможливо отримати цей бонус зараз!');
+        return;
     }
+
+    const lastClaimDate = new Date(lastDailyBonusTime);
+    const currentDate = new Date(currentTime);
+    const isSameDay = lastClaimDate.getFullYear() === currentDate.getFullYear() &&
+                      lastClaimDate.getMonth() === currentDate.getMonth() &&
+                      lastClaimDate.getDate() === currentDate.getDate();
+    const isYesterday = lastClaimDate.getFullYear() === currentDate.getFullYear() &&
+                        lastClaimDate.getMonth() === currentDate.getMonth() &&
+                        lastClaimDate.getDate() === currentDate.getDate() - 1;
+
+    if (!isSameDay && !isYesterday && lastDailyBonusTime !== 0) {
+        dailyBonusStreak = 0; // Reset streak if a day was missed
+    }
+
+    dailyBonusStreak = isSameDay ? dailyBonusStreak : dailyBonusStreak + 1; // Increment streak
+    const bonus = calculateDailyBonus(dailyBonusStreak - 1);
+    score += bonus;
+    exp += 2000;
+    lastDailyBonusTime = currentTime;
+    if (dailyBonusStreak >= 3) {
+        dailyBonusStreak = 0; // Reset streak after combo bonus
+        showNotification(`Комбо-бонус! +${bonus} монет за ${dailyBonusStreak} дні!`);
+    } else {
+        showNotification(`День ${dailyBonusStreak}: +${bonus} монет!`);
+    }
+    checkLevelUp();
+    updateDisplay();
 }
 
 function makeDonation(event) {
@@ -414,7 +442,6 @@ function regenerateEnergy() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if running in Telegram Web App environment
     if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.expand();
     } else {
