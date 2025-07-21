@@ -28,6 +28,8 @@ let upgradesToday = 0;
 let lastEventTime = 0;
 let tapBoostActive = false;
 let tapBoostEndTime = 0;
+let walletConnected = false;
+let walletAddress = '';
 
 function loadGame() {
     const savedData = localStorage.getItem('ukraineCoinGame');
@@ -60,6 +62,8 @@ function loadGame() {
         upgradesToday = data.upgradesToday || 0;
         tapBoostActive = data.tapBoostActive || false;
         tapBoostEndTime = data.tapBoostEndTime || 0;
+        walletConnected = data.walletConnected || false;
+        walletAddress = data.walletAddress || '';
     }
     updateDisplay();
 }
@@ -91,7 +95,9 @@ function saveGame() {
         taskTiktokCompleted,
         upgradesToday,
         tapBoostActive,
-        tapBoostEndTime
+        tapBoostEndTime,
+        walletConnected,
+        walletAddress
     };
     localStorage.setItem('ukraineCoinGame', JSON.stringify(gameData));
 }
@@ -164,6 +170,12 @@ function updateDisplay() {
     document.getElementById('task-telegram3-btn').disabled = taskTelegram3Completed;
     document.getElementById('task-youtube-btn').disabled = taskYoutubeCompleted;
     document.getElementById('task-tiktok-btn').disabled = taskTiktokCompleted;
+
+    // Update wallet status
+    document.getElementById('wallet-status').textContent = walletConnected ? `Підключено: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 'Кошелек не підключено';
+    document.getElementById('connect-wallet-btn').textContent = walletConnected ? 'Відключити кошелек 🦊' : 'Підключити кошелек 🦊';
+    document.getElementById('connect-wallet-btn').disabled = false;
+
     saveGame();
 }
 
@@ -423,33 +435,62 @@ function claimDailyBonus(day, event) {
     updateDisplay();
 }
 
-function makeDonation(event) {
+function connectWallet(event) {
     event.preventDefault();
     if (Date.now() - lastEventTime < 100) return;
     lastEventTime = Date.now();
-    const amount = parseInt(document.getElementById('donation-amount').value);
-    if (amount >= 20) {
-        if (confirm(`Підтвердити пожертву ${amount} грн?`)) {
-            score += amount * 3;
-            exp += amount * 30;
-            checkLevelUp();
-            showNotification(`Дякуємо за ${amount} грн! +${amount * 3} монет! (Симуляція)`);
-            document.getElementById('donation-amount').value = '';
+
+    if (walletConnected) {
+        // Disconnect wallet
+        walletConnected = false;
+        walletAddress = '';
+        showNotification('Кошелек відключено!');
+        updateDisplay();
+    } else {
+        // Simulate wallet connection
+        if (window.Telegram && window.Telegram.WebApp) {
+            // Attempt to use Telegram Web App's wallet integration (if available)
+            try {
+                window.Telegram.WebApp.requestWalletAuth((result) => {
+                    if (result && result.address) {
+                        walletConnected = true;
+                        walletAddress = result.address;
+                        showNotification(`Кошелек підключено: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`);
+                        updateDisplay();
+                    } else {
+                        showNotification('Не вдалося підключити кошелек. Спробуйте ще раз.');
+                    }
+                });
+            } catch (e) {
+                // Fallback to simulated wallet connection
+                walletConnected = true;
+                walletAddress = '0x' + Math.random().toString(16).slice(2, 42);
+                showNotification(`Кошелек підключено: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`);
+                updateDisplay();
+            }
+        } else {
+            // Simulate wallet connection for non-Telegram environment
+            walletConnected = true;
+            walletAddress = '0x' + Math.random().toString(16).slice(2, 42);
+            showNotification(`Кошелек підключено: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`);
             updateDisplay();
         }
-    } else {
-        showNotification('Мінімум 20 грн.');
     }
 }
 
 function openTab(tabName, event) {
     event.preventDefault();
-    if (Date.now() - lastEventTime < 100) return;
-    lastEventTime = Date.now();
-    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-    document.querySelector(`.tab-button[data-tab="${tabName}"]`)?.classList.add('active');
+    const tabContents = document.getElementsByClassName('tab-content');
+    for (let i = 0; i < tabContents.length; i++) {
+        tabContents[i].classList.remove('active');
+    }
+    const tabButtons = document.getElementsByClassName('tab-button');
+    for (let i = 0; i < tabButtons.length; i++) {
+        tabButtons[i].classList.remove('active');
+    }
     document.getElementById(`${tabName}-content`).classList.add('active');
+    event.currentTarget.classList.add('active');
+    updateDisplay();
 }
 
 function regenerateEnergy() {
