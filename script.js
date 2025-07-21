@@ -26,6 +26,8 @@ let taskYoutubeCompleted = false;
 let taskTiktokCompleted = false;
 let upgradesToday = 0;
 let lastEventTime = 0;
+let tapBoostActive = false;
+let tapBoostEndTime = 0;
 
 function loadGame() {
     const savedData = localStorage.getItem('ukraineCoinGame');
@@ -56,6 +58,8 @@ function loadGame() {
         taskYoutubeCompleted = data.taskYoutubeCompleted || false;
         taskTiktokCompleted = data.taskTiktokCompleted || false;
         upgradesToday = data.upgradesToday || 0;
+        tapBoostActive = data.tapBoostActive || false;
+        tapBoostEndTime = data.tapBoostEndTime || 0;
     }
     updateDisplay();
 }
@@ -85,7 +89,9 @@ function saveGame() {
         taskTelegram3Completed,
         taskYoutubeCompleted,
         taskTiktokCompleted,
-        upgradesToday
+        upgradesToday,
+        tapBoostActive,
+        tapBoostEndTime
     };
     localStorage.setItem('ukraineCoinGame', JSON.stringify(gameData));
 }
@@ -128,6 +134,8 @@ function updateDisplay() {
     document.getElementById('upgrade-mining-btn').disabled = score < 100 * miningLevel;
     document.getElementById('upgrade-energy-btn').disabled = score < 200 * energyLevel;
     document.getElementById('upgrade-regen-btn').disabled = score < 300 * regenLevel;
+    document.getElementById('tap-boost-btn').disabled = score < 500 || tapBoostActive;
+    document.getElementById('energy-boost-btn').disabled = score < 300 || energy >= maxEnergy;
 
     // Update daily bonus buttons
     const canClaim = Date.now() - lastDailyBonusTime >= dailyBonusCooldown;
@@ -164,9 +172,10 @@ function tapCoin(event) {
     if (Date.now() - lastEventTime < 100) return;
     lastEventTime = Date.now();
     if (energy >= 1) {
-        score += profitPerTap;
+        const currentProfit = tapBoostActive ? profitPerTap * 2 : profitPerTap;
+        score += currentProfit;
         energy -= 1;
-        exp += Math.floor(profitPerTap * 10);
+        exp += Math.floor(currentProfit * 10);
         totalTaps += 1;
         checkLevelUp();
         createTapAnimation(event);
@@ -183,7 +192,7 @@ function createTapAnimation(event) {
     const hamster = document.getElementById('hamster-image');
     const anim = document.createElement('div');
     anim.className = 'tap-animation';
-    anim.textContent = `+${Math.floor(profitPerTap)}`;
+    anim.textContent = `+${Math.floor(tapBoostActive ? profitPerTap * 2 : profitPerTap)}`;
     anim.style.left = `${event.offsetX - 20}px`;
     anim.style.top = `${event.offsetY - 20}px`;
     hamster.appendChild(anim);
@@ -281,6 +290,40 @@ function upgradeRegen(event) {
         updateDisplay();
     } else {
         showNotification('Недостатньо монет!');
+    }
+}
+
+function activateTapBoost(event) {
+    event.preventDefault();
+    if (Date.now() - lastEventTime < 100) return;
+    lastEventTime = Date.now();
+    if (score >= 500 && !tapBoostActive) {
+        score -= 500;
+        tapBoostActive = true;
+        tapBoostEndTime = Date.now() + 30 * 1000; // 30 seconds
+        showNotification('Тап буст активовано! Заробіток x2 на 30 секунд!');
+        setTimeout(() => {
+            tapBoostActive = false;
+            showNotification('Тап буст закінчився!');
+            updateDisplay();
+        }, 30 * 1000);
+        updateDisplay();
+    } else {
+        showNotification(tapBoostActive ? 'Тап буст уже активний!' : 'Недостатньо монет!');
+    }
+}
+
+function activateEnergyBoost(event) {
+    event.preventDefault();
+    if (Date.now() - lastEventTime < 100) return;
+    lastEventTime = Date.now();
+    if (score >= 300 && energy < maxEnergy) {
+        score -= 300;
+        energy = maxEnergy;
+        showNotification('Енергію повністю відновлено!');
+        updateDisplay();
+    } else {
+        showNotification(energy >= maxEnergy ? 'Енергія вже повна!' : 'Недостатньо монет!');
     }
 }
 
@@ -417,6 +460,10 @@ function regenerateEnergy() {
         score += passiveIncome * (deltaTime / 3600);
         exp += Math.floor(passiveIncome * (deltaTime / 3600) * 10);
         checkLevelUp();
+        if (tapBoostActive && currentTime >= tapBoostEndTime) {
+            tapBoostActive = false;
+            showNotification('Тап буст закінчився!');
+        }
     }
     lastTime = currentTime;
     updateDisplay();
