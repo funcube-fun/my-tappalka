@@ -143,7 +143,7 @@ function updateDisplay() {
     for (let i = 0; i < 30; i++) {
         const btn = document.getElementById(`daily-bonus-day${i + 1}-btn`);
         const reward = calculateDailyBonus(i);
-        btn.innerHTML = `📄 День ${i + 1}: +${reward.toLocaleString()}`;
+        btn.innerHTML = `📄 <strong>День ${i + 1}: +${reward.toLocaleString()}</strong>`;
         btn.disabled = i !== currentDay || !canClaim;
         btn.classList.remove('completed', 'current', 'locked', 'unavailable');
         if (i < currentDay) {
@@ -181,7 +181,7 @@ function tapCoin(event) {
         createTapAnimation(event);
         updateDisplay();
     } else {
-        showNotification('Недостатньо енергії!');
+        showNotification('<strong>Недостатньо енергії!</strong>');
         const hamster = document.getElementById('hamster-image');
         hamster.classList.add('no-energy');
         setTimeout(() => hamster.classList.remove('no-energy'), 300);
@@ -220,7 +220,7 @@ function checkLevelUp() {
         expToLevel = baseExpToLevel * level;
         const reward = calculateLevelReward(level - 1);
         score += reward;
-        showNotification(`Рівень ${level} досягнуто! +${reward} UkraineCoins!`);
+        showNotification(`<strong>Рівень ${level} досягнуто! +${reward} UkraineCoins!</strong>`);
     }
 }
 
@@ -234,10 +234,10 @@ function upgradeProfit(event) {
         profitLevel++;
         profitPerTap += 2;
         upgradesToday += 1;
-        showNotification('Тап покращено!');
+        showNotification('<strong>Тап покращено!</strong>');
         updateDisplay();
     } else {
-        showNotification('Недостатньо монет!');
+        showNotification('<strong>Недостатньо монет!</strong>');
     }
 }
 
@@ -251,10 +251,10 @@ function upgradeMining(event) {
         miningLevel++;
         passiveIncome += 50;
         upgradesToday += 1;
-        showNotification('Шахта покращена!');
+        showNotification('<strong>Шахта покращена!</strong>');
         updateDisplay();
     } else {
-        showNotification('Недостатньо монет!');
+        showNotification('<strong>Недостатньо монет!</strong>');
     }
 }
 
@@ -269,10 +269,10 @@ function upgradeEnergy(event) {
         maxEnergy += 20;
         energy = Math.min(energy, maxEnergy);
         upgradesToday += 1;
-        showNotification('Максимальна енергія збільшена!');
+        showNotification('<strong>Максимальна енергія збільшена!</strong>');
         updateDisplay();
     } else {
-        showNotification('Недостатньо монет!');
+        showNotification('<strong>Недостатньо монет!</strong>');
     }
 }
 
@@ -286,10 +286,10 @@ function upgradeRegen(event) {
         regenLevel++;
         energyRegenRate += 0.5;
         upgradesToday += 1;
-        showNotification('Регенерація прискорена!');
+        showNotification('<strong>Регенерація прискорена!</strong>');
         updateDisplay();
     } else {
-        showNotification('Недостатньо монет!');
+        showNotification('<strong>Недостатньо монет!</strong>');
     }
 }
 
@@ -301,15 +301,15 @@ function activateTapBoost(event) {
         score -= 500;
         tapBoostActive = true;
         tapBoostEndTime = Date.now() + 30 * 1000; // 30 seconds
-        showNotification('Тап буст активовано! Заробіток x2 на 30 секунд!');
+        showNotification('<strong>Тап буст активовано! Заробіток x2 на 30 секунд!</strong>');
         setTimeout(() => {
             tapBoostActive = false;
-            showNotification('Тап буст закінчився!');
+            showNotification('<strong>Тап буст закінчився!</strong>');
             updateDisplay();
         }, 30 * 1000);
         updateDisplay();
     } else {
-        showNotification(tapBoostActive ? 'Тап буст уже активний!' : 'Недостатньо монет!');
+        showNotification(tapBoostActive ? '<strong>Тап буст уже активний!</strong>' : '<strong>Недостатньо монет!</strong>');
     }
 }
 
@@ -320,10 +320,10 @@ function activateEnergyBoost(event) {
     if (score >= 300 && energy < maxEnergy) {
         score -= 300;
         energy = maxEnergy;
-        showNotification('Енергію повністю відновлено!');
+        showNotification('<strong>Енергію повністю відновлено!</strong>');
         updateDisplay();
     } else {
-        showNotification(energy >= maxEnergy ? 'Енергія вже повна!' : 'Недостатньо монет!');
+        showNotification(energy >= maxEnergy ? '<strong>Енергія вже повна!</strong>' : '<strong>Недостатньо монет!</strong>');
     }
 }
 
@@ -336,10 +336,10 @@ function showReferral(event) {
         exp += 1000;
         checkLevelUp();
         referralClaimed = true;
-        showNotification('Реферальний бонус використано! +100 монет!');
+        showNotification('<strong>Реферальний бонус використано! +100 монет!</strong>');
         updateDisplay();
     } else {
-        showNotification('Реферальний бонус уже використано!');
+        showNotification('<strong>Реферальний бонус уже використано!</strong>');
     }
 }
 
@@ -375,10 +375,10 @@ function completeTask(taskType, event) {
         if (taskType === 'youtube') taskYoutubeCompleted = true;
         if (taskType === 'tiktok') taskTiktokCompleted = true;
         checkLevelUp();
-        showNotification(`Завдання виконано! +${reward} монет!`);
+        showNotification(`<strong>Завдання виконано! +${reward} монет!</strong>`);
         updateDisplay();
     } else {
-        showNotification('Завдання вже виконано!');
+        showNotification('<strong>Завдання вже виконано!</strong>');
     }
 }
 
@@ -391,7 +391,7 @@ function claimDailyBonus(day, event) {
     const currentDay = canClaim ? dailyBonusStreak : dailyBonusStreak - 1;
 
     if (day !== currentDay || !canClaim) {
-        showNotification('Неможливо отримати цей бонус зараз!');
+        showNotification('<strong>Неможливо отримати цей бонус зараз!</strong>');
         return;
     }
 
@@ -415,9 +415,9 @@ function claimDailyBonus(day, event) {
     lastDailyBonusTime = currentTime;
     if (dailyBonusStreak >= 30) {
         dailyBonusStreak = 0;
-        showNotification(`Вітаємо! +${bonus.toLocaleString()} монет за ${dailyBonusStreak} день! Серію завершено!`);
+        showNotification(`<strong>Вітаємо! +${bonus.toLocaleString()} монет за ${dailyBonusStreak} день! Серію завершено!</strong>`);
     } else {
-        showNotification(`День ${dailyBonusStreak}: +${bonus.toLocaleString()} монет!`);
+        showNotification(`<strong>День ${dailyBonusStreak}: +${bonus.toLocaleString()} монет!</strong>`);
     }
     checkLevelUp();
     updateDisplay();
@@ -443,7 +443,7 @@ function regenerateEnergy() {
         checkLevelUp();
         if (tapBoostActive && currentTime >= tapBoostEndTime) {
             tapBoostActive = false;
-            showNotification('Тап буст закінчився!');
+            showNotification('<strong>Тап буст закінчився!</strong>');
         }
     }
     lastTime = currentTime;
@@ -461,15 +461,15 @@ async function connectWallet(event) {
             await window.ethereum.request({ method: 'eth_requestAccounts' });
             const accounts = await web3.eth.getAccounts();
             if (accounts.length > 0) {
-                showNotification(`Криптокошелек підключено: ${accounts[0]}`);
+                showNotification(`<strong>Криптокошелек підключено: ${accounts[0]}</strong>`);
             } else {
-                showNotification('Не вдалося підключити гаманець.');
+                showNotification('<strong>Не вдалося підключити гаманець.</strong>');
             }
         } catch (error) {
-            showNotification('Помилка підключення: ' + error.message);
+            showNotification('<strong>Помилка підключення: ' + error.message + '</strong>');
         }
     } else {
-        showNotification('Будь ласка, встановіть MetaMask або інший сумісний гаманець.');
+        showNotification('<strong>Будь ласка, встановіть MetaMask або інший сумісний гаманець.</strong>');
     }
 }
 
