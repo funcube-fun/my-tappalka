@@ -25,6 +25,10 @@
             <div class="energy-display">Енергія: <span id="energy">100/100</span></div>
             <div class="stats-container">
                 <div class="stat-box">Заробіток за тап: <span id="profit">+1</span></div>
+                <button id="boost-btn" class="boost-btn" onclick="openTab('boosts', event)" ontouchstart="openTab('boosts', event)">
+                    <span class="tab-icon">🚀</span>
+                    Буст
+                </button>
                 <div class="stat-box">Пасивний дохід: <span id="profit-hour">+0</span>/год</div>
             </div>
             <div id="notification" class="notification"></div>
@@ -105,7 +109,7 @@
                 <button id="daily-bonus-day12-btn" class="daily-bonus-btn" onclick="claimDailyBonus(11, event)" ontouchstart="claimDailyBonus(11, event)">📄 День 12: +120000</button>
                 <button id="daily-bonus-day13-btn" class="daily-bonus-btn" onclick="claimDailyBonus(12, event)" ontouchstart="claimDailyBonus(12, event)">📄 День 13: +130000</button>
                 <button id="daily-bonus-day14-btn" class="daily-bonus-btn" onclick="claimDailyBonus(13, event)" ontouchstart="claimDailyBonus(13, event)">📄 День 14: +140000</button>
-                <div id="daily-bonus-day15-btn" class="daily-bonus-btn" onclick="claimDailyBonus(14, event)" ontouchstart="claimDailyBonus(14, event)">📄 День 15: +150000</button>
+                <button id="daily-bonus-day15-btn" class="daily-bonus-btn" onclick="claimDailyBonus(14, event)" ontouchstart="claimDailyBonus(14, event)">📄 День 15: +150000</button>
                 <button id="daily-bonus-day16-btn" class="daily-bonus-btn" onclick="claimDailyBonus(15, event)" ontouchstart="claimDailyBonus(15, event)">📄 День 16: +160000</button>
                 <button id="daily-bonus-day17-btn" class="daily-bonus-btn" onclick="claimDailyBonus(16, event)" ontouchstart="claimDailyBonus(16, event)">📄 День 17: +170000</button>
                 <button id="daily-bonus-day18-btn" class="daily-bonus-btn" onclick="claimDailyBonus(17, event)" ontouchstart="claimDailyBonus(17, event)">📄 День 18: +180000</button>
@@ -154,10 +158,6 @@
             <button class="tab-button" data-tab="upgrades" onclick="openTab('upgrades', event)" ontouchstart="openTab('upgrades', event)">
                 <span class="tab-icon">⚙️</span>
                 <span class="tab-label">Покращення</span>
-            </button>
-            <button class="tab-button" data-tab="boosts" onclick="openTab('boosts', event)" ontouchstart="openTab('boosts', event)">
-                <span class="tab-icon">🚀</span>
-                <span class="tab-label">Буст</span>
             </button>
             <button class="tab-button" data-tab="tasks" onclick="openTab('tasks', event)" ontouchstart="openTab('tasks', event)">
                 <span class="tab-icon">📝</span>
