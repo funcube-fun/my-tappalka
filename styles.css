@@ -78,6 +78,7 @@ body {
     border-radius: 15px;
     width: 80%;
     box-sizing: border-box;
+    font-weight: bold;
 }
 
 #hamster-image {
@@ -113,6 +114,7 @@ body {
     color: #ffd700;
     font-size: 2rem;
     animation: tapUp 0.7s ease-out;
+    font-weight: bold;
 }
 
 @keyframes tapUp {
@@ -139,6 +141,7 @@ body {
     text-align: center;
     color: #E0E0E0;
     margin: 1vw 0;
+    font-weight: bold;
 }
 
 .progress-bar {
@@ -169,6 +172,7 @@ body {
     background: #2a2a5a;
     padding: 1vw 2vw;
     border-radius: 15px;
+    font-weight: bold;
 }
 
 .stats-container {
@@ -187,6 +191,7 @@ body {
     flex: 1;
     max-width: 200px;
     text-align: center;
+    font-weight: bold;
 }
 
 .boost-btn {
@@ -243,12 +248,14 @@ body {
     font-size: 1rem;
     margin: 0 0 0.8vw;
     color: #ffd700;
+    font-weight: bold;
 }
 
 .upgrade-card p, .boost-card p {
     font-size: 0.8rem;
     margin: 0.4vw 0;
     color: #E0E0E0;
+    font-weight: bold;
 }
 
 .progress-bar-small {
@@ -355,6 +362,7 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    font-weight: bold;
 }
 
 .notification {
@@ -369,6 +377,7 @@ body {
     display: none;
     z-index: 1000;
     animation: fade 3s ease-out;
+    font-weight: bold;
 }
 
 @keyframes fade {
@@ -400,6 +409,7 @@ body {
     margin: 0.5vw;
     cursor: pointer;
     box-sizing: border-box;
+    font-weight: bold;
 }
 
 #tasks-content button:hover:not(:disabled), .daily-bonus-btn:hover:not(:disabled), #boosts-content button:hover:not(:disabled) {
@@ -427,6 +437,7 @@ body {
     height: 60px;
     font-size: 0.9rem;
     border-radius: 15px;
+    font-weight: bold;
 }
 
 .daily-bonus-btn.completed {
@@ -456,6 +467,7 @@ body {
     color: #ffd700;
     font-size: 1.5rem;
     margin-bottom: 1vw;
+    font-weight: bold;
 }
 
 .task-icon {
@@ -465,6 +477,7 @@ body {
 
 #boosts-content p, #listing-content p {
     color: #E0E0E0;
+    font-weight: bold;
 }
 
 .wallet-connect {
@@ -482,6 +495,7 @@ body {
     padding: 1vw 2vw;
     cursor: pointer;
     transition: transform 0.3s ease;
+    font-weight: bold;
 }
 
 #connect-wallet-btn:hover {
@@ -498,6 +512,7 @@ body {
     width: 100%;
     text-align: center;
     color: #999;
+    font-weight: bold;
 }
 
 @media (max-width: 768px) {
