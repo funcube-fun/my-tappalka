@@ -451,6 +451,28 @@ function regenerateEnergy() {
     requestAnimationFrame(regenerateEnergy);
 }
 
+async function connectWallet(event) {
+    event.preventDefault();
+    if (Date.now() - lastEventTime < 100) return;
+    lastEventTime = Date.now();
+    if (window.ethereum) {
+        try {
+            const web3 = new Web3(window.ethereum);
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const accounts = await web3.eth.getAccounts();
+            if (accounts.length > 0) {
+                showNotification(`Криптокошелек підключено: ${accounts[0]}`);
+            } else {
+                showNotification('Не вдалося підключити гаманець.');
+            }
+        } catch (error) {
+            showNotification('Помилка підключення: ' + error.message);
+        }
+    } else {
+        showNotification('Будь ласка, встановіть MetaMask або інший сумісний гаманець.');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.expand();
