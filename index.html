@@ -25,12 +25,12 @@
             <div class="energy-display">Енергія: <span id="energy">100/100</span></div>
             <div class="stats-container">
                 <div class="stat-box">Заробіток за тап: <span id="profit">+1</span></div>
+                <button id="boost-btn" class="boost-btn" onclick="openTab('boosts', event)" ontouchstart="openTab('boosts', event)">
+                    <span class="tab-icon">🚀</span>
+                    Буст
+                </button>
                 <div class="stat-box">Пасивний дохід: <span id="profit-hour">+0</span>/год</div>
             </div>
-            <button id="boost-btn" class="boost-btn" onclick="openTab('boosts', event)" ontouchstart="openTab('boosts', event)">
-                <span class="tab-icon">🚀</span>
-                Буст
-            </button>
             <div id="notification" class="notification"></div>
         </div>
         <div id="upgrades-content" class="tab-content">
@@ -144,28 +144,11 @@
                 </div>
             </div>
         </div>
-        <div id="listing-content" class="tab-content">
-            <h2>Листинг UkraineCoin</h2>
-            <div class="listing-info">
-                <h3>Інформація про токен</h3>
-                <p><strong>Назва:</strong> UkraineCoin (UKC)</p>
-                <p><strong>Загальна емісія:</strong> 1,000,000,000 UKC</p>
-                <p><strong>Розподіл:</strong></p>
-                <ul>
-                    <li>50% - Гравці (на основі зібраних монет)</li>
-                    <li>20% - Команда розробників</li>
-                    <li>20% - Ліквідність на біржах</li>
-                    <li>10% - Маркетинг та партнерства</li>
-                </ul>
-                <p><strong>Дата листингу:</strong> Q4 2025 (очікується)</p>
-                <p><strong>Механіка розрахунку:</strong> Ваші UkraineCoins будуть конвертовані у токени UKC за курсом, який залежить від загальної активності гравців. Остаточний курс буде оголошено перед листингом.</p>
-                <p><strong>Біржі:</strong> Очікується лістинг на провідних децентралізованих та централізованих біржах.</p>
-            </div>
-            <div class="wallet-connect">
-                <h3>Підключити криптокошелек</h3>
-                <p id="wallet-status">Кошелек не підключено</p>
-                <button id="connect-wallet-btn" onclick="connectWallet(event)" ontouchstart="connectWallet(event)">Підключити кошелек 🦊</button>
-            </div>
+        <div id="donate-content" class="tab-content">
+            <h2>Допомога ЗСУ</h2>
+            <input type="number" id="donation-amount" placeholder="Сума (грн)" min="20">
+            <button onclick="makeDonation(event)" ontouchstart="makeDonation(event)">Пожертвувати</button>
+            <p>Симуляція. Для реальних пожертв зверніться до офіційних фондів.</p>
         </div>
         <div id="tabs">
             <button class="tab-button active" data-tab="main" onclick="openTab('main', event)" ontouchstart="openTab('main', event)">
@@ -184,9 +167,9 @@
                 <span class="tab-icon">🎁</span>
                 <span class="tab-label">Бонуси</span>
             </button>
-            <button class="tab-button" data-tab="listing" onclick="openTab('listing', event)" ontouchstart="openTab('listing', event)">
-                <span class="tab-icon">📊</span>
-                <span class="tab-label">Листинг</span>
+            <button class="tab-button" data-tab="donate" onclick="openTab('donate', event)" ontouchstart="openTab('donate', event)">
+                <span class="tab-icon">❤️</span>
+                <span class="tab-label">Донат</span>
             </button>
         </div>
         <div id="footer-text">© 2025 UkraineCoin</div>
