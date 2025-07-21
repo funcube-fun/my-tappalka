@@ -146,7 +146,10 @@
         </div>
         <div id="listing-content" class="tab-content">
             <h2>Листинг UkraineCoin</h2>
-            <p>Деталі про листинг будуть оголошені найближчим часом.</p>
+            <p>UkraineCoin готується до листингу на провідних криптовалютних біржах! Ця монета, натхненна підтримкою України, пропонує унікальну можливість для інвесторів приєднатися до зростання криптосообщества. Очікуйте офіційного анонсу найближчим часом, який включатиме деталі про біржі, дати та умови. Приєднуйтесь до нас і станьте частиною цього історичного моменту!</p>
+            <div class="wallet-connect">
+                <button id="connect-wallet-btn" onclick="connectWallet(event)" ontouchstart="connectWallet(event)">Підключити криптокошелек</button>
+            </div>
         </div>
         <div id="tabs">
             <button class="tab-button active" data-tab="main" onclick="openTab('main', event)" ontouchstart="openTab('main', event)">
@@ -173,6 +176,7 @@
         <div id="footer-text">© 2025 UkraineCoin</div>
     </div>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
