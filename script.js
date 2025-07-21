@@ -423,25 +423,6 @@ function claimDailyBonus(day, event) {
     updateDisplay();
 }
 
-function makeDonation(event) {
-    event.preventDefault();
-    if (Date.now() - lastEventTime < 100) return;
-    lastEventTime = Date.now();
-    const amount = parseInt(document.getElementById('donation-amount').value);
-    if (amount >= 20) {
-        if (confirm(`Підтвердити пожертву ${amount} грн?`)) {
-            score += amount * 3;
-            exp += amount * 30;
-            checkLevelUp();
-            showNotification(`Дякуємо за ${amount} грн! +${amount * 3} монет! (Симуляція)`);
-            document.getElementById('donation-amount').value = '';
-            updateDisplay();
-        }
-    } else {
-        showNotification('Мінімум 20 грн.');
-    }
-}
-
 function openTab(tabName, event) {
     event.preventDefault();
     if (Date.now() - lastEventTime < 100) return;
