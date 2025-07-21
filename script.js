@@ -66,6 +66,7 @@ function loadGame() {
         walletAddress = data.walletAddress || '';
     }
     updateDisplay();
+    openTab('main', { currentTarget: document.querySelector('[data-tab="main"]') }); // Устанавливаем главную вкладку по умолчанию
 }
 
 function saveGame() {
