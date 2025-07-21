@@ -105,7 +105,7 @@
                 <button id="daily-bonus-day12-btn" class="daily-bonus-btn" onclick="claimDailyBonus(11, event)" ontouchstart="claimDailyBonus(11, event)">📄 День 12: +120000</button>
                 <button id="daily-bonus-day13-btn" class="daily-bonus-btn" onclick="claimDailyBonus(12, event)" ontouchstart="claimDailyBonus(12, event)">📄 День 13: +130000</button>
                 <button id="daily-bonus-day14-btn" class="daily-bonus-btn" onclick="claimDailyBonus(13, event)" ontouchstart="claimDailyBonus(13, event)">📄 День 14: +140000</button>
-                <button id="daily-bonus-day15-btn" class="daily-bonus-btn" onclick="claimDailyBonus(14, event)" ontouchstart="claimDailyBonus(14, event)">📄 День 15: +150000</button>
+                <div id="daily-bonus-day15-btn" class="daily-bonus-btn" onclick="claimDailyBonus(14, event)" ontouchstart="claimDailyBonus(14, event)">📄 День 15: +150000</button>
                 <button id="daily-bonus-day16-btn" class="daily-bonus-btn" onclick="claimDailyBonus(15, event)" ontouchstart="claimDailyBonus(15, event)">📄 День 16: +160000</button>
                 <button id="daily-bonus-day17-btn" class="daily-bonus-btn" onclick="claimDailyBonus(16, event)" ontouchstart="claimDailyBonus(16, event)">📄 День 17: +170000</button>
                 <button id="daily-bonus-day18-btn" class="daily-bonus-btn" onclick="claimDailyBonus(17, event)" ontouchstart="claimDailyBonus(17, event)">📄 День 18: +180000</button>
@@ -123,6 +123,23 @@
                 <button id="daily-bonus-day30-btn" class="daily-bonus-btn" onclick="claimDailyBonus(29, event)" ontouchstart="claimDailyBonus(29, event)">📄 День 30: +300000</button>
             </div>
         </div>
+        <div id="boosts-content" class="tab-content">
+            <h2>Бусти</h2>
+            <div class="boosts-grid">
+                <div class="boost-card">
+                    <h3>Тап Буст</h3>
+                    <p>Збільшує заробіток за тап у 2 рази на 30 секунд</p>
+                    <p>Ціна: 500 монет</p>
+                    <button id="tap-boost-btn" onclick="activateTapBoost(event)" ontouchstart="activateTapBoost(event)">Активувати 🚀</button>
+                </div>
+                <div class="boost-card">
+                    <h3>Повне відновлення енергії</h3>
+                    <p>Миттєво відновлює всю енергію</p>
+                    <p>Ціна: 300 монет</p>
+                    <button id="energy-boost-btn" onclick="activateEnergyBoost(event)" ontouchstart="activateEnergyBoost(event)">Активувати ⚡️</button>
+                </div>
+            </div>
+        </div>
         <div id="donate-content" class="tab-content">
             <h2>Допомога ЗСУ</h2>
             <input type="number" id="donation-amount" placeholder="Сума (грн)" min="20">
@@ -137,6 +154,10 @@
             <button class="tab-button" data-tab="upgrades" onclick="openTab('upgrades', event)" ontouchstart="openTab('upgrades', event)">
                 <span class="tab-icon">⚙️</span>
                 <span class="tab-label">Покращення</span>
+            </button>
+            <button class="tab-button" data-tab="boosts" onclick="openTab('boosts', event)" ontouchstart="openTab('boosts', event)">
+                <span class="tab-icon">🚀</span>
+                <span class="tab-label">Буст</span>
             </button>
             <button class="tab-button" data-tab="tasks" onclick="openTab('tasks', event)" ontouchstart="openTab('tasks', event)">
                 <span class="tab-icon">📝</span>
