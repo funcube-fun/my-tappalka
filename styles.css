@@ -467,6 +467,31 @@ body {
     color: #E0E0E0;
 }
 
+.wallet-connect {
+    margin-top: 2vw;
+    text-align: center;
+}
+
+#connect-wallet-btn {
+    background: linear-gradient(45deg, #00ff7f, #00cc44);
+    color: #1a1a3b;
+    border: none;
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    padding: 1vw 2vw;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#connect-wallet-btn:hover {
+    transform: scale(1.05);
+}
+
+#connect-wallet-btn:active {
+    transform: scale(0.95);
+}
+
 #footer-text {
     position: fixed;
     bottom: 5vw;
@@ -507,6 +532,7 @@ body {
     #boosts-content p, #listing-content p { font-size: 3vw; }
     #tasks-content button { font-size: 3.5vw; padding: 2vw 4vw; }
     .task-icon { font-size: 4.5vw; }
+    #connect-wallet-btn { font-size: 4vw; padding: 2vw 4vw; }
 }
 
 @media (min-width: 769px) {
@@ -541,4 +567,5 @@ body {
     #boosts-content p, #listing-content p { font-size: 16px; }
     #tasks-content button { font-size: 1rem; padding: 10px 20px; }
     .task-icon { font-size: 1.2rem; }
+    #connect-wallet-btn { font-size: 1.2rem; padding: 10px 20px; }
 }
