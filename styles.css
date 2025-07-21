@@ -173,7 +173,7 @@ body {
 
 .stats-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     gap: 1vw;
     width: 80%;
     margin: 1vw 0;
@@ -196,8 +196,7 @@ body {
     border-radius: 15px;
     font-weight: 600;
     font-size: 1.2rem;
-    padding: 1vw 2vw;
-    width: 80%;
+    flex: 1;
     max-width: 200px;
     display: flex;
     flex-direction: column;
@@ -205,7 +204,6 @@ body {
     justify-content: center;
     cursor: pointer;
     transition: transform 0.3s ease;
-    margin: 1vw 0;
 }
 
 .boost-btn:hover {
@@ -379,88 +377,6 @@ body {
     100% { opacity: 0; }
 }
 
-#listing-content, #boosts-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 800px;
-}
-
-.listing-info {
-    background: #2a2a5a;
-    border-radius: 12px;
-    padding: 1.5vw;
-    width: 100%;
-    margin-bottom: 2vw;
-    box-sizing: border-box;
-}
-
-.listing-info h3 {
-    font-size: 1.2rem;
-    color: #ffd700;
-    margin: 0 0 1vw;
-}
-
-.listing-info p {
-    font-size: 0.9rem;
-    color: #E0E0E0;
-    margin: 0.5vw 0;
-}
-
-.listing-info ul {
-    list-style: disc;
-    padding-left: 20px;
-    margin: 0.5vw 0;
-    color: #E0E0E0;
-}
-
-.listing-info ul li {
-    font-size: 0.9rem;
-    margin-bottom: 0.5vw;
-}
-
-.wallet-connect {
-    background: #2a2a5a;
-    border-radius: 12px;
-    padding: 1.5vw;
-    width: 100%;
-    text-align: center;
-    box-sizing: border-box;
-}
-
-.wallet-connect h3 {
-    font-size: 1.2rem;
-    color: #ffd700;
-    margin: 0 0 1vw;
-}
-
-#wallet-status {
-    font-size: 0.9rem;
-    color: #E0E0E0;
-    margin: 0.5vw 0;
-}
-
-#connect-wallet-btn {
-    background: linear-gradient(45deg, #ffaa00, #ffdd55);
-    color: #1a1a3b;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    padding: 0.8vw 1.5vw;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-#connect-wallet-btn:hover:not(:disabled) {
-    transform: scale(1.05);
-}
-
-#connect-wallet-btn:active {
-    transform: scale(0.95);
-}
-
 #donate-content input, #boosts-content input {
     background: #2a2a5a;
     border: none;
@@ -474,7 +390,7 @@ body {
     outline: none;
 }
 
-#tasks-content button, .daily-bonus-btn, #boosts-content button {
+#donate-content button, #tasks-content button, .daily-bonus-btn, #boosts-content button {
     background: linear-gradient(45deg, #0088cc, #00b7ff);
     color: #ffffff;
     border: none;
@@ -486,11 +402,11 @@ body {
     box-sizing: border-box;
 }
 
-#tasks-content button:hover:not(:disabled), .daily-bonus-btn:hover:not(:disabled), #boosts-content button:hover:not(:disabled) {
+#donate-content button:hover:not(:disabled), #tasks-content button:hover:not(:disabled), .daily-bonus-btn:hover:not(:disabled), #boosts-content button:hover:not(:disabled) {
     transform: scale(1.05);
 }
 
-#tasks-content button:active, .daily-bonus-btn:active, #boosts-content button:active {
+#donate-content button:active, #tasks-content button:active, .daily-bonus-btn:active, #boosts-content button:active {
     transform: scale(0.95);
 }
 
@@ -536,7 +452,7 @@ body {
     100% { transform: scale(1); }
 }
 
-#bonuses-content h2, #boosts-content h2, #listing-content h2 {
+#bonuses-content h2, #boosts-content h2 {
     color: #ffd700;
     font-size: 1.5rem;
     margin-bottom: 1vw;
@@ -547,13 +463,9 @@ body {
     font-size: 1.2rem;
 }
 
-#footer-text {
-    position: fixed;
-    bottom: 5vw;
-    width: 100%;
-    text-align: center;
-    color: #999;
-}
+#donate-content h2, #boosts-content h2 { color: #ffd700; }
+#donate-content p, #boosts-content p { color: #E0E0E0; }
+#footer-text { position: fixed; bottom: 5vw; width: 100%; text-align: center; color: #999; }
 
 @media (max-width: 768px) {
     #game-container { font-size: 4vw; }
@@ -565,8 +477,7 @@ body {
     .progress-bar { margin: 2vw 0; }
     .energy-display { font-size: 4vw; margin: 2vw 0; }
     .stats-container { gap: 2vw; }
-    .stat-box { font-size: 3.5vw; padding: 2vw 3vw; margin: 1vw 0; max-width: 150px; }
-    .boost-btn { font-size: 3.5vw; padding: 2vw 3vw; margin: 2vw 0; max-width: 80%; }
+    .stat-box, .boost-btn { font-size: 3.5vw; padding: 2vw 3vw; margin: 1vw 0; max-width: 150px; }
     .boost-btn .tab-icon { font-size: 5vw; }
     .upgrades-grid, .boosts-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2vw; }
     .upgrade-card, .boost-card { padding: 2vw; }
@@ -583,16 +494,12 @@ body {
     .particle { width: 3px; height: 3px; }
     .daily-bonus-container { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 2vw; }
     .daily-bonus-btn { font-size: 3vw; height: 10vw; padding: 2vw; }
-    .listing-info { padding: 2vw; }
-    .listing-info h3 { font-size: 4vw; }
-    .listing-info p, .listing-info ul li { font-size: 3vw; }
-    .wallet-connect { padding: 2vw; }
-    .wallet-connect h3 { font-size: 4vw; }
-    #wallet-status { font-size: 3vw; }
-    #connect-wallet-btn { font-size: 3vw; padding: 1.5vw 3vw; }
+    #donate-content input, #boosts-content input { padding: 3vw; font-size: 4vw; }
+    #donate-content h2, #boosts-content h2 { font-size: 5vw; }
+    #donate-content p, #boosts-content p { font-size: 3vw; }
     #tasks-content button { font-size: 3.5vw; padding: 2vw 4vw; }
     .task-icon { font-size: 4.5vw; }
-    #bonuses-content h2, #boosts-content h2, #listing-content h2 { font-size: 5vw; }
+    #bonuses-content h2, #boosts-content h2 { font-size: 5vw; }
 }
 
 @media (min-width: 769px) {
@@ -605,8 +512,7 @@ body {
     .progress-bar { margin: 10px 0; }
     .energy-display { font-size: 1.2rem; margin: 10px 0; }
     .stats-container { margin: 10px 0; }
-    .stat-box { font-size: 1rem; padding: 10px 20px; max-width: 200px; }
-    .boost-btn { font-size: 1rem; padding: 10px 20px; max-width: 200px; margin: 10px 0; }
+    .stat-box, .boost-btn { font-size: 1rem; padding: 10px 20px; max-width: 200px; }
     .boost-btn .tab-icon { font-size: 1.5rem; }
     .upgrades-grid, .boosts-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5vw; }
     .upgrade-card, .boost-card { padding: 12px; }
@@ -623,14 +529,10 @@ body {
     .particle { width: 5px; height: 5px; }
     .daily-bonus-container { grid-template-columns: repeat(5, 1fr); gap: 1vw; }
     .daily-bonus-btn { font-size: 0.9rem; height: 60px; }
-    .listing-info { padding: 15px; }
-    .listing-info h3 { font-size: 1.2rem; }
-    .listing-info p, .listing-info ul li { font-size: 0.9rem; }
-    .wallet-connect { padding: 15px; }
-    .wallet-connect h3 { font-size: 1.2rem; }
-    #wallet-status { font-size: 0.9rem; }
-    #connect-wallet-btn { font-size: 0.9rem; padding: 8px 15px; }
+    #donate-content input, #boosts-content input { padding: 12px; font-size: 16px; }
+    #donate-content h2, #boosts-content h2 { font-size: 28px; }
+    #donate-content p, #boosts-content p { font-size: 16px; }
     #tasks-content button { font-size: 1rem; padding: 10px 20px; }
     .task-icon { font-size: 1.2rem; }
-    #bonuses-content h2, #boosts-content h2, #listing-content h2 { font-size: 28px; }
+    #bonuses-content h2, #boosts-content h2 { font-size: 28px; }
 }
