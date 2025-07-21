@@ -173,7 +173,7 @@ body {
 
 .stats-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     gap: 1vw;
     width: 80%;
     margin: 1vw 0;
@@ -196,7 +196,8 @@ body {
     border-radius: 15px;
     font-weight: 600;
     font-size: 1.2rem;
-    flex: 1;
+    padding: 1vw 2vw;
+    width: 80%;
     max-width: 200px;
     display: flex;
     flex-direction: column;
@@ -204,6 +205,7 @@ body {
     justify-content: center;
     cursor: pointer;
     transition: transform 0.3s ease;
+    margin: 1vw 0;
 }
 
 .boost-btn:hover {
@@ -563,7 +565,8 @@ body {
     .progress-bar { margin: 2vw 0; }
     .energy-display { font-size: 4vw; margin: 2vw 0; }
     .stats-container { gap: 2vw; }
-    .stat-box, .boost-btn { font-size: 3.5vw; padding: 2vw 3vw; margin: 1vw 0; max-width: 150px; }
+    .stat-box { font-size: 3.5vw; padding: 2vw 3vw; margin: 1vw 0; max-width: 150px; }
+    .boost-btn { font-size: 3.5vw; padding: 2vw 3vw; margin: 2vw 0; max-width: 80%; }
     .boost-btn .tab-icon { font-size: 5vw; }
     .upgrades-grid, .boosts-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2vw; }
     .upgrade-card, .boost-card { padding: 2vw; }
@@ -580,7 +583,6 @@ body {
     .particle { width: 3px; height: 3px; }
     .daily-bonus-container { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 2vw; }
     .daily-bonus-btn { font-size: 3vw; height: 10vw; padding: 2vw; }
-    #listing-content, #boosts-content { max-width: 100%; }
     .listing-info { padding: 2vw; }
     .listing-info h3 { font-size: 4vw; }
     .listing-info p, .listing-info ul li { font-size: 3vw; }
@@ -603,7 +605,8 @@ body {
     .progress-bar { margin: 10px 0; }
     .energy-display { font-size: 1.2rem; margin: 10px 0; }
     .stats-container { margin: 10px 0; }
-    .stat-box, .boost-btn { font-size: 1rem; padding: 10px 20px; max-width: 200px; }
+    .stat-box { font-size: 1rem; padding: 10px 20px; max-width: 200px; }
+    .boost-btn { font-size: 1rem; padding: 10px 20px; max-width: 200px; margin: 10px 0; }
     .boost-btn .tab-icon { font-size: 1.5rem; }
     .upgrades-grid, .boosts-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5vw; }
     .upgrade-card, .boost-card { padding: 12px; }
