@@ -30,6 +30,7 @@ let tapBoostActive = false;
 let tapBoostEndTime = 0;
 let referralCode = '';
 let referredFriends = [];
+let hasUsedReferralCode = false;
 
 function loadGame() {
     const savedData = localStorage.getItem('ukraineCoinGame');
@@ -64,6 +65,7 @@ function loadGame() {
         tapBoostEndTime = data.tapBoostEndTime || 0;
         referralCode = data.referralCode || generateReferralCode();
         referredFriends = data.referredFriends || [];
+        hasUsedReferralCode = data.hasUsedReferralCode || false;
     } else {
         referralCode = generateReferralCode();
     }
@@ -100,7 +102,8 @@ function saveGame() {
         tapBoostActive,
         tapBoostEndTime,
         referralCode,
-        referredFriends
+        referredFriends,
+        hasUsedReferralCode
     };
     localStorage.setItem('ukraineCoinGame', JSON.stringify(gameData));
 }
@@ -149,6 +152,7 @@ function updateDisplay() {
     document.getElementById('upgrade-regen-btn').disabled = score < 300 * regenLevel;
     document.getElementById('tap-boost-btn').disabled = score < 500 || tapBoostActive;
     document.getElementById('energy-boost-btn').disabled = score < 300 || energy >= maxEnergy;
+    document.getElementById('submit-referral-btn').disabled = hasUsedReferralCode;
 
     const canClaim = Date.now() - lastDailyBonusTime >= dailyBonusCooldown;
     const currentDay = canClaim ? dailyBonusStreak : dailyBonusStreak - 1;
@@ -176,7 +180,7 @@ function updateDisplay() {
     document.getElementById('task-telegram3-btn').disabled = taskTelegram3Completed;
     document.getElementById('task-youtube-btn').disabled = taskYoutubeCompleted;
     document.getElementById('task-tiktok-btn').disabled = taskTiktokCompleted;
-    document.getElementById('referral-link').value = `https://ukrainecoin.com?ref=${referralCode}`;
+    document.getElementById('referral-link').value = `${window.location.origin}?ref=${referralCode}`;
     saveGame();
 }
 
@@ -462,7 +466,7 @@ function copyReferralLink(event) {
         document.execCommand('copy');
         showNotification('Посилання скопійовано!');
         if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.openLink(`https://t.me/share/url?url=${encodeURIComponent(`https://ukrainecoin.com?ref=${referralCode}`)}`);
+            window.Telegram.WebApp.openLink(`https://t.me/share/url?url=${encodeURIComponent(`${window.location.origin}?ref=${referralCode}`)}`);
         }
     } catch (err) {
         showNotification('Не вдалося скопіювати посилання');
@@ -481,6 +485,70 @@ function simulateFriendJoin(event) {
     showNotification(`Новий друг приєднався! +100 монет!`);
     updateFriendsList();
     updateDisplay();
+    // Save referral code to mock database
+    let referralDb = JSON.parse(localStorage.getItem('referralDb') || '[]');
+    referralDb.push(friendCode);
+    localStorage.setItem('referralDb', JSON.stringify(referralDb));
+}
+
+function useReferralCode(event) {
+    event.preventDefault();
+    if (Date.now() - lastEventTime < 100) return;
+    lastEventTime = Date.now();
+    if (hasUsedReferralCode) {
+        showNotification('Ви вже використали реферальний код!');
+        return;
+    }
+    const code = document.getElementById('referral-code-input').value.trim().toUpperCase();
+    if (!code.match(/^UKC-[A-Z0-9]{8}$/)) {
+        showNotification('Невірний формат коду! Має бути UKC-XXXXXXXX');
+        return;
+    }
+    if (code === referralCode) {
+        showNotification('Ви не можете використати власний код!');
+        return;
+    }
+    // Simulate checking code in database
+    let referralDb = JSON.parse(localStorage.getItem('referralDb') || '[]');
+    if (referralDb.includes(code)) {
+        // Award new user
+        score += 100;
+        exp += 1000;
+        hasUsedReferralCode = true;
+        checkLevelUp();
+        showNotification('Код використано! +100 монет!');
+        // Simulate awarding referrer (in real app, this would be server-side)
+        referredFriends.push({ code: 'FRIEND-' + code.slice(4), level: 1, rewards: 100 });
+        score += 100; // Assuming referrer is the same user for testing
+        showNotification(`Ви запросили друга через код! +100 монет!`);
+        updateFriendsList();
+        updateDisplay();
+    } else {
+        showNotification('Код не знайдено!');
+    }
+}
+
+function simulateUseReferralCode(event) {
+    event.preventDefault();
+    if (Date.now() - lastEventTime < 100) return;
+    lastEventTime = Date.now();
+    if (hasUsedReferralCode) {
+        showNotification('Ви вже використали реферальний код!');
+        return;
+    }
+    // Simulate picking a valid code from database
+    let referralDb = JSON.parse(localStorage.getItem('referralDb') || '[]');
+    if (referralDb.length === 0) {
+        referralDb.push(referralCode); // Add current user's code for testing
+        localStorage.setItem('referralDb', JSON.stringify(referralDb));
+    }
+    const validCode = referralDb.find(code => code !== referralCode) || referralDb[0];
+    if (!validCode) {
+        showNotification('Немає доступних кодів для тестування!');
+        return;
+    }
+    document.getElementById('referral-code-input').value = validCode;
+    useReferralCode(event);
 }
 
 function checkFriendMilestones() {
