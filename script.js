@@ -15,8 +15,8 @@ let dailyBonusStreak = 0;
 const dailyBonusCooldown = 24 * 60 * 60 * 1000;
 let level = 1;
 let exp = 0;
-let baseExpToLevel = 500; // Reduced base to balance quadratic scaling
-let expToLevel = baseExpToLevel * (level * level); // Quadratic scaling for level progression
+let baseExpToLevel = 500;
+let expToLevel = baseExpToLevel * (level * level);
 let referralClaimed = false;
 let taskVideoCompleted = false;
 let taskTelegram1Completed = false;
@@ -28,6 +28,8 @@ let upgradesToday = 0;
 let lastEventTime = 0;
 let tapBoostActive = false;
 let tapBoostEndTime = 0;
+let referralCode = '';
+let referredFriends = [];
 
 function loadGame() {
     const savedData = localStorage.getItem('ukraineCoinGame');
@@ -49,7 +51,7 @@ function loadGame() {
         dailyBonusStreak = data.dailyBonusStreak || 0;
         level = data.level || 1;
         exp = data.exp || 0;
-        expToLevel = baseExpToLevel * (level * level); // Apply quadratic scaling on load
+        expToLevel = baseExpToLevel * (level * level);
         referralClaimed = data.referralClaimed || false;
         taskVideoCompleted = data.taskVideoCompleted || false;
         taskTelegram1Completed = data.taskTelegram1Completed || false;
@@ -60,8 +62,13 @@ function loadGame() {
         upgradesToday = data.upgradesToday || 0;
         tapBoostActive = data.tapBoostActive || false;
         tapBoostEndTime = data.tapBoostEndTime || 0;
+        referralCode = data.referralCode || generateReferralCode();
+        referredFriends = data.referredFriends || [];
+    } else {
+        referralCode = generateReferralCode();
     }
     updateDisplay();
+    updateFriendsList();
 }
 
 function saveGame() {
@@ -91,9 +98,15 @@ function saveGame() {
         taskTiktokCompleted,
         upgradesToday,
         tapBoostActive,
-        tapBoostEndTime
+        tapBoostEndTime,
+        referralCode,
+        referredFriends
     };
     localStorage.setItem('ukraineCoinGame', JSON.stringify(gameData));
+}
+
+function generateReferralCode() {
+    return 'UKC-' + Math.random().toString(36).substr(2, 8).toUpperCase();
 }
 
 function calculateLevelReward(level) {
@@ -137,7 +150,6 @@ function updateDisplay() {
     document.getElementById('tap-boost-btn').disabled = score < 500 || tapBoostActive;
     document.getElementById('energy-boost-btn').disabled = score < 300 || energy >= maxEnergy;
 
-    // Update daily bonus buttons
     const canClaim = Date.now() - lastDailyBonusTime >= dailyBonusCooldown;
     const currentDay = canClaim ? dailyBonusStreak : dailyBonusStreak - 1;
     for (let i = 0; i < 30; i++) {
@@ -164,7 +176,24 @@ function updateDisplay() {
     document.getElementById('task-telegram3-btn').disabled = taskTelegram3Completed;
     document.getElementById('task-youtube-btn').disabled = taskYoutubeCompleted;
     document.getElementById('task-tiktok-btn').disabled = taskTiktokCompleted;
+    document.getElementById('referral-link').value = `${window.location.origin}?ref=${referralCode}`;
     saveGame();
+}
+
+function updateFriendsList() {
+    const friendsList = document.getElementById('friends-list-items');
+    friendsList.innerHTML = '';
+    if (referredFriends.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'Поки що немає запрошених друзів';
+        friendsList.appendChild(li);
+    } else {
+        referredFriends.forEach(friend => {
+            const li = document.createElement('li');
+            li.textContent = `Друг ${friend.code}: Рівень ${friend.level}, Нагороди: ${friend.rewards}`;
+            friendsList.appendChild(li);
+        });
+    }
 }
 
 function tapCoin(event) {
@@ -198,7 +227,6 @@ function createTapAnimation(event) {
     hamster.appendChild(anim);
     setTimeout(() => anim.remove(), 700);
 
-    // Add particle effects
     for (let i = 0; i < 5; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle';
@@ -217,10 +245,11 @@ function checkLevelUp() {
     while (exp >= expToLevel) {
         exp -= expToLevel;
         level++;
-        expToLevel = baseExpToLevel * (level * level); // Quadratic scaling for next level
+        expToLevel = baseExpToLevel * (level * level);
         const reward = calculateLevelReward(level - 1);
         score += reward;
         showNotification(`Рівень ${level} досягнуто! +${reward} UkraineCoins!`);
+        checkFriendMilestones();
     }
 }
 
@@ -300,7 +329,7 @@ function activateTapBoost(event) {
     if (score >= 500 && !tapBoostActive) {
         score -= 500;
         tapBoostActive = true;
-        tapBoostEndTime = Date.now() + 30 * 1000; // 30 seconds
+        tapBoostEndTime = Date.now() + 30 * 1000;
         showNotification('Тап буст активовано! Заробіток x2 на 30 секунд!');
         setTimeout(() => {
             tapBoostActive = false;
@@ -423,6 +452,54 @@ function claimDailyBonus(day, event) {
     updateDisplay();
 }
 
+function copyReferralLink(event) {
+    event.preventDefault();
+    if (Date.now() - lastEventTime < 100) return;
+    lastEventTime = Date.now();
+    const referralInput = document.getElementById('referral-link');
+    referralInput.select();
+    try {
+        document.execCommand('copy');
+        showNotification('Посилання скопійовано!');
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.openLink(`https://t.me/share/url?url=${encodeURIComponent(referralInput.value)}`);
+        }
+    } catch (err) {
+        showNotification('Не вдалося скопіювати посилання');
+    }
+}
+
+function simulateFriendJoin(event) {
+    event.preventDefault();
+    if (Date.now() - lastEventTime < 100) return;
+    lastEventTime = Date.now();
+    const friendCode = 'FRIEND-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+    referredFriends.push({ code: friendCode, level: 1, rewards: 100 });
+    score += 100;
+    exp += 1000;
+    checkLevelUp();
+    showNotification(`Новий друг приєднався! +100 монет!`);
+    updateFriendsList();
+    updateDisplay();
+}
+
+function checkFriendMilestones() {
+    referredFriends = referredFriends.map(friend => {
+        if (friend.level < 5 && Math.random() < 0.2) { // Simulate friend leveling up (20% chance per player level-up)
+            friend.level += 1;
+            if (friend.level === 5) {
+                score += 500;
+                exp += 5000;
+                friend.rewards += 500;
+                showNotification(`Ваш друг ${friend.code} досяг 5 рівня! +500 монет!`);
+            }
+        }
+        return friend;
+    });
+    updateFriendsList();
+    updateDisplay();
+}
+
 function openTab(tabName, event) {
     event.preventDefault();
     if (Date.now() - lastEventTime < 100) return;
@@ -449,28 +526,6 @@ function regenerateEnergy() {
     lastTime = currentTime;
     updateDisplay();
     requestAnimationFrame(regenerateEnergy);
-}
-
-async function connectWallet(event) {
-    event.preventDefault();
-    if (Date.now() - lastEventTime < 100) return;
-    lastEventTime = Date.now();
-    if (window.ethereum) {
-        try {
-            const web3 = new Web3(window.ethereum);
-            await window.ethereum.request({ method: 'eth_requestAccounts' });
-            const accounts = await web3.eth.getAccounts();
-            if (accounts.length > 0) {
-                showNotification(`Криптокошелек підключено: ${accounts[0]}`);
-            } else {
-                showNotification('Не вдалося підключити гаманець.');
-            }
-        } catch (error) {
-            showNotification('Помилка підключення: ' + error.message);
-        }
-    } else {
-        showNotification('Будь ласка, встановіть MetaMask або інший сумісний гаманець.');
-    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
