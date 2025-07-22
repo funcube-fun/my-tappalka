@@ -315,7 +315,7 @@ body {
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    width: 16%; /* Adjusted for 6 tabs */
+    width: 16%;
     padding: 1vw;
     box-sizing: border-box;
     transition: all 0.3s ease;
