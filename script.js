@@ -176,7 +176,7 @@ function updateDisplay() {
     document.getElementById('task-telegram3-btn').disabled = taskTelegram3Completed;
     document.getElementById('task-youtube-btn').disabled = taskYoutubeCompleted;
     document.getElementById('task-tiktok-btn').disabled = taskTiktokCompleted;
-    document.getElementById('referral-link').value = `${window.location.origin}?ref=${referralCode}`;
+    document.getElementById('referral-link').value = `https://ukrainecoin.com?ref=${referralCode}`;
     saveGame();
 }
 
@@ -462,7 +462,7 @@ function copyReferralLink(event) {
         document.execCommand('copy');
         showNotification('Посилання скопійовано!');
         if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.openLink(`https://t.me/share/url?url=${encodeURIComponent(referralInput.value)}`);
+            window.Telegram.WebApp.openLink(`https://t.me/share/url?url=${encodeURIComponent(`https://ukrainecoin.com?ref=${referralCode}`)}`);
         }
     } catch (err) {
         showNotification('Не вдалося скопіювати посилання');
