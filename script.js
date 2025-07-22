@@ -15,8 +15,8 @@ let dailyBonusStreak = 0;
 const dailyBonusCooldown = 24 * 60 * 60 * 1000;
 let level = 1;
 let exp = 0;
-let baseExpToLevel = 1000;
-let expToLevel = baseExpToLevel * level;
+let baseExpToLevel = 500; // Reduced base to balance quadratic scaling
+let expToLevel = baseExpToLevel * (level * level); // Quadratic scaling for level progression
 let referralClaimed = false;
 let taskVideoCompleted = false;
 let taskTelegram1Completed = false;
@@ -49,7 +49,7 @@ function loadGame() {
         dailyBonusStreak = data.dailyBonusStreak || 0;
         level = data.level || 1;
         exp = data.exp || 0;
-        expToLevel = baseExpToLevel * level;
+        expToLevel = baseExpToLevel * (level * level); // Apply quadratic scaling on load
         referralClaimed = data.referralClaimed || false;
         taskVideoCompleted = data.taskVideoCompleted || false;
         taskTelegram1Completed = data.taskTelegram1Completed || false;
@@ -217,7 +217,7 @@ function checkLevelUp() {
     while (exp >= expToLevel) {
         exp -= expToLevel;
         level++;
-        expToLevel = baseExpToLevel * level;
+        expToLevel = baseExpToLevel * (level * level); // Quadratic scaling for next level
         const reward = calculateLevelReward(level - 1);
         score += reward;
         showNotification(`Рівень ${level} досягнуто! +${reward} UkraineCoins!`);
