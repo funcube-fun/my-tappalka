@@ -154,13 +154,17 @@
                 <p>Запросіть друзів і отримуйте бонуси!</p>
                 <input id="referral-link" type="text" readonly value="">
                 <button id="copy-referral-btn" onclick="copyReferralLink(event)" ontouchstart="copyReferralLink(event)">Копіювати посилання</button>
-                <p>Нагороди: +100 монет за кожного друга, +500 за друга на 5 рівні</p>
+                <p>Введіть код друга для бонусу:</p>
+                <input id="referral-code-input" type="text" placeholder="Введіть код (UKC-XXXXXXXX)">
+                <button id="submit-referral-btn" onclick="useReferralCode(event)" ontouchstart="useReferralCode(event)">Використати код</button>
+                <p>Нагороди: +100 монет за кожного друга, +500 за друга на 5 рівні, +100 за використання коду друга</p>
                 <div id="friends-list">
                     <h3>Ваші друзі</h3>
                     <ul id="friends-list-items"></ul>
                 </div>
-                <!-- Temporary button for testing referral system -->
+                <!-- Temporary buttons for testing referral system -->
                 <button id="simulate-friend-btn" onclick="simulateFriendJoin(event)" ontouchstart="simulateFriendJoin(event)">Симулювати друга (тест)</button>
+                <button id="simulate-use-referral-btn" onclick="simulateUseReferralCode(event)" ontouchstart="simulateUseReferralCode(event)">Симулювати використання коду (тест)</button>
             </div>
         </div>
         <div id="tabs">
