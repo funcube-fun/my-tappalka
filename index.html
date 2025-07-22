@@ -147,8 +147,20 @@
         <div id="listing-content" class="tab-content">
             <h2>Листинг UkraineCoin</h2>
             <p>UkraineCoin готується до листингу на провідних криптовалютних біржах! Загальна емісія: 1 мільярд UKC. Розподіл: 50% (500 млн UKC) — гравцям через тапи, завдання та бонуси; 20% (200 млн UKC) — на підтримку армії України; 20% (200 млн UKC) — команді розробників; 10% (100 млн UKC) — резервний фонд. Очікуйте офіційного анонсу найближчим часом із деталями про біржі, дати та умови. Приєднуйтесь до нас і станьте частиною цього історичного моменту!</p>
-            <div class="wallet-connect">
-                <button id="connect-wallet-btn" onclick="connectWallet(event)" ontouchstart="connectWallet(event)">Підключити криптокошелек</button>
+        </div>
+        <div id="friends-content" class="tab-content">
+            <h2>Друзі</h2>
+            <div class="referral-section">
+                <p>Запросіть друзів і отримуйте бонуси!</p>
+                <input id="referral-link" type="text" readonly value="">
+                <button id="copy-referral-btn" onclick="copyReferralLink(event)" ontouchstart="copyReferralLink(event)">Копіювати посилання</button>
+                <p>Нагороди: +100 монет за кожного друга, +500 за друга на 5 рівні</p>
+                <div id="friends-list">
+                    <h3>Ваші друзі</h3>
+                    <ul id="friends-list-items"></ul>
+                </div>
+                <!-- Temporary button for testing referral system -->
+                <button id="simulate-friend-btn" onclick="simulateFriendJoin(event)" ontouchstart="simulateFriendJoin(event)">Симулювати друга (тест)</button>
             </div>
         </div>
         <div id="tabs">
@@ -172,11 +184,14 @@
                 <span class="tab-icon">📊</span>
                 <span class="tab-label">Листинг</span>
             </button>
+            <button class="tab-button" data-tab="friends" onclick="openTab('friends', event)" ontouchstart="openTab('friends', event)">
+                <span class="tab-icon">👥</span>
+                <span class="tab-label">Друзі</span>
+            </button>
         </div>
         <div id="footer-text">© 2025 UkraineCoin</div>
     </div>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
